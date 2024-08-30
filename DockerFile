@@ -1,0 +1,12 @@
+# Build 
+FROM gradle:7.6-jdk17 AS build
+COPY --chown=gradle:gradle . ${{ secrets.DOCKER_WORK_DIRECTORY }}
+WORKDIR ${{ secrets.DOCKER_WORK_DIRECTORY }}
+RUN gradle build --no-daemon
+
+
+# Run
+FROM eclipse-temurin:17-jre-alpine
+COPY --from=build ${{ secrets.BUILDFILE_RUN_DIRECTORY }} ${{ secrets.BUILD_FILE_NAME }}
+ENTRYPOINT ["java", "-jar", "${{ secrets.BUILD_FILE_NAME }}"]
+
