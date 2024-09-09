@@ -1,0 +1,70 @@
+name: Create Jira issue # 1
+on: # 2
+  issues: 
+    types: [opened]
+    
+jobs: # 3
+  create-issue: # 4
+    name: Create Jira issue # 5
+    runs-on: ubuntu-latest # 6
+    steps: # 7
+    - name: Login
+      uses: atlassian/gajira-login@v3 # 8
+      env: # 9
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+    
+    - name: Create Issue 
+      uses: atlassian/gajira-create@v3
+      with:
+        project: FESTA
+        issuetype: Task
+        summary: '${{ github.event.issue.title }}'
+        description: '${{ github.event.issue.html_url }}'
+
+# 1
+# workflow의 이름을 지정한다.
+# 이때 지정한 이름은 깃허브 리포지터리의 Actions 탭의 이름이 된다.
+#
+# 2
+# workflow가 실행될 트리거를 설정한다.
+# 해당 workflow의 목적은 issue가 새로 생성될 때 실행되어야 하므로, types 속성에 opend 값을 설정했다.
+# Issue의 types 속성들은 다음 링크에서 확인할 수 있다.
+# https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#issues
+#
+# 3
+# workflow에서 수행될 작업을 정의한다.
+#
+# 4
+# jobs의 job을 정의한다.
+# 자세한 설명은 다음 링크를 참조하자.
+# https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow
+#
+# 5
+# 해당 job의 Github UI에 표시되는 작업의 이름을 설정한다.
+#
+# 6
+# job이 실행될 환경을 정의한다.
+# 자세한 설명은 링크를 참조하자.
+# https://docs.github.com/en/actions/using-jobs/choosing-the-runner-for-a-job
+#
+# 7
+# steps를 사용하여 job이 실행될 작업을 지정할 수 있다.
+# - name: ${name} 을 사용하여 각 step을 정의한다.
+# 자세한 설명은 링크를 참조하자.
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps
+#
+# 8
+# uses를 사용하면 다른 리포지터리에 정의된 작업을 사용할 수 있다.
+# 자세한 설명은 링크를 참조하자.
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsuses
+# 사용된 uses는 마켓플레이스에도 등록 되어있다.
+# jira-login
+# https://github.com/marketplace/actions/jira-login
+# jira-create-issue
+# https://github.com/marketplace/actions/jira-create-issue
+# 자세한 사용법은 위의 링크를 참조하자.
+# 
+# 9
+# jira-login에서 사용할 민감한 개인 정보는 Github의 secrets을 사용하여 유출되지 않게 했다.
