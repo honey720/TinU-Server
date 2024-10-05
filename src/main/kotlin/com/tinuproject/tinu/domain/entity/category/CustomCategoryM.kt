@@ -1,5 +1,6 @@
-package com.tinuproject.tinu.domain.entity
+package com.tinuproject.tinu.domain.entity.category
 
+import com.tinuproject.tinu.domain.entity.CustomFilter
 import jakarta.persistence.*
 
 

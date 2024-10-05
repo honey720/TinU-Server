@@ -1,5 +1,6 @@
-package com.tinuproject.tinu.domain.entity
+package com.tinuproject.tinu.domain.entity.category
 
+import com.tinuproject.tinu.domain.entity.Post
 import jakarta.persistence.*
 
 @Entity
@@ -15,7 +16,8 @@ class CategoryL(
 
     //category가 삭제된다고 필터링 cascade로 삭제 X 별도의 로직 필요
     @OneToMany(mappedBy = "categoryl",  fetch = FetchType.LAZY)
-    var customCategoryL: MutableList<CustomCategoryL>
+    var customCategoryL: MutableList<CustomCategoryL>,
 
-
-    )
+    @OneToMany(mappedBy = "categoryl", fetch = FetchType.LAZY)
+    var posts : MutableList<Post>
+)

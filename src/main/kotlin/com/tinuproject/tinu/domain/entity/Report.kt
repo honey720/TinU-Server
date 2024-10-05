@@ -32,14 +32,12 @@ class Report (
     var post : Post,
 
 
-    @ElementCollection(targetClass = PaymentMethod::class)
     @Enumerated(EnumType.STRING)
-    @Column
-    @CollectionTable(name = "report_category", joinColumns = [JoinColumn(name = "post_id")])
-    var reportCategory : Set<ReportCategory> = setOf(),
+    @Column(nullable = false)
+    var reportCategory : ReportCategory,
 
 
-    @Column(nullable = true,columnDefinition = "TEXT")
-    var body : String
+    @Column(columnDefinition = "TEXT")
+    var body : String?
 
 )

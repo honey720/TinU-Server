@@ -40,10 +40,11 @@ class Member (
     var eMail : String,
 
     @Column
-    var reportCount : Long,
+    var reportCount : Long=0,
 
+    //학점에 해당하는 데이터
     @Column
-    var evaluationResult : Double,
+    var mark : Double?,
 
     @Column
     @Enumerated(EnumType.ORDINAL)
@@ -53,12 +54,16 @@ class Member (
         cascade = [CascadeType.REMOVE],
         mappedBy = "member"
     )
-    var evaluations: MutableList<Evaluation>,
+    var evaluations: MutableList<Evaluation> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY,
         cascade = [CascadeType.REMOVE],
         mappedBy = "member"
     )
-    var posts : MutableList<Post>
+    var posts : MutableList<Post> = mutableListOf(),
 
+    @OneToMany(fetch = FetchType.LAZY,
+        cascade = [CascadeType.REMOVE],
+        mappedBy = "member")
+    var scrap : MutableList<Scrap> = mutableListOf()
 )

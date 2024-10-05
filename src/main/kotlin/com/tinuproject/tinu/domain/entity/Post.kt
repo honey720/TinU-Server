@@ -1,5 +1,7 @@
 package com.tinuproject.tinu.domain.entity
 
+import com.tinuproject.tinu.domain.entity.category.CategoryL
+import com.tinuproject.tinu.domain.entity.category.CategoryM
 import com.tinuproject.tinu.domain.enum.PaymentMethod
 import com.tinuproject.tinu.domain.enum.SellMethod
 import jakarta.persistence.*
@@ -23,11 +25,19 @@ class Post (
     @Column(columnDefinition = "TEXT")
     var body : String,
 
-    @OneToMany(mappedBy = "post")
-    var categoryL : MutableList<CategoryL>,
 
-    @OneToMany(mappedBy = "post")
-    var CategoryM : MutableList<CategoryM>,
+
+    //categoryL에 ManyToOne 관련한 Post 연관 매핑 필요 (했음)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="categoryl_id")
+    var categoryL: CategoryL,
+
+
+
+    //categoryM에 ManyToOne 관련한 Post 연관 매핑 필요 (했음)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="categorym_id")
+    var CategoryM : CategoryM,
 
     @Column
     var price : Int,
@@ -39,7 +49,7 @@ class Post (
     var sellMethod : Set<SellMethod> = setOf(),
 
     @Column
-    var hide : Boolean,
+    var hide : Boolean = false,
 
     @ElementCollection(targetClass = PaymentMethod::class)
     @CollectionTable(name = "payment_method", joinColumns = [JoinColumn(name = "post_id")])
@@ -48,11 +58,12 @@ class Post (
     var paymentMethod: Set<PaymentMethod> = setOf(),
 
     @Column
-    var thumbnailImageUrl : String,
+    var thumbnailImageUrl : String?,
 
     @Column
-    var reports : Long,
+    var reports : Long = 0,
 
-    @OneToMany(mappedBy = "mutimedia")
-    var multimedia : MutableList<Multimedia>
+    //단방향 매핑
+    @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
+    var multimedia : MutableList<Multimedia> = mutableListOf()
 )

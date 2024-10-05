@@ -1,4 +1,4 @@
-package com.tinuproject.tinu.domain.entity
+package com.tinuproject.tinu.domain.entity.base
 
 import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners

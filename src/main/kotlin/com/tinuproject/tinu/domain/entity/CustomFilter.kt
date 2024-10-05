@@ -1,5 +1,7 @@
 package com.tinuproject.tinu.domain.entity
 
+import com.tinuproject.tinu.domain.entity.category.CustomCategoryL
+import com.tinuproject.tinu.domain.entity.category.CustomCategoryM
 import jakarta.persistence.*
 
 @Entity
