@@ -11,7 +11,7 @@ class Member (
     // , 프사, 자기소개글, 이메일, 평과결과, 신고누적(반정규화), 소셜로그인 플랫폼 식별자
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Long = 0,
+    var id : Long ?= null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="university_id")
