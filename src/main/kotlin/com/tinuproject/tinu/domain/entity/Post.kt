@@ -39,6 +39,11 @@ class Post (
     @JoinColumn(name="categorym_id")
     var CategoryM : CategoryM,
 
+    //categoryM에 ManyToOne 관련한 Post 연관 매핑 필요 (했음)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="category_id")
+    var Category : Category,
+
     @Column
     var price : Int,
 

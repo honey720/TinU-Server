@@ -33,7 +33,10 @@ class CustomFilter (
     var customCategoryL: MutableList<CustomCategoryL>,
 
     @OneToMany(mappedBy = "customfilter", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
-    var customCategoryM: MutableList<CustomCategoryM>
+    var customCategoryM: MutableList<CustomCategoryM>,
+
+    @OneToMany(mappedBy = "customfilter", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
+    var customCategory: MutableList<CustomCategory>
 
 
 )
