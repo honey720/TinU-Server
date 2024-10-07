@@ -1,6 +1,5 @@
 package com.tinuproject.tinu.domain.entity
 
-import com.tinuproject.tinu.domain.entity.category.CategoryL
 import jakarta.persistence.*
 
 @Entity
@@ -14,7 +13,7 @@ class CustomCategory (
         var customFilters : CustomFilter,
 
         @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "categoryl_id")
+        @JoinColumn(name = "category_id")
         var category : Category
 
 )
