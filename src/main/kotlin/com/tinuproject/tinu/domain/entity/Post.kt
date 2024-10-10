@@ -1,7 +1,5 @@
 package com.tinuproject.tinu.domain.entity
 
-import com.tinuproject.tinu.domain.entity.category.CategoryL
-import com.tinuproject.tinu.domain.entity.category.CategoryM
 import com.tinuproject.tinu.domain.enum.PaymentMethod
 import com.tinuproject.tinu.domain.enum.SellMethod
 import jakarta.persistence.*
@@ -25,24 +23,14 @@ class Post (
     @Column(columnDefinition = "TEXT")
     var body : String,
 
-
-
-    //categoryL에 ManyToOne 관련한 Post 연관 매핑 필요 (했음)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="categoryl_id")
-    var categoryL: CategoryL,
-
-
-
-    //categoryM에 ManyToOne 관련한 Post 연관 매핑 필요 (했음)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="categorym_id")
-    var CategoryM : CategoryM,
+    @JoinColumn(name="member_id")
+    var author : Member,
 
     //categoryM에 ManyToOne 관련한 Post 연관 매핑 필요 (했음)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="category_id")
-    var Category : Category,
+    var category : Category,
 
     @Column
     var price : Int,
@@ -63,10 +51,10 @@ class Post (
     var paymentMethod: Set<PaymentMethod> = setOf(),
 
     @Column
-    var thumbnailImageUrl : String?,
+    var thumbnailImageURL : String?,
 
     @Column
-    var reports : Long = 0,
+    var reportCount : Long = 0,
 
     //단방향 매핑
     @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
