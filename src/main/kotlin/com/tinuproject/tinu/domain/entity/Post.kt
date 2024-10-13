@@ -42,7 +42,10 @@ class Post (
     var sellMethod : Set<SellMethod> = setOf(),
 
     @Column
-    var hide : Boolean = false,
+    var isSell : Boolean,
+
+    @Column
+    var isHide : Boolean = false,
 
     @ElementCollection(targetClass = PaymentMethod::class)
     @CollectionTable(name = "payment_method", joinColumns = [JoinColumn(name = "post_id")])
@@ -56,7 +59,18 @@ class Post (
     @Column
     var reportCount : Long = 0,
 
+    @Column
+    var scrapCount : Long = 0,
+
     //단방향 매핑
-    @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
-    var multimedia : MutableList<Multimedia> = mutableListOf()
+    @OneToMany(fetch = FetchType.LAZY,
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true,
+        mappedBy = "post")
+    var multimedia : MutableList<Multimedia> = mutableListOf(),
+
+    @OneToMany(fetch = FetchType.LAZY,
+        cascade = [CascadeType.REMOVE],
+        mappedBy = "post")
+    var postHashTagMap: MutableList<PostHashTagMap> = mutableListOf()
 )

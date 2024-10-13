@@ -60,10 +60,22 @@ class Member (
         cascade = [CascadeType.REMOVE],
         mappedBy = "member"
     )
-    var posts : MutableList<Post> = mutableListOf(),
+    var post : MutableList<Post> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY,
         cascade = [CascadeType.REMOVE],
         mappedBy = "member")
-    var scrap : MutableList<Scrap> = mutableListOf()
+    var scrap : MutableList<Scrap> = mutableListOf(),
+
+    @OneToMany(fetch = FetchType.LAZY,
+        cascade = [CascadeType.REMOVE],
+        mappedBy = "member")
+    var chat : MutableList<Chat> = mutableListOf(),
+
+    @OneToMany(fetch = FetchType.LAZY,
+        cascade = [CascadeType.REMOVE],
+        mappedBy = "member")
+    var inquiry: MutableList<Inquiry> = mutableListOf()
+
+
 )
