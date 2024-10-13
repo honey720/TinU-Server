@@ -72,5 +72,6 @@ class Post (
     @OneToMany(fetch = FetchType.LAZY,
         cascade = [CascadeType.REMOVE],
         mappedBy = "post")
-    var postHashTagMap: MutableList<PostHashTagMap> = mutableListOf()
+    var postHashTagMap: MutableList<PostHashTagMap> = mutableListOf(),
+
 )

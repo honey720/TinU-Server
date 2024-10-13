@@ -16,6 +16,7 @@ class Chat (
     @JoinColumn(name="member_id")
     var seller : Member,
 
+    //단방향 매핑 - post는 채팅을 알고 있을 필요가 없을 것으로 생각
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="post_id")
     var post : Post,
