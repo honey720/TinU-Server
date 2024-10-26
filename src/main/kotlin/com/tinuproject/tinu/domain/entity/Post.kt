@@ -27,6 +27,11 @@ class Post (
     @JoinColumn(name="member_id")
     var author : Member,
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id")
+    @Column(nullable = true)
+    var buyer : Member?,
+
     //categoryM에 ManyToOne 관련한 Post 연관 매핑 필요 (했음)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="category_id")
