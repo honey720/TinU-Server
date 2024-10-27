@@ -1,10 +1,6 @@
 package com.tinuproject.tinu.domain.entity
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
+import jakarta.persistence.*
 
 
 @Entity
@@ -19,5 +15,7 @@ class Multimedia (
     @Column
     var isImage : Boolean,
 
-    //Entity 정리에는 연관ID라는게 있는데 뭔지 모르겠어요
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="post_id")
+    var post : Post,
 )

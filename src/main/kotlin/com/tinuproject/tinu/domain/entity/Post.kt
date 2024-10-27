@@ -25,11 +25,11 @@ class Post (
     var body : String,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name="author_id")
     var author : Member,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name="buyer_id")
     var buyer : Member?,
 
     //categoryM에 ManyToOne 관련한 Post 연관 매핑 필요 (했음)
@@ -67,7 +67,7 @@ class Post (
     @Column
     var scrapCount : Long = 0,
 
-    //단방향 매핑
+    //양방향 매핑으로 수정
     @OneToMany(fetch = FetchType.LAZY,
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
@@ -79,4 +79,9 @@ class Post (
         mappedBy = "post")
     var postHashTagMap: MutableList<PostHashTagMap> = mutableListOf(),
 
+
+    @OneToMany(fetch = FetchType.LAZY,
+        cascade = [CascadeType.REMOVE],
+        mappedBy = "post")
+    var scrap: MutableList<Scrap> = mutableListOf(),
 )

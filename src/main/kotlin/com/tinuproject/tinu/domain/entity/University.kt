@@ -16,6 +16,8 @@ class University (
     var members : MutableList<Member> ?= null,
 
     @Column
-    var domain : String
+    var domain : String,
 
+    @Column
+    var name : String
     )

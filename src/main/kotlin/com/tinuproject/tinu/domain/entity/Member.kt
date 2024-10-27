@@ -50,15 +50,10 @@ class Member (
     @Enumerated(EnumType.ORDINAL)
     var social : Social,
 
-    @OneToMany(fetch = FetchType.LAZY,
-        cascade = [CascadeType.REMOVE],
-        mappedBy = "member"
-    )
-    var evaluations: MutableList<Evaluation> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY,
         cascade = [CascadeType.REMOVE],
-        mappedBy = "member"
+        mappedBy = "author"
     )
     var post : MutableList<Post> = mutableListOf(),
 
@@ -67,14 +62,26 @@ class Member (
         mappedBy = "member")
     var scrap : MutableList<Scrap> = mutableListOf(),
 
-    @OneToMany(fetch = FetchType.LAZY,
-        cascade = [CascadeType.REMOVE],
-        mappedBy = "member")
-    var chat : MutableList<Chat> = mutableListOf(),
+
+    //    @OneToMany(fetch = FetchType.LAZY,
+    //        cascade = [CascadeType.REMOVE],
+    //        mappedBy = "member")
+    //    var Chat : MutableList<Chat> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY,
         cascade = [CascadeType.REMOVE],
-        mappedBy = "member")
+        mappedBy = "buyer")
+    var buyerChat : MutableList<Chat> = mutableListOf(),
+
+    @OneToMany(fetch = FetchType.LAZY,
+        cascade = [CascadeType.REMOVE],
+        mappedBy = "seller")
+    var sellerChat : MutableList<Chat> = mutableListOf(),
+
+
+    @OneToMany(fetch = FetchType.LAZY,
+        cascade = [CascadeType.REMOVE],
+        mappedBy = "inquirer")
     var inquiry: MutableList<Inquiry> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY,

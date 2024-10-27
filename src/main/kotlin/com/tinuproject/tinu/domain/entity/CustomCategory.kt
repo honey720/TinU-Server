@@ -9,8 +9,8 @@ class CustomCategory (
         var id : Long ?= null,
 
         @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "customfilter_id")
-        var customFilters : CustomFilter,
+        @JoinColumn(name = "customFilter_id")
+        var customFilter : CustomFilter,
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "category_id")

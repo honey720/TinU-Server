@@ -12,7 +12,7 @@ class HashTag (
 
     @OneToMany(fetch = FetchType.LAZY,
         cascade = [CascadeType.REMOVE],
-        mappedBy = "hashtag")
+        mappedBy = "hashTag")
     var postHashTagMap:  MutableList<PostHashTagMap> = mutableListOf()
 
 
