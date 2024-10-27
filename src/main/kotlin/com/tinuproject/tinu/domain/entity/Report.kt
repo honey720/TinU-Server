@@ -33,7 +33,6 @@ class Report (
 
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     var reportCategory : ReportCategory,
 
 

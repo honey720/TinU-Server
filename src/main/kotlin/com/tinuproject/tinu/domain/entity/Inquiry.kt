@@ -17,5 +17,11 @@ class Inquiry (
     var title : String,
 
     @Column
-    var body : String
+    var body : String,
+
+    @Column
+    var answer : String?,
+
+    @Column
+    var isAnswer : Boolean
 )

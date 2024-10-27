@@ -14,7 +14,8 @@ class Post (
     @GeneratedValue
     var id : Long ?= null,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="university_id")
     var university : University,
 
     @Column
@@ -29,7 +30,6 @@ class Post (
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
-    @Column(nullable = true)
     var buyer : Member?,
 
     //categoryM에 ManyToOne 관련한 Post 연관 매핑 필요 (했음)

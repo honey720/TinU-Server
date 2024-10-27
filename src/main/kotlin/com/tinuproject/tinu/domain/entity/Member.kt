@@ -75,7 +75,10 @@ class Member (
     @OneToMany(fetch = FetchType.LAZY,
         cascade = [CascadeType.REMOVE],
         mappedBy = "member")
-    var inquiry: MutableList<Inquiry> = mutableListOf()
+    var inquiry: MutableList<Inquiry> = mutableListOf(),
 
-
+    @OneToMany(fetch = FetchType.LAZY,
+        cascade = [CascadeType.REMOVE],
+        mappedBy = "member")
+    var customFilter : MutableList<CustomFilter> = mutableListOf()
 )
