@@ -29,5 +29,5 @@ class CustomFilter (
 
 
     @OneToMany(mappedBy = "customFilter", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
-    var customCategory: MutableList<CustomCategory>
+    var customCategory: MutableList<CustomCategory> = mutableListOf()
 )

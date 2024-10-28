@@ -13,7 +13,7 @@ class University (
 
 
     @OneToMany(mappedBy = "university")
-    var members : MutableList<Member> ?= null,
+    var members : MutableList<Member> ?= mutableListOf(),
 
     @Column
     var domain : String,
