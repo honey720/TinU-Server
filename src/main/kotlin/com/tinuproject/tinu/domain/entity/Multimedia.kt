@@ -6,9 +6,6 @@ import jakarta.persistence.*
 
 @Entity
 class Multimedia (
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Long? = null,
 
     @Column
     var url : String,

@@ -11,9 +11,6 @@ class Post (
     // 카테고리(외래) 논의점,
     // 가격, 판매방식, 숨김상태,
     // 거래방식, 썸네일(반정규화), 신고누적(반정규화)
-    @Id
-    @GeneratedValue
-    var id : Long ?= null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="university_id")

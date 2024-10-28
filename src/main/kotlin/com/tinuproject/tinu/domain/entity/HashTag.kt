@@ -5,9 +5,6 @@ import jakarta.persistence.*
 
 @Entity
 class HashTag (
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Long ?= null,
 
     var tagName : String,
 

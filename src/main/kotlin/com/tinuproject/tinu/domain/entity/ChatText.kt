@@ -7,9 +7,6 @@ import jakarta.persistence.*
 
 @Entity
 class ChatText (
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Long ?= null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="chat_id")

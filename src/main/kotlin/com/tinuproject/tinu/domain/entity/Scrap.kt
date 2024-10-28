@@ -5,10 +5,6 @@ import jakarta.persistence.*
 
 @Entity
 class Scrap (
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Long ?= null,
-
 
     //Scrap과 관련한 요소 Member에 추가 필요 (해결)
     @ManyToOne(fetch = FetchType.LAZY)

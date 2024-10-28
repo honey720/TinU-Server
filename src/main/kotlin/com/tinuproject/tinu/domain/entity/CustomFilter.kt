@@ -6,10 +6,6 @@ import jakarta.persistence.*
 
 @Entity
 class CustomFilter (
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Long ?= null,
-
 
     @Column
     var filterName : String,
