@@ -1,5 +1,6 @@
 package com.tinuproject.tinu.domain.entity
 
+import com.tinuproject.tinu.domain.entity.base.BaseEntity
 import jakarta.persistence.*
 
 
@@ -20,4 +21,4 @@ class University (
 
     @Column
     var name : String
-    )
+) : BaseEntity()

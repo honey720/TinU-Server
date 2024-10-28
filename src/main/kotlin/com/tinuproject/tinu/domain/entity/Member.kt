@@ -1,5 +1,6 @@
 package com.tinuproject.tinu.domain.entity
 
+import com.tinuproject.tinu.domain.entity.base.BaseEntity
 import com.tinuproject.tinu.domain.enum.Gender
 import com.tinuproject.tinu.domain.enum.Social
 import jakarta.persistence.*
@@ -88,4 +89,4 @@ class Member (
         cascade = [CascadeType.REMOVE],
         mappedBy = "member")
     var customFilter : MutableList<CustomFilter> = mutableListOf()
-)
+) : BaseEntity()

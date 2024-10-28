@@ -1,5 +1,6 @@
 package com.tinuproject.tinu.domain.entity
 
+import com.tinuproject.tinu.domain.entity.base.BaseEntity
 import jakarta.persistence.*
 
 @Entity
@@ -16,4 +17,4 @@ class CustomCategory (
         @JoinColumn(name = "category_id")
         var category : Category
 
-)
+) : BaseEntity()

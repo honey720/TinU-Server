@@ -1,5 +1,6 @@
 package com.tinuproject.tinu.domain.entity
 
+import com.tinuproject.tinu.domain.entity.base.BaseEntity
 import jakarta.persistence.*
 
 @Entity
@@ -26,4 +27,4 @@ class Category (
 
         @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
         var posts : MutableList<Post> = mutableListOf()
-)
+) : BaseEntity()

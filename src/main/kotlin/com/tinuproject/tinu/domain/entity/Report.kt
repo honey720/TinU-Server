@@ -1,5 +1,6 @@
 package com.tinuproject.tinu.domain.entity
 
+import com.tinuproject.tinu.domain.entity.base.BaseEntity
 import com.tinuproject.tinu.domain.enum.PaymentMethod
 import com.tinuproject.tinu.domain.enum.ReportCategory
 import jakarta.persistence.*
@@ -39,4 +40,4 @@ class Report (
     @Column(columnDefinition = "TEXT")
     var body : String?
 
-)
+) : BaseEntity()

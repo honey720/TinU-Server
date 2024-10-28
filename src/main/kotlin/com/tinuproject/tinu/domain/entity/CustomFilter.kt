@@ -1,6 +1,7 @@
 package com.tinuproject.tinu.domain.entity
 
 
+import com.tinuproject.tinu.domain.entity.base.BaseEntity
 import jakarta.persistence.*
 
 @Entity
@@ -30,4 +31,4 @@ class CustomFilter (
 
     @OneToMany(mappedBy = "customFilter", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
     var customCategory: MutableList<CustomCategory> = mutableListOf()
-)
+) : BaseEntity()

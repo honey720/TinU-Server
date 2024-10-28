@@ -1,5 +1,6 @@
 package com.tinuproject.tinu.domain.entity
 
+import com.tinuproject.tinu.domain.entity.base.BaseEntity
 import com.tinuproject.tinu.domain.enum.ChatRole
 import com.tinuproject.tinu.domain.enum.ChatType
 import jakarta.persistence.*
@@ -29,4 +30,4 @@ class ChatText (
 
     @Column
     var isRead : Boolean
-)
+) : BaseEntity()

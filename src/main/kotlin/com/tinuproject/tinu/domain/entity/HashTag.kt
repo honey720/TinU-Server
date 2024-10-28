@@ -1,5 +1,6 @@
 package com.tinuproject.tinu.domain.entity
 
+import com.tinuproject.tinu.domain.entity.base.BaseEntity
 import jakarta.persistence.*
 
 @Entity
@@ -17,4 +18,4 @@ class HashTag (
 
 
 
-)
+) : BaseEntity()

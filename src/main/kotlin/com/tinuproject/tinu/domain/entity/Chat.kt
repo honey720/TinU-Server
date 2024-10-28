@@ -1,5 +1,6 @@
 package com.tinuproject.tinu.domain.entity
 
+import com.tinuproject.tinu.domain.entity.base.BaseEntity
 import jakarta.persistence.*
 
 @Entity
@@ -25,4 +26,4 @@ class Chat (
         cascade = [CascadeType.REMOVE],
         mappedBy = "chat")
     var chatList : MutableList<ChatText> = mutableListOf()
-)
+) : BaseEntity()

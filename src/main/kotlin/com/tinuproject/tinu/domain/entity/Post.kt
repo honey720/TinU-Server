@@ -1,5 +1,6 @@
 package com.tinuproject.tinu.domain.entity
 
+import com.tinuproject.tinu.domain.entity.base.BaseEntity
 import com.tinuproject.tinu.domain.enum.PaymentMethod
 import com.tinuproject.tinu.domain.enum.SellMethod
 import jakarta.persistence.*
@@ -84,4 +85,4 @@ class Post (
         cascade = [CascadeType.REMOVE],
         mappedBy = "post")
     var scrap: MutableList<Scrap> = mutableListOf(),
-)
+) : BaseEntity()
