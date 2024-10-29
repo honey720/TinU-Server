@@ -1,12 +1,10 @@
 package com.tinuproject.tinu.domain.entity
 
+import com.tinuproject.tinu.domain.entity.base.BaseEntity
 import jakarta.persistence.*
 
 @Entity
 class Category (
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        var id : Long ?= null,
 
         @Column
         var name : String,
@@ -26,4 +24,4 @@ class Category (
 
         @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
         var posts : MutableList<Post> = mutableListOf()
-)
+) : BaseEntity()

@@ -1,18 +1,12 @@
 package com.tinuproject.tinu.domain.entity
 
+import com.tinuproject.tinu.domain.entity.base.BaseEntity
 import com.tinuproject.tinu.domain.enum.PaymentMethod
 import com.tinuproject.tinu.domain.enum.SellMethod
 import jakarta.persistence.*
 
 @Entity
 class Post (
-    //id, 학교(외래), 제목, 내용, 작성시간(base),
-    // 카테고리(외래) 논의점,
-    // 가격, 판매방식, 숨김상태,
-    // 거래방식, 썸네일(반정규화), 신고누적(반정규화)
-    @Id
-    @GeneratedValue
-    var id : Long ?= null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="university_id")
@@ -67,7 +61,6 @@ class Post (
     @Column
     var scrapCount : Long = 0,
 
-    //양방향 매핑으로 수정
     @OneToMany(fetch = FetchType.LAZY,
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
@@ -83,5 +76,5 @@ class Post (
     @OneToMany(fetch = FetchType.LAZY,
         cascade = [CascadeType.REMOVE],
         mappedBy = "post")
-    var scrap: MutableList<Scrap> = mutableListOf(),
-)
+    var scrap: MutableList<Scrap> = mutableListOf()
+) : BaseEntity()

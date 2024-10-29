@@ -1,13 +1,11 @@
 package com.tinuproject.tinu.domain.entity
 
+import com.tinuproject.tinu.domain.entity.base.BaseEntity
 import jakarta.persistence.*
 
 //문의 Entity
 @Entity
 class Inquiry (
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Long?=null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
@@ -24,4 +22,4 @@ class Inquiry (
 
     @Column
     var isAnswer : Boolean
-)
+) : BaseEntity()

@@ -1,13 +1,11 @@
 package com.tinuproject.tinu.domain.entity
 
+import com.tinuproject.tinu.domain.entity.base.BaseEntity
 import jakarta.persistence.*
 
 
 @Entity
 class Multimedia (
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Long? = null,
 
     @Column
     var url : String,
@@ -17,5 +15,5 @@ class Multimedia (
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="post_id")
-    var post : Post,
-)
+    var post : Post
+) : BaseEntity()
