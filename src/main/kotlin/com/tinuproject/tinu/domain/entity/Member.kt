@@ -8,9 +8,6 @@ import jakarta.persistence.*
 @Entity
 class Member (
 
-    //id, 학교, 닉네임, 학과, 학년, 성별
-    // , 프사, 자기소개글, 이메일, 평과결과, 신고누적(반정규화), 소셜로그인 플랫폼 식별자
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="university_id")
     var university: University? = null,
@@ -40,14 +37,12 @@ class Member (
     @Column
     var reportCount : Long=0,
 
-    //학점에 해당하는 데이터
     @Column
     var mark : Double?,
 
     @Column
     @Enumerated(EnumType.ORDINAL)
     var social : Social,
-
 
     @OneToMany(fetch = FetchType.LAZY,
         cascade = [CascadeType.REMOVE],
@@ -60,12 +55,6 @@ class Member (
         mappedBy = "member")
     var scrap : MutableList<Scrap> = mutableListOf(),
 
-
-    //    @OneToMany(fetch = FetchType.LAZY,
-    //        cascade = [CascadeType.REMOVE],
-    //        mappedBy = "member")
-    //    var Chat : MutableList<Chat> = mutableListOf(),
-
     @OneToMany(fetch = FetchType.LAZY,
         cascade = [CascadeType.REMOVE],
         mappedBy = "buyer")
@@ -75,7 +64,6 @@ class Member (
         cascade = [CascadeType.REMOVE],
         mappedBy = "seller")
     var sellerChat : MutableList<Chat> = mutableListOf(),
-
 
     @OneToMany(fetch = FetchType.LAZY,
         cascade = [CascadeType.REMOVE],

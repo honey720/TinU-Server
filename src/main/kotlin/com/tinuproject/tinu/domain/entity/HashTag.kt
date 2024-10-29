@@ -12,7 +12,4 @@ class HashTag (
         cascade = [CascadeType.REMOVE],
         mappedBy = "hashTag")
     var postHashTagMap:  MutableList<PostHashTagMap> = mutableListOf()
-
-
-
 ) : BaseEntity()

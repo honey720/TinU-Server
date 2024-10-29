@@ -13,5 +13,4 @@ class CustomCategory (
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "category_id")
         var category : Category
-
 ) : BaseEntity()
