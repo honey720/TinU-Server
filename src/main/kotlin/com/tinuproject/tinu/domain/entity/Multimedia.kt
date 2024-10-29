@@ -15,5 +15,5 @@ class Multimedia (
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="post_id")
-    var post : Post,
+    var post : Post
 ) : BaseEntity()
