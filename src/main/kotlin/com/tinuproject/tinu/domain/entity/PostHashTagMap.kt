@@ -12,5 +12,5 @@ class PostHashTagMap (
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hashTag_id")
-    var hashTag : HashTag,
+    var hashTag : HashTag
 ) : BaseEntity()

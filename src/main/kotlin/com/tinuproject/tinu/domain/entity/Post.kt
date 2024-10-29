@@ -76,5 +76,5 @@ class Post (
     @OneToMany(fetch = FetchType.LAZY,
         cascade = [CascadeType.REMOVE],
         mappedBy = "post")
-    var scrap: MutableList<Scrap> = mutableListOf(),
+    var scrap: MutableList<Scrap> = mutableListOf()
 ) : BaseEntity()
