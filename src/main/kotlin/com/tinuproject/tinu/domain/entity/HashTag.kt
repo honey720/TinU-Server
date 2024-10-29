@@ -6,6 +6,7 @@ import jakarta.persistence.*
 @Entity
 class HashTag (
 
+    @Column
     var tagName : String,
 
     @OneToMany(fetch = FetchType.LAZY,
