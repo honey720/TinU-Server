@@ -1,70 +1,107 @@
-name: Create Jira issue # 1
-on: # 2
-  issues: 
-    types: [opened]
-    
-jobs: # 3
-  create-issue: # 4
-    name: Create Jira issue # 5
-    runs-on: ubuntu-latest # 6
-    steps: # 7
-    - name: Login
-      uses: atlassian/gajira-login@v3 # 8
-      env: # 9
-        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
-    
-    - name: Create Issue 
-      uses: atlassian/gajira-create@v3
-      with:
-        project: TINU
-        issuetype: Task
-        summary: '${{ github.event.issue.title }}'
-        description: '${{ github.event.issue.html_url }}'
+name: Create Jira issue
+on:
+  issues:
+    types:
+      - opened
+jobs:
+  create-issue:
+    name: Create Jira issue
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login
+        uses: atlassian/gajira-login@v3
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
 
-# 1
-# workflow의 이름을 지정한다.
-# 이때 지정한 이름은 깃허브 리포지터리의 Actions 탭의 이름이 된다.
-#
-# 2
-# workflow가 실행될 트리거를 설정한다.
-# 해당 workflow의 목적은 issue가 새로 생성될 때 실행되어야 하므로, types 속성에 opend 값을 설정했다.
-# Issue의 types 속성들은 다음 링크에서 확인할 수 있다.
-# https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#issues
-#
-# 3
-# workflow에서 수행될 작업을 정의한다.
-#
-# 4
-# jobs의 job을 정의한다.
-# 자세한 설명은 다음 링크를 참조하자.
-# https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow
-#
-# 5
-# 해당 job의 Github UI에 표시되는 작업의 이름을 설정한다.
-#
-# 6
-# job이 실행될 환경을 정의한다.
-# 자세한 설명은 링크를 참조하자.
-# https://docs.github.com/en/actions/using-jobs/choosing-the-runner-for-a-job
-#
-# 7
-# steps를 사용하여 job이 실행될 작업을 지정할 수 있다.
-# - name: ${name} 을 사용하여 각 step을 정의한다.
-# 자세한 설명은 링크를 참조하자.
-# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps
-#
-# 8
-# uses를 사용하면 다른 리포지터리에 정의된 작업을 사용할 수 있다.
-# 자세한 설명은 링크를 참조하자.
-# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsuses
-# 사용된 uses는 마켓플레이스에도 등록 되어있다.
-# jira-login
-# https://github.com/marketplace/actions/jira-login
-# jira-create-issue
-# https://github.com/marketplace/actions/jira-create-issue
-# 자세한 사용법은 위의 링크를 참조하자.
-# 
-# 9
-# jira-login에서 사용할 민감한 개인 정보는 Github의 secrets을 사용하여 유출되지 않게 했다.
+      - name: Checkout main code
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Issue Parser
+        uses: stefanbuck/github-issue-praser@v3
+        id: issue-parser
+        with:
+          template-path: .github/ISSUE_TEMPLATE/feature.yml
+
+      - name: Log Issue Parser
+        run: |
+          echo '${{ steps.issue-parser.outputs.jsonString }}'
+          echo "Branch Name : ${{ steps.issue-parser.outputs.issueparser_branch }}"
+          echo "Start date : ${{ steps.issue-parser.outputs.issueparser_start_date }}"
+          echo "Due date : ${{ steps.issue-parser.outputs.issueparser_due_date }}"
+
+      - name: Convert markdown to Jira Syntax
+        uses: peter-evans/jira2md@v1
+        id: md2jira
+        with:
+          input-text: |
+            ### Github Issue Link
+            - ${{ github.event.issue.html_url }}
+
+            ${{ github.event.issue.body }}
+          mode: md2jira
+          
+      - name: Check JIRA_USER_EMAIL
+        run: |
+          if [ -z "${{ secrets.JIRA_USER_EMAIL }}" ]; then
+            echo "JIRA_USER_EMAIL is not set or empty"
+          else
+            echo "JIRA_USER_EMAIL is set"
+          fi
+
+      - name: Check JIRA_API_TOKEN
+        run: |
+          if [ -z "${{ secrets.JIRA_API_TOKEN }}" ]; then
+            echo "JIRA_API_TOKEN is not set or empty"
+          else
+            echo "JIRA_API_TOKEN is set"
+          fi
+
+      - name: Check JIRA_BASE_URL
+        run: |
+          if [ -z "${{ secrets.JIRA_BASE_URL }}" ]; then
+            echo "JIRA_BASE_URL is not set or empty"
+          else
+            echo "JIRA_BASE_URL is set"
+          fi
+          
+      - name: List Jira Fields
+        run: |
+          curl -u ${{ secrets.JIRA_USER_EMAIL }}:${{ secrets.JIRA_API_TOKEN }} \
+          -X GET \
+          -H "Content-Type: application/json" \
+          "${{ secrets.JIRA_BASE_URL }}/rest/api/2/field"
+          
+      - name: Create Issue
+        id: create
+        uses: atlassian/gajira-create@v3
+        with:
+          project: TINU
+          issuetype: SERVER
+          summary: "${{ github.event.issue.title }}"
+          description: "${{ steps.md2jira.outputs.output-text }}"
+          fields: '{"parent": { "key": "TINU-51" }, "customfield_10015": "${{ steps.issue-parser.outputs.issueparser_start_date }}", "duedate": "${{ steps.issue-parser.outputs.issueparser_due_date }}"}'
+
+      - name: Log created issue
+        run: echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
+
+      - name: Checkout develop code
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+
+      - name: Create branch with Ticket number
+        run: |
+          BRANCH_NAME="${{ steps.create.outputs.issue }}/${{ steps.issue-parser.outputs.issueparser_branch }}"
+          git checkout -b $BRANCH_NAME
+          git push origin $BRANCH_NAME
+
+      - name: Update issue title
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: "update-issue"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "${{ steps.create.outputs.issue }} ${{ github.event.issue.title }}"
