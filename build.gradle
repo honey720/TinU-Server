@@ -54,3 +54,13 @@ kotlin {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.register("installLocalGitHook", Copy) {
+	from("${rootProject.rootDir}/.github/hooks")
+	into(new File("${rootProject.rootDir}/.git/hooks"))
+	fileMode 0775
+}
+
+tasks.build {
+	dependsOn(tasks.installLocalGitHook)
+}
