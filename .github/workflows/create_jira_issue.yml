@@ -32,8 +32,10 @@ jobs:
           echo "Branch Name : ${{ steps.issue-parser.outputs.issueparser_branch }}"
           echo "Start date : ${{ steps.issue-parser.outputs.issueparser_start_date }}"
           echo "Due date : ${{ steps.issue-parser.outputs.issueparser_due_date }}"
+          echo "checkbox : ${{ steps.issue-parser.outputs.issueparser_is_only_branch }}"
 
       - name: Convert markdown to Jira Syntax
+        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '브랜치만 생성할래요' }}
         uses: peter-evans/jira2md@v1
         id: md2jira
         with:
@@ -44,38 +46,8 @@ jobs:
             ${{ github.event.issue.body }}
           mode: md2jira
           
-      - name: Check JIRA_USER_EMAIL
-        run: |
-          if [ -z "${{ secrets.JIRA_USER_EMAIL }}" ]; then
-            echo "JIRA_USER_EMAIL is not set or empty"
-          else
-            echo "JIRA_USER_EMAIL is set"
-          fi
-
-      - name: Check JIRA_API_TOKEN
-        run: |
-          if [ -z "${{ secrets.JIRA_API_TOKEN }}" ]; then
-            echo "JIRA_API_TOKEN is not set or empty"
-          else
-            echo "JIRA_API_TOKEN is set"
-          fi
-
-      - name: Check JIRA_BASE_URL
-        run: |
-          if [ -z "${{ secrets.JIRA_BASE_URL }}" ]; then
-            echo "JIRA_BASE_URL is not set or empty"
-          else
-            echo "JIRA_BASE_URL is set"
-          fi
-          
-      - name: List Jira Fields
-        run: |
-          curl -u ${{ secrets.JIRA_USER_EMAIL }}:${{ secrets.JIRA_API_TOKEN }} \
-          -X GET \
-          -H "Content-Type: application/json" \
-          "${{ secrets.JIRA_BASE_URL }}/rest/api/2/field"
-          
       - name: Create Issue
+        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '브랜치만 생성할래요' }}
         id: create
         uses: atlassian/gajira-create@v3
         with:
@@ -86,6 +58,7 @@ jobs:
           fields: '{"parent": { "key": "TINU-51" }, "customfield_10015": "${{ steps.issue-parser.outputs.issueparser_start_date }}", "duedate": "${{ steps.issue-parser.outputs.issueparser_due_date }}"}'
 
       - name: Log created issue
+        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '브랜치만 생성할래요' }}
         run: echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
 
       - name: Checkout develop code
