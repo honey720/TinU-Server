@@ -1,9 +1,7 @@
 package com.tinuproject.tinu.domain.exception.token
 
-import com.tinuproject.tinu.domain.exception.base.BaseErrorCode
 import com.tinuproject.tinu.domain.exception.base.BaseException
-import com.tinuproject.tinu.domain.exception.base.ResponseDTO
-import java.lang.RuntimeException
+import com.tinuproject.tinu.domain.exception.base.ErrorCode
 
-class ExpiredTokenException(): BaseException(tokenErrorCode = TokenErrorCode.TOKEN_EXPIRED) {
+class ExpiredTokenException(): BaseException(errorCode = ErrorCode.TOKEN_EXPIRED) {
 }
