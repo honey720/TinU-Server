@@ -112,7 +112,6 @@ class OAuthLoginSuccessHandler(
         val encodedName: String = URLEncoder.encode(name, "UTF-8")
         val redirectUri = String.format(REDIRECT_URL, encodedName, accessToken, "done")
 
-
         response?.addHeader("Authorization", accessToken)
         response?.addHeader("Set-Cookie",CookieGenerator.createCookies("AccessToken",accessToken))
         response?.addHeader("Set-Cookie",CookieGenerator.createCookies("RefreshToken", refreshToken))
