@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -45,8 +46,8 @@ class RefreshTokenController(
             throw e
         }
 
-        httpServletResponse.addCookie(CookieGenerator.createCookies(accessTokenKey,tokens.accessToken))
-        httpServletResponse.addCookie(CookieGenerator.createCookies(refreshTokenkey, tokens.refreshToken))
+        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE,CookieGenerator.createCookies(accessTokenKey,tokens.accessToken))
+        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE,CookieGenerator.createCookies(refreshTokenkey, tokens.refreshToken))
         var body : MutableMap<String, Any> = mutableMapOf()
 
         //TODO 이후 삭제 예정 잘 보내지는 지 responseBody를 통해 확인하기 위함.

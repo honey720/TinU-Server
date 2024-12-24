@@ -9,6 +9,7 @@ import com.tinuproject.tinu.security.jwt.JwtUtil
 import com.tinuproject.tinu.security.oauth2.dto.KakaoUserInfo
 import com.tinuproject.tinu.security.oauth2.dto.NaverUserInfo
 import com.tinuproject.tinu.security.oauth2.dto.OAuth2UserInfoDto
+import com.tinuproject.tinu.web.CookieGenerator
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory
 import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.PropertySource
+import org.springframework.http.HttpHeaders
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.stereotype.Component
@@ -112,19 +114,9 @@ class OAuthLoginSuccessHandler(
 
 
         response?.addHeader("Authorization", accessToken)
-        response?.addCookie(createCookies("AccessToken",accessToken))
-        response?.addCookie(createCookies("RefreshToken", refreshToken))
+        response?.addHeader(HttpHeaders.SET_COOKIE,CookieGenerator.createCookies("AccessToken",accessToken))
+        response?.addHeader(HttpHeaders.SET_COOKIE,CookieGenerator.createCookies("RefreshToken", refreshToken))
         response?.sendRedirect(redirectUri)
-    }
-
-    fun createCookies(key : String, value : String) : Cookie {
-        val cookie = Cookie(key, value)
-        cookie.path = "/"
-        cookie.isHttpOnly = false
-        cookie.secure = false
-        cookie.maxAge = COOKIE_MAX_AGE
-
-        return cookie
     }
 
 

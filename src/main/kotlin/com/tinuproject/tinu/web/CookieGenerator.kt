@@ -1,17 +1,21 @@
 package com.tinuproject.tinu.web
 
 import jakarta.servlet.http.Cookie
+import org.apache.coyote.Response
+import org.springframework.http.ResponseCookie
 
 class CookieGenerator {
     companion object{
-        fun createCookies(key : String, value : String) : Cookie {
-            val cookie = Cookie(key, value)
-            cookie.path = "/"
-            cookie.isHttpOnly = false
-            cookie.secure = false
-            cookie.maxAge = 3600
+        fun createCookies(key : String, value : String) : String {
+            val cookie = ResponseCookie.from(key, value)
+                .path("/")
+                .maxAge(3600)
+                .secure(false)
+                .httpOnly(true)
+                .sameSite("None")
+                .build()
 
-            return cookie
+            return cookie.toString()
         }
     }
 }
