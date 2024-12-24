@@ -67,9 +67,9 @@ jobs:
           jwt.redirect=${{ secrets.JWT_REDIRECT_URI }}
           jwt.access-token.expiration-time=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION_TIME }}
           jwt.refresh-token.expiration-time=${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION_TIME }}
-          cookie.max-age=${{ secrets.COOKIE_ACCESS_TOKEN }}
-          cookie.token.access-token=${{ secrets.COOKIE_REFRESH_TOKEN }}
-          cookie.token.refresh-token=${{ secrets.COOKIE_MAX_AGE }}
+          cookie.max-age=${{ secrets.COOKIE_MAX_AGE }}
+          cookie.token.access-token=${{ secrets.COOKIE_ACCESS_TOKEN }}
+          cookie.token.refresh-token=${{ secrets.COOKIE_REFRESH_TOKEN }}
           EOF
 
     # docker image 빌드
