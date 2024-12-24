@@ -12,7 +12,7 @@ class CookieGenerator {
                 .maxAge(3600)
                 .secure(false)
                 .httpOnly(false)
-                .sameSite("None")
+//                .sameSite("None")
                 .build()
 
             return cookie.toString()
