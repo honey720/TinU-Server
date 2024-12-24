@@ -114,8 +114,8 @@ class OAuthLoginSuccessHandler(
 
 
         response?.addHeader("Authorization", accessToken)
-        response?.addHeader("Set-Cookie",CookieGenerator.createCookies("AccessToken",accessToken))
-        response?.addHeader("Set-Cookie",CookieGenerator.createCookies("RefreshToken", refreshToken))
+        response?.addHeader(HttpHeaders.SET_COOKIE,CookieGenerator.createCookies("AccessToken",accessToken))
+        response?.addHeader(HttpHeaders.SET_COOKIE,CookieGenerator.createCookies("RefreshToken", refreshToken))
         response?.sendRedirect(redirectUri)
     }
 

@@ -11,7 +11,7 @@ class CookieGenerator {
                 .path("/")
                 .maxAge(3600)
                 .secure(false)
-                .httpOnly(false)
+                .httpOnly(true)
                 .sameSite("None")
                 .build()
 
