@@ -70,6 +70,7 @@ jobs:
           cookie.max-age=${{ secrets.COOKIE_MAX_AGE }}
           cookie.token.access-token=${{ secrets.COOKIE_ACCESS_TOKEN }}
           cookie.token.refresh-token=${{ secrets.COOKIE_REFRESH_TOKEN }}
+          web.allowed-path=${{ secrets.ALLOWED_PATH }}
           EOF
 
     # docker image 빌드

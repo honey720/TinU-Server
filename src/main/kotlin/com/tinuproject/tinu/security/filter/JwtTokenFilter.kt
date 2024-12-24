@@ -23,17 +23,13 @@ class JwtTokenFilter(
 
     val jwtUtil : JwtUtil,
 
-    private val ACCESSTOKEN_COOKIE : String
+    private val ACCESSTOKEN_COOKIE : String,
+
+    //토큰이 없어도 되는 api
+    private val excludeUrls : List<String>
 
 ) : OncePerRequestFilter(){
     var log : Logger = LoggerFactory.getLogger(this::class.java);
-    // 요청 제외 url
-    private val excludeUrls =
-        listOf(
-            "/login",
-            "/favicon.ico",
-            "/api/token/generate"
-        )
 
 
     fun hasJwtToken(httpServeletRequest : HttpServletRequest) : String{
