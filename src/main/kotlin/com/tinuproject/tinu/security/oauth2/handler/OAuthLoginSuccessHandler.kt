@@ -26,7 +26,6 @@ import java.util.*
 
 
 @Component
-@PropertySource("classpath:/secret.yml")
 class OAuthLoginSuccessHandler(
 
     private val jwtUtil: JwtUtil,

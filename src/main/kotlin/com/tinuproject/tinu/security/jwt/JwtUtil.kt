@@ -22,7 +22,6 @@ import java.time.Clock
 
 
 @Component
-@PropertySource("classpath:/secret.yml")
 class JwtUtil {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
     @Value("\${jwt.secret}")
