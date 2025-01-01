@@ -3,6 +3,7 @@ package com.tinuproject.tinu.domain.token.refreshtoken.service
 import com.tinuproject.tinu.domain.entity.RefreshToken
 import com.tinuproject.tinu.domain.exception.token.ExpiredTokenException
 import com.tinuproject.tinu.domain.exception.token.InvalidedTokenException
+import com.tinuproject.tinu.domain.exception.token.NotFoundTokenException
 import com.tinuproject.tinu.domain.token.Tokens
 import com.tinuproject.tinu.domain.token.refreshtoken.repository.RefreshTokenRepository
 import com.tinuproject.tinu.security.jwt.JwtUtil
@@ -30,6 +31,9 @@ class RefreshTokenServiceImpl(
     override fun reissueAccessTokenByRefreshToken(refreshToken: String): Tokens {
         jwtUtil.validateToken(refreshToken)
 
+        if(refreshTokenRepository.findByToken(refreshToken)==null){
+            throw NotFoundTokenException()
+        }
 
         val userId :UUID = UUID.fromString(jwtUtil.getUserIdFromToken(refreshToken))
 
