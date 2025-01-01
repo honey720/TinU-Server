@@ -10,9 +10,14 @@ import java.util.*
 
 interface RefreshTokenRepository:CrudRepository<RefreshToken, Long> {
 
-    fun findByUserId(userId : UUID) : RefreshToken
+    fun findByToken(token : String) : RefreshToken?
 
     @Transactional
     @Modifying
     fun deleteByUserId(userId : UUID)
+
+
+    @Transactional
+    @Modifying
+    fun deleteByToken(token : String)
 }
