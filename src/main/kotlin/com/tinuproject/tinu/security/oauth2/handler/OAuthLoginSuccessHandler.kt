@@ -83,7 +83,7 @@ class OAuthLoginSuccessHandler(
         // 정보 추출
         val providerId = oAuth2UserInfo!!.getProviderId()
         val name = oAuth2UserInfo!!.getName()
-        val existUser: SocialMember? = userRepository. findByProviderId(providerId)
+        val existUser: SocialMember? = userRepository.findByProviderId(providerId)
         val user: SocialMember
         if (existUser == null) {
             // 신규 유저인 경우
@@ -107,7 +107,6 @@ class OAuthLoginSuccessHandler(
 
         // 액세스 토큰 발급
         var accessToken: String = jwtUtil.generateAccessToken(user.userId, ACCESS_TOKEN_EXPIRATION_TIME)
-//        accessToken = "Bearer "+accessToken
         // 이름, 액세스 토큰, 리프레쉬 토큰을 담아 리다이렉트
         val encodedName: String = URLEncoder.encode(name, "UTF-8")
         val redirectUri = String.format(REDIRECT_URL, encodedName, accessToken, "done")
