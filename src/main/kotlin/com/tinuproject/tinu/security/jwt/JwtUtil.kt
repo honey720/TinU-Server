@@ -66,11 +66,7 @@ class JwtUtil {
     // 토큰에서 유저 id를 반환하는 메서드
     fun getUserIdFromToken(token: String?): String {
         return try {
-            val userId: String = Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .body
+            val userId: String = getClaimsFromToken(token)
                 .get("userId", String::class.java)
             log.info("유저 id 반환")
             userId
