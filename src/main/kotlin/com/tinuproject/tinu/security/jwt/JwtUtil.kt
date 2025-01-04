@@ -112,7 +112,10 @@ class JwtUtil {
         //parseClamisJWS에서 발생하는 예외를
         //본 프로젝트에서의 예외로 변경.
         try{
-            getClaimsFromToken(token)
+            Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
         }catch (e : SignatureException){
             throw InvalidedTokenException()
         }catch (e : ExpiredJwtException){
