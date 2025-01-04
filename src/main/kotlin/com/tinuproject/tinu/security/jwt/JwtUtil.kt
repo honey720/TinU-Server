@@ -66,11 +66,7 @@ class JwtUtil {
     // 토큰에서 유저 id를 반환하는 메서드
     fun getUserIdFromToken(token: String?): String {
         return try {
-            val userId: String = Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .body
+            val userId: String = getClaimsFromToken(token)
                 .get("userId", String::class.java)
             log.info("유저 id 반환")
             userId
@@ -112,7 +108,10 @@ class JwtUtil {
         //parseClamisJWS에서 발생하는 예외를
         //본 프로젝트에서의 예외로 변경.
         try{
-            getClaimsFromToken(token)
+            Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
         }catch (e : SignatureException){
             throw InvalidedTokenException()
         }catch (e : ExpiredJwtException){

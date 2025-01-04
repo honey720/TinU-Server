@@ -40,13 +40,9 @@ class RefreshTokenController(
         if(refreshToken==null){
             throw NotFoundTokenException()
         }
-        try{
-            tokens = refreshTokenService.reissueAccessTokenByRefreshToken(refreshToken)
-        }catch (e : InvalidedTokenException){
-            throw e
-        }catch (e : NotFoundTokenException){
-            throw e
-        }
+
+        tokens = refreshTokenService.reissueAccessTokenByRefreshToken(refreshToken)
+
 
         httpServletResponse.addHeader(HttpHeaders.SET_COOKIE,CookieGenerator.createCookies(accessTokenKey,tokens.accessToken))
         httpServletResponse.addHeader(HttpHeaders.SET_COOKIE,CookieGenerator.createCookies(refreshTokenkey, tokens.refreshToken))
