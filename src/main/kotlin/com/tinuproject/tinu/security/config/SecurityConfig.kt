@@ -6,10 +6,10 @@ import com.tinuproject.tinu.security.filter.JwtTokenFilter
 import com.tinuproject.tinu.security.jwt.JwtUtil
 import com.tinuproject.tinu.security.oauth2.handler.OAuthLoginFailureHandler
 import com.tinuproject.tinu.security.oauth2.handler.OAuthLoginSuccessHandler
+import com.tinuproject.tinu.security.oauth2.service.CustomOAuth2UserService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.PropertySource
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.builders.WebSecurity
@@ -33,7 +33,7 @@ class SecurityConfig(
     private val jwtUtil: JwtUtil,
     private val oauth2LoginSuccessHandler: OAuthLoginSuccessHandler,
     private val oAuthLoginFailureHandler: OAuthLoginFailureHandler,
-
+    private val customOAuth2UserService: CustomOAuth2UserService,
     @Value("\${cookie.token.access-token}")
     private val accessTokenName : String,
 
@@ -87,6 +87,9 @@ class SecurityConfig(
             )
             .oauth2Login { oauth: OAuth2LoginConfigurer<HttpSecurity?> ->  // OAuth2 로그인 기능에 대한 여러 설정의 진입점
                 oauth
+                    .userInfoEndpoint { userInfo ->
+                        userInfo.userService(customOAuth2UserService) // CustomOAuth2UserService 등록
+                    }
                     //TODO(로그인이 필요한데 안된 부분이 있으면 넘길 수 있는 것.)- 기본은 (백엔드 도메인)/login
                     //.loginPage("http://localhost:8080/loginpage.html").permitAll()
                     .successHandler(oauth2LoginSuccessHandler) // 로그인 성공 시 핸들러
