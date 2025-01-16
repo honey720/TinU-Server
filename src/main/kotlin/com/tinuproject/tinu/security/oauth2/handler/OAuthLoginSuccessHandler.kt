@@ -6,6 +6,7 @@ import com.tinuproject.tinu.domain.enum.Social
 import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
 import com.tinuproject.tinu.domain.token.refreshtoken.repository.RefreshTokenRepository
 import com.tinuproject.tinu.security.jwt.JwtUtil
+import com.tinuproject.tinu.security.oauth2.dto.CustomOAuth2User
 import com.tinuproject.tinu.security.oauth2.dto.KakaoUserInfo
 import com.tinuproject.tinu.security.oauth2.dto.NaverUserInfo
 import com.tinuproject.tinu.security.oauth2.dto.OAuth2UserInfoDto
@@ -64,52 +65,20 @@ class OAuthLoginSuccessHandler(
         response: HttpServletResponse?,
         authentication: Authentication
     ){
-        val token: OAuth2AuthenticationToken = authentication as OAuth2AuthenticationToken // 토큰
-        val provider: String = token.getAuthorizedClientRegistrationId() // provider 추출
-        when (provider) {
+        val oauth2User: CustomOAuth2User = authentication.principal as CustomOAuth2User
 
-            "kakao" -> {
-                log.info("카카오 로그인 요청")
-                oAuth2UserInfo = KakaoUserInfo(token.getPrincipal().getAttributes())
-            }
-
-            "naver" -> {
-                log.info("네이버 로그인 요청")
-                oAuth2UserInfo =
-                    NaverUserInfo(token.getPrincipal().getAttributes().get("response") as Map<String, Any>)
-            }
-        }
-
-        // 정보 추출
-        val providerId = oAuth2UserInfo!!.getProviderId()
-        val name = oAuth2UserInfo!!.getName()
-        val existUser: SocialMember? = userRepository.findByProviderId(providerId)
-        val user: SocialMember
-        if (existUser == null) {
-            // 신규 유저인 경우
-            log.info("신규 유저입니다. 등록을 진행합니다.")
-            user = SocialMember(userId = UUID.randomUUID(),provider= Social.getSocial(provider), providerId = providerId)
-            userRepository.save(user)
-        } else {
-            // 기존 유저인 경우
-            log.info("기존 유저입니다.")
-            refreshTokenRepository.deleteByUserId(existUser.userId)
-            user = existUser
-        }
-        log.info("유저 이름 : {}", name)
-        log.info("PROVIDER : {}", provider)
-        log.info("PROVIDER_ID : {}", providerId)
+        val userId : UUID = oauth2User.userInfoDto.uuid
 
         // 리프레쉬 토큰 발급 후 저장
-        val refreshToken: String =  jwtUtil.generateRefreshToken(user.userId, REFRESH_TOKEN_EXPIRATION_TIME)
-        val newRefreshToken: RefreshToken = RefreshToken(userId = user.userId, token = refreshToken)
+        val refreshToken: String =  jwtUtil.generateRefreshToken(userId, REFRESH_TOKEN_EXPIRATION_TIME)
+        val newRefreshToken: RefreshToken = RefreshToken(userId = userId, token = refreshToken)
         refreshTokenRepository.save(newRefreshToken)
 
         // 액세스 토큰 발급
-        var accessToken: String = jwtUtil.generateAccessToken(user.userId, ACCESS_TOKEN_EXPIRATION_TIME)
+        var accessToken: String = jwtUtil.generateAccessToken(userId, ACCESS_TOKEN_EXPIRATION_TIME)
         // 이름, 액세스 토큰, 리프레쉬 토큰을 담아 리다이렉트
-        val encodedName: String = URLEncoder.encode(name, "UTF-8")
-        val redirectUri = String.format(REDIRECT_URL, encodedName, accessToken, "done")
+        val encodedName: String = URLEncoder.encode(oauth2User.name, "UTF-8")
+        val redirectUri = String.format(REDIRECT_URL,encodedName,accessToken,refreshToken)
 
         response?.addHeader("Set-Cookie",CookieGenerator.createCookies("AccessToken", accessToken))
         response?.addHeader("Set-Cookie",CookieGenerator.createCookies("RefreshToken", refreshToken))
