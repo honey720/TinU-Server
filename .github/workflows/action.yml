@@ -71,6 +71,7 @@ jobs:
           cookie.token.access-token=${{ secrets.COOKIE_ACCESS_TOKEN }}
           cookie.token.refresh-token=${{ secrets.COOKIE_REFRESH_TOKEN }}
           web.allowed-path=${{ secrets.ALLOWED_PATH }}
+          spring.web.resources.add-mappings=false
           EOF
 
     # docker image 빌드
