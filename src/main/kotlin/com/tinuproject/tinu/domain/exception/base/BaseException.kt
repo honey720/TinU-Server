@@ -1,5 +1,6 @@
 package com.tinuproject.tinu.domain.exception.base
 
+import com.tinuproject.tinu.DTO.ResponseDTO
 import java.lang.RuntimeException
 
 open class BaseException(
@@ -10,6 +11,6 @@ open class BaseException(
         var map : MutableMap<String, Any> = mutableMapOf()
         map["error-message"] = errorCode.message
         if(errorCode.stateCode!=null) map["stateCode"] = errorCode.stateCode
-        return ResponseDTO(isSuccess = false, httpStatusCode = errorCode.httpStatusCode, result = map)
+        return ResponseDTO(isSuccess = false, stateCode = errorCode.httpStatusCode, result = map)
     }
 }

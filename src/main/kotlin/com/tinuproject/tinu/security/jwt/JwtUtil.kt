@@ -74,11 +74,11 @@ class JwtUtil {
             // 토큰이 유효하지 않은 경우
             log.warn("유효하지 않은 토큰입니다.")
             //(토큰이 유효하지 않는 경우 반환하는 Exception을 만들어 처리)
-            throw Exception()
+            throw InvalidedTokenException()
         } catch (e: IllegalArgumentException) {
             log.warn("유효하지 않은 토큰입니다.")
             //(토큰이 유효하지 않는 경우 반환하는 Exception을 만들어 처리)
-            throw Exception()
+            throw InvalidedTokenException()
         }
     }
 

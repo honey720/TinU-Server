@@ -33,8 +33,6 @@ class OAuthLoginSuccessHandler(
 
     private val jwtUtil: JwtUtil,
 
-    private val userRepository: SocialMemberRepository,
-
     private val refreshTokenRepository: RefreshTokenRepository,
 
     @Value("\${jwt.redirect}")
@@ -48,16 +46,9 @@ class OAuthLoginSuccessHandler(
     @Value("\${jwt.refresh-token.expiration-time}")
     private val REFRESH_TOKEN_EXPIRATION_TIME: Long, // 리프레쉬 토큰 유효기간
 
-    @Value("\${cookie.max-age}")
-    private val COOKIE_MAX_AGE : Int
-
 
 ) : SimpleUrlAuthenticationSuccessHandler() {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
-
-
-
-    private var oAuth2UserInfo: OAuth2UserInfoDto? = null
 
     @Throws
     override fun onAuthenticationSuccess(
@@ -71,7 +62,7 @@ class OAuthLoginSuccessHandler(
 
         // 리프레쉬 토큰 발급 후 저장
         val refreshToken: String =  jwtUtil.generateRefreshToken(userId, REFRESH_TOKEN_EXPIRATION_TIME)
-        val newRefreshToken: RefreshToken = RefreshToken(userId = userId, token = refreshToken)
+        val newRefreshToken = RefreshToken(userId = userId, token = refreshToken)
         refreshTokenRepository.save(newRefreshToken)
 
         // 액세스 토큰 발급

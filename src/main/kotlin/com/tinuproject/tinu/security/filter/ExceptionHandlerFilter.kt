@@ -1,22 +1,16 @@
 package com.tinuproject.tinu.security.filter
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.tinuproject.tinu.DTO.ResponseDTO
 import com.tinuproject.tinu.domain.exception.base.BaseException
-import com.tinuproject.tinu.domain.exception.base.ResponseDTO
 import com.tinuproject.tinu.web.ResponseEntityGenerator
 import jakarta.servlet.FilterChain
-import jakarta.servlet.GenericFilter
-import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.apache.juli.logging.LogFactory
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import java.io.IOException
 
@@ -42,7 +36,7 @@ class ExceptionHandlerFilter(
 
     fun setErrorResponse(response: ServletResponse?, e : BaseException){
         if(response is HttpServletResponse){
-            response.status = e.getResponse().httpStatusCode!!
+            response.status = e.getResponse().stateCode
             response.contentType = MediaType.APPLICATION_JSON_VALUE
             response.characterEncoding = "UTF-8"
             val result : ResponseDTO? = ResponseEntityGenerator.onFailure(e).body
@@ -54,6 +48,4 @@ class ExceptionHandlerFilter(
             }
         }
     }
-
-
 }
