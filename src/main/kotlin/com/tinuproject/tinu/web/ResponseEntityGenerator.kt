@@ -1,8 +1,7 @@
 package com.tinuproject.tinu.web
 
+import com.tinuproject.tinu.DTO.ResponseDTO
 import com.tinuproject.tinu.domain.exception.base.BaseErrorCode
-import com.tinuproject.tinu.domain.exception.base.ResponseDTO
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
 class ResponseEntityGenerator {
@@ -10,7 +9,7 @@ class ResponseEntityGenerator {
         fun onSuccess(result : Any?) : ResponseEntity<ResponseDTO> {
             val responseDTO = ResponseDTO(
                 isSuccess = true,
-                httpStatusCode = 200,
+                stateCode = 200,
                 result = result
             )
 
@@ -20,7 +19,7 @@ class ResponseEntityGenerator {
         fun onSuccess(result : Any?, httpStatus : Int) : ResponseEntity<ResponseDTO>{
             val responseDTO = ResponseDTO(
                 isSuccess = true,
-                httpStatusCode = httpStatus,
+                stateCode = httpStatus,
                 result = result
             )
 
@@ -29,7 +28,7 @@ class ResponseEntityGenerator {
 
         fun onFailure(code : BaseErrorCode) : ResponseEntity<ResponseDTO>{
             val responseDTO = code.getResponse()
-            return ResponseEntity.status(responseDTO!!.httpStatusCode!!).body(responseDTO)
+            return ResponseEntity.status(responseDTO!!.stateCode).body(responseDTO)
         }
     }
 }

@@ -88,15 +88,6 @@ class JwtTokenFilter(
             log.warn("토큰이 만료되었습니다.")
             throw e
         }
-        /*
-            위 3개의 catch문을
-            catch(e:BaseException){
-                log.warn(e.message)
-                throw e
-            }
-            로 대체 가능
-        */
-
         filterChain.doFilter(request,response)
     }
 
