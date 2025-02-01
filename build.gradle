@@ -44,6 +44,19 @@ dependencies {
 	testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	//security 관련 의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	//jwt 관련 의존성 추가
+	implementation "io.jsonwebtoken:jjwt-api:0.11.5"
+	implementation "io.jsonwebtoken:jjwt-impl:0.11.5"
+	implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
+	//OAuth2 관련 의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 kotlin {
