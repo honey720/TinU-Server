@@ -59,7 +59,7 @@ jobs:
           issuetype: SERVER
           summary: "${{ github.event.issue.title }}"
           description: "${{ steps.md2jira.outputs.output-text }}"
-          fields: '{"parent": { "key": "TINU-51" }, "customfield_10015": "${{ steps.date.START_DATE }}", "duedate": "${{ steps.date.DUE_DATE }}"}'
+          fields: '{"parent": { "key": "TINU-51" }, "customfield_10015": "${{ steps.date.outputs.START_DATE }}", "duedate": "${{ steps.date.outputs.DUE_DATE }}"}'
 
       - name: Log created issue
         if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '등록하지 않을래요.' }}
