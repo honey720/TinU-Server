@@ -36,12 +36,12 @@ body:
       label: '지라 이슈 등록를 제외할까요?'
       description: '체크하면 지라 이슈와 티켓 넘버가 생성되지 않아요.'
       options:
-        - label: 등록하지 않을래요.
+        - label: 네
 
   - type: input
     id: period
     attributes:
-      label: '개발 기간은 얼마나 되나요?(DAY)'
+      label: '개발 기간은 얼마나 되나요?(Day)'
       description: '양의 정수로 입력해주세요. 비워두시면 1일로 설정됩니다.'
       placeholder: '1'
     validations:
