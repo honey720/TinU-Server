@@ -36,7 +36,7 @@ body:
       label: '지라 이슈 생성을 건너뛸까요?'
       description: '체크하면 지라 이슈와 티켓 넘버가 생성되지 않아요.'
       options:
-        - label: 지라 이슈 등록 생략
+        - label: 건너뛸래요
 
   - type: input
     id: period
