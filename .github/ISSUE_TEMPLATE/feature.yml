@@ -16,7 +16,7 @@ body:
     id: without_jira_issue
     attributes:
       label: '지라 이슈 해제'
-      description: '체크하면 지라 이슈와 이슈 티켓 넘버가 생성되지 않아요.'
+      description: '체크하면 지라 이슈와 티켓 넘버가 생성되지 않아요.'
       options:
         - label: 지라 이슈를 생성하지 않을래요.
 
