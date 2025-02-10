@@ -18,7 +18,7 @@ jobs:
       - name: Checkout main code
         uses: actions/checkout@v4
         with:
-          ref: master
+          ref: develop
 
       - name: Issue Parser
         uses: stefanbuck/github-issue-praser@v3
@@ -30,13 +30,15 @@ jobs:
         run: |
           echo '${{ steps.issue-parser.outputs.jsonString }}'
           echo "Branch Name : ${{ steps.issue-parser.outputs.issueparser_branch }}"
-          echo "Start date : ${{ steps.issue-parser.outputs.issueparser_start_date }}"
-          echo "Due date : ${{ steps.issue-parser.outputs.issueparser_due_date }}"
-          echo "checkbox : ${{ steps.issue-parser.outputs.issueparser_is_only_branch }}"
+          echo "checkbox : ${{ steps.issue-parser.outputs.issueparser_without_jira_issue }}"
+          echo "Period : ${{ steps.issue-parser.outputs.issueparser_period }}"
           echo " ${{ steps.issue-parser.outputs}}"
+          echo "CURRENT_DATE : $(date +%F)"
+          echo "FUTURE_DATE=$(date -d '+7 days' +%F)"
+          echo "VAR_AFTER_DATE=$(date -d "${{ steps.issue-parser.outputs.issueparser_period }} days" +%F)"
 
       - name: Convert markdown to Jira Syntax
-        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '브랜치만 생성할래요' }}
+        if: ${{ steps.issue-parser.outputs.issueparser_without_jira_issue != '등록하지 않을래요.' }}
         uses: peter-evans/jira2md@v1
         id: md2jira
         with:
@@ -48,7 +50,7 @@ jobs:
           mode: md2jira
           
       - name: Create Issue
-        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '브랜치만 생성할래요' }}
+        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '등록하지 않을래요.' }}
         id: create
         uses: atlassian/gajira-create@v3
         with:
@@ -56,10 +58,10 @@ jobs:
           issuetype: SERVER
           summary: "${{ github.event.issue.title }}"
           description: "${{ steps.md2jira.outputs.output-text }}"
-          fields: '{"parent": { "key": "TINU-51" }, "customfield_10015": "${{ steps.issue-parser.outputs.issueparser_start_date }}", "duedate": "${{ steps.issue-parser.outputs.issueparser_due_date }}"}'
+          fields: '{"parent": { "key": "TINU-51" }, "customfield_10015": "$(date +%F)", "duedate": "$(date -d "${{ steps.issue-parser.outputs.issueparser_period }} days" +%F)"}'
 
       - name: Log created issue
-        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '브랜치만 생성할래요' }}
+        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '등록하지 않을래요.' }}
         run: echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
 
       - name: Checkout develop code
@@ -68,12 +70,14 @@ jobs:
           ref: develop
 
       - name: Create branch with Ticket number
+        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '' }}
         run: |
           BRANCH_NAME="${{ steps.create.outputs.issue }}/${{ steps.issue-parser.outputs.issueparser_branch }}"
           git checkout -b $BRANCH_NAME
           git push origin $BRANCH_NAME
 
       - name: Update issue title
+        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '등록하지 않을래요.' }}
         uses: actions-cool/issues-helper@v3
         with:
           actions: "update-issue"
