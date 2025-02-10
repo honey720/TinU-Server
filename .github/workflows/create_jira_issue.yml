@@ -65,11 +65,6 @@ jobs:
         if: ${{ steps.issue-parser.outputs.issueparser_without_jira_issue != '지라 이슈를 만들지 않을래요' }}
         run: echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
 
-      - name: Checkout develop code
-        uses: actions/checkout@v4
-        with:
-          ref: develop
-
       - name: Create branch with Ticket number
         if: ${{ steps.issue-parser.outputs.issueparser_branch != '' }}
         run: |
