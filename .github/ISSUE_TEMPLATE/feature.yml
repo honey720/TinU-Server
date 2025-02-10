@@ -33,10 +33,10 @@ body:
   - type: checkboxes
     id: without_jira_issue
     attributes:
-      label: '지라 이슈 생성을 건너뛸까요?'
+      label: '지라 이슈를 제외할까요?'
       description: '체크하면 지라 이슈와 티켓 넘버가 생성되지 않아요.'
       options:
-        - label: 건너뛸래요
+        - label: 지라 이슈를 만들지 않을래요
 
   - type: input
     id: period
