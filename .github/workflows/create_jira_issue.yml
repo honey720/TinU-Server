@@ -33,9 +33,9 @@ jobs:
           echo "checkbox : ${{ steps.issue-parser.outputs.issueparser_without_jira_issue }}"
           echo "Period : ${{ steps.issue-parser.outputs.issueparser_period }}"
           echo " ${{ steps.issue-parser.outputs}}"
-          echo "CURRENT_DATE : $(date +%F)"
+          echo "START_DATE : $(date +%F)" >> $GITHUB_ENV
           echo "FUTURE_DATE=$(date -d '+7 days' +%F)"
-          echo "VAR_AFTER_DATE=$(date -d "${{ steps.issue-parser.outputs.issueparser_period }} days" +%F)"
+          echo "DUE_DATE=$(date -d "${{ steps.issue-parser.outputs.issueparser_period }} days" +%F)" >> $GITHUB_ENV
 
       - name: Convert markdown to Jira Syntax
         if: ${{ steps.issue-parser.outputs.issueparser_without_jira_issue != '등록하지 않을래요.' }}
@@ -58,7 +58,7 @@ jobs:
           issuetype: SERVER
           summary: "${{ github.event.issue.title }}"
           description: "${{ steps.md2jira.outputs.output-text }}"
-          fields: '{"parent": { "key": "TINU-51" }, "customfield_10015": "$(date +%F)", "duedate": "$(date -d "${{ steps.issue-parser.outputs.issueparser_period }} days" +%F)"}'
+          fields: '{"parent": { "key": "TINU-51" }, "customfield_10015": "${{ env.START_DATE }}", "duedate": "${{ env.DUE_DATE }}"}'
 
       - name: Log created issue
         if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '등록하지 않을래요.' }}
@@ -70,7 +70,7 @@ jobs:
           ref: develop
 
       - name: Create branch with Ticket number
-        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '' }}
+        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '_No response_' }}
         run: |
           BRANCH_NAME="${{ steps.create.outputs.issue }}/${{ steps.issue-parser.outputs.issueparser_branch }}"
           git checkout -b $BRANCH_NAME
