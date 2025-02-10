@@ -34,7 +34,7 @@ jobs:
           echo "checkbox : ${{ steps.issue-parser.outputs.issueparser_without_jira_issue }}"
           echo "Period : ${{ steps.issue-parser.outputs.issueparser_period }}"
           echo " ${{ steps.issue-parser.outputs}}"
-          echo "START_DATE : $(date +%F)" >> $GITHUB_OUTPUT
+          echo "START_DATE=$(date +%F)" >> $GITHUB_OUTPUT
           echo "FUTURE_DATE=$(date -d '+7 days' +%F)"
           echo "DUE_DATE=$(date -d "${{ steps.issue-parser.outputs.issueparser_period }} days" +%F)" >> $GITHUB_OUTPUT
 
