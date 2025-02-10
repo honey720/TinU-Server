@@ -36,7 +36,7 @@ body:
       label: '지라 이슈 등록를 제외할까요?'
       description: '체크하면 지라 이슈와 티켓 넘버가 생성되지 않아요.'
       options:
-        - label: 지라 이슈를 생성하지 않을래요.
+        - label: 등록하지 않을래요.
 
   - type: input
     id: period
