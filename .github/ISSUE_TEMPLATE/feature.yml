@@ -27,6 +27,8 @@ body:
       label: '참조(References)'
       description: '해당 이슈과 관련된 레퍼런스를 참조해주세요'
     validations:
+      value: |
+        - 
       required: true
 
   - type: input
