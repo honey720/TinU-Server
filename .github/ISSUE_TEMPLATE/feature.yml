@@ -41,7 +41,7 @@ body:
   - type: input
     id: period
     attributes:
-      label: '개발 기간은 얼마나 되나요?'
+      label: '개발 기간은 얼마나 되나요?(DAY)'
       description: '양의 정수로 입력해주세요. 비워두시면 1일로 설정됩니다.'
       placeholder: '1'
     validations:
