@@ -71,7 +71,7 @@ jobs:
           ref: develop
 
       - name: Create branch with Ticket number
-        if: ${{ steps.issue-parser.outputs.issueparser_branch != '_No response_' }}
+        if: ${{ steps.issue-parser.outputs.issueparser_branch != '' }}
         run: |
           BRANCH_NAME="${{ steps.create.outputs.issue }}/${{ steps.issue-parser.outputs.issueparser_branch }}"
           git checkout -b $BRANCH_NAME
