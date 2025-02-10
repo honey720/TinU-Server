@@ -51,7 +51,7 @@ jobs:
           mode: md2jira
           
       - name: Create Issue
-        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '등록하지 않을래요.' }}
+        if: ${{ steps.issue-parser.outputs.issueparser_without_jira_issue != '등록하지 않을래요.' }}
         id: create
         uses: atlassian/gajira-create@v3
         with:
@@ -62,7 +62,7 @@ jobs:
           fields: '{"parent": { "key": "TINU-51" }, "customfield_10015": "${{ steps.date.outputs.START_DATE }}", "duedate": "${{ steps.date.outputs.DUE_DATE }}"}'
 
       - name: Log created issue
-        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '등록하지 않을래요.' }}
+        if: ${{ steps.issue-parser.outputs.issueparser_without_jira_issue != '등록하지 않을래요.' }}
         run: echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
 
       - name: Checkout develop code
@@ -71,14 +71,14 @@ jobs:
           ref: develop
 
       - name: Create branch with Ticket number
-        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '_No response_' }}
+        if: ${{ steps.issue-parser.outputs.issueparser_branch != '_No response_' }}
         run: |
           BRANCH_NAME="${{ steps.create.outputs.issue }}/${{ steps.issue-parser.outputs.issueparser_branch }}"
           git checkout -b $BRANCH_NAME
           git push origin $BRANCH_NAME
 
       - name: Update issue title
-        if: ${{ steps.issue-parser.outputs.issueparser_is_only_branch != '등록하지 않을래요.' }}
+        if: ${{ steps.issue-parser.outputs.issueparser_without_jira_issue != '등록하지 않을래요.' }}
         uses: actions-cool/issues-helper@v3
         with:
           actions: "update-issue"
