@@ -73,7 +73,14 @@ jobs:
       - name: Create branch with Ticket number
         if: ${{ steps.issue-parser.outputs.issueparser_branch != '' }}
         run: |
-          BRANCH_NAME="${{ steps.create.outputs.issue }}/${{ steps.issue-parser.outputs.issueparser_branch }}"
+          WITHOUT_JIRA="${{ steps.issue-parser.outputs.issueparser_without_jira_issue }}"
+
+          if [[ "$WITHOUT_JIRA" == "등록하지 않을래요." ]]; then
+            BRANCH_NAME="${{ steps.issue-parser.outputs.issueparser_branch }}"
+          else
+            BRANCH_NAME="${{ steps.create.outputs.issue }}/${{ steps.issue-parser.outputs.issueparser_branch }}"
+          fi
+
           git checkout -b $BRANCH_NAME
           git push origin $BRANCH_NAME
 
