@@ -72,7 +72,8 @@ jobs:
           echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"\
           FULL_ISSUE="${{ steps.create.outputs.issue }}"
           ISSUE_NUM=$(echo "$FULL_ISSUE" | grep -oE '[0-9]+$' || true)
-          echo "ISSUE_NUM=$ISSUE_NUM" >> $GITHUB_OUTPUT
+          echo "ISSUE_NUM=$ISSUE_NUM" >> $GITHUB_ENV
+          echo "${{ env.ISSUE_NUM }}"
 
       - name: Create branch with Ticket number
         if: ${{ steps.issue-parser.outputs.issueparser_branch != '' }}
@@ -94,4 +95,4 @@ jobs:
         with:
           actions: "update-issue"
           token: ${{ secrets.GITHUB_TOKEN }}
-          title: "${{ github.event.issue.title }} - ${{ steps.issue-num.outputs.ISSUE_NUM }} "
+          title: "${{ github.event.issue.title }} - ${{ env.ISSUE_NUM }} "
