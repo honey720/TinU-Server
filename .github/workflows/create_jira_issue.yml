@@ -70,15 +70,18 @@ jobs:
         id: issue-num
         run: |
           echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
-          FULL_ISSUE="${{ steps.create.outputs.issue }}"
-          ISSUE_NUM=$(echo "$FULL_ISSUE" | sed 's/.*-//')
-          echo "ISSUE_NUM=$ISSUE_NUM" >> $GITHUB_ENV
-          echo "Extracted ISSUE_NUM is: $ISSUE_NUM"
+
 
       - name: Create branch with Ticket number
         if: ${{ steps.issue-parser.outputs.issueparser_branch != '' }}
         run: |
           WITHOUT_JIRA="${{ steps.issue-parser.outputs.issueparser_without_jira_issue }}"
+
+
+          FULL_ISSUE="TINU-104"
+          ISSUE_NUM=$(echo "$FULL_ISSUE" | sed 's/.*-//')
+          echo "ISSUE_NUM=$ISSUE_NUM" >> $GITHUB_ENV
+          echo "Extracted ISSUE_NUM is: $ISSUE_NUM"
 
           if [[ "$WITHOUT_JIRA" == "지라 이슈를 만들지 않을래요" ]]; then
             BRANCH_NAME="${{ steps.issue-parser.outputs.issueparser_branch }}"
@@ -90,7 +93,7 @@ jobs:
           git push origin $BRANCH_NAME
 
       - name: Update issue title
-        if: ${{ steps.issue-parser.outputs.issueparser_without_jira_issue != '지라 이슈를 만들지 않을래요' }}
+        if: ${{ steps.issue-parser.outputs.issueparser_without_jira_issue == '지라 이슈를 만들지 않을래요' }}
         uses: actions-cool/issues-helper@v3
         with:
           actions: "update-issue"
