@@ -39,10 +39,10 @@ body:
         - label: 지라 이슈를 만들지 않을래요
 
   - type: input
-    id: period
+    id: due_date
     attributes:
-      label: '개발 기간은 얼마나 되나요?(Day)'
-      description: '양의 정수로 입력해주세요. 비워두시면 1일로 설정됩니다.'
-      placeholder: '1'
+      label: '개발 기한은 언제인가요?'
+      description: '비워두시면 다음날로 저장할게요.'
+      placeholder: 'YYYY-MM-DD'
     validations:
       required: false

@@ -32,10 +32,14 @@ jobs:
           echo '${{ steps.issue-parser.outputs.jsonString }}'
           echo "Branch Name : ${{ steps.issue-parser.outputs.issueparser_branch }}"
           echo "checkbox : ${{ steps.issue-parser.outputs.issueparser_without_jira_issue }}"
-          echo "Period : ${{ steps.issue-parser.outputs.issueparser_period }}"
+          echo "DUE_DATE : ${{ steps.issue-parser.outputs.issueparser_due_date }}"
           echo "START_DATE=$(date +%F)" >> $GITHUB_OUTPUT
           echo "START_DATE : ${{ steps.date.outputs.START_DATE }}"
-          echo "DUE_DATE=$(date -d "${{ steps.issue-parser.outputs.issueparser_period }} days" +%F)" >> $GITHUB_OUTPUT
+          if [[ "${{ steps.issue-parser.outputs.issueparser_due_date }}" == "" ]]; then
+            echo "DUE_DATE=$(date -d '1 days' +%F)" >> $GITHUB_OUTPUT
+          else
+            echo "DUE_DATE=${{ steps.issue-parser.outputs.issueparser_due_date }}" >> $GITHUB_OUTPUT
+          fi
           echo "DUE_DATE : ${{ steps.date.outputs.DUE_DATE }}"
 
       - name: Convert markdown to Jira Syntax
@@ -63,7 +67,13 @@ jobs:
 
       - name: Log created issue
         if: ${{ steps.issue-parser.outputs.issueparser_without_jira_issue != '지라 이슈를 만들지 않을래요' }}
-        run: echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
+        id: issue-num
+        run: |
+          echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
+          FULL_ISSUE="${{ steps.create.outputs.issue }}"
+          ISSUE_NUM=$(echo "$FULL_ISSUE" | sed 's/.*-//')
+          echo "ISSUE_NUM=$ISSUE_NUM" >> $GITHUB_ENV
+          echo "Extracted ISSUE_NUM is: $ISSUE_NUM"
 
       - name: Create branch with Ticket number
         if: ${{ steps.issue-parser.outputs.issueparser_branch != '' }}
@@ -85,4 +95,4 @@ jobs:
         with:
           actions: "update-issue"
           token: ${{ secrets.GITHUB_TOKEN }}
-          title: "${{ steps.create.outputs.issue }} ${{ github.event.issue.title }}"
+          title: "${{ github.event.issue.title }} - ${{ env.ISSUE_NUM }} "
