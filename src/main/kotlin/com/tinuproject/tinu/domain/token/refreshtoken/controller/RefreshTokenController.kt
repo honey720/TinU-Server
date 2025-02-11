@@ -49,11 +49,4 @@ class RefreshTokenController(
 
         return ResponseEntityGenerator.onSuccess(null)
     }
-
-    @GetMapping("/test")
-    fun testAccessToken(requestServletRequest: HttpServletRequest):ResponseEntity<ResponseDTO>{
-        val accessToken = jwtUtil.getTokenFromHeader(requestServletRequest)
-
-        return ResponseEntityGenerator.onSuccess(accessToken)
-    }
 }
