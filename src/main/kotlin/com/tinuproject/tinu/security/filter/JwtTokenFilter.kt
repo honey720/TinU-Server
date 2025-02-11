@@ -15,6 +15,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.PropertySource
+import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
@@ -33,51 +34,37 @@ class JwtTokenFilter(
 
 
     fun hasJwtToken(httpServeletRequest : HttpServletRequest) : String{
-        val cookies = httpServeletRequest.cookies
-        var hasToken : Boolean = false
-        var accesToken : String= ""
-        if(cookies==null) throw NotFoundTokenException()
 
-        for(cookie in cookies){
-            //Cookie들 중 AccessToken을 갖고 있는지
-            if(cookie.name.equals(ACCESSTOKEN_COOKIE)){
-                hasToken = true
-                accesToken = cookie.value
-            }
+        var hasToken : Boolean = false
+        val accessToken : String?= httpServeletRequest.getHeader(HttpHeaders.AUTHORIZATION)
+
+
+        if(!accessToken.isNullOrBlank()){
+            hasToken=true
         }
+
         //AccessToken을 갖고 있지 않음.
         if(!hasToken){throw NotFoundTokenException() }
 
-        return accesToken
+        return accessToken!!
     }
 
     fun validateToken(accessToken : String){
         jwtUtil.validateToken(accessToken)
     }
 
-    fun expireToken(accessToken: String){
-        if(jwtUtil.isExpired(accessToken)){
-            throw ExpiredTokenException()
-        }
-    }
 
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        var httpServeletRequest : HttpServletRequest = request as HttpServletRequest
+        var httpServeletRequest : HttpServletRequest = request
         var accessToken : String
-
-        val requestUrl = httpServeletRequest.requestURL
-
-        log.info(requestUrl.toString())
-
 
         try{
             accessToken = hasJwtToken(httpServeletRequest)
             validateToken(accessToken)
-            expireToken(accessToken)
         }catch (e : NotFoundTokenException){
             log.warn("토큰이 없습니다.")
             throw e
