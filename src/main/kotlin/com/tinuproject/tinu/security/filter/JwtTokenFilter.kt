@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.PropertySource
 import org.springframework.http.HttpHeaders
+import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
@@ -35,18 +36,11 @@ class JwtTokenFilter(
 
     fun hasJwtToken(httpServeletRequest : HttpServletRequest) : String{
 
-        var hasToken : Boolean = false
         val accessToken : String?= httpServeletRequest.getHeader(HttpHeaders.AUTHORIZATION)
 
+        accessToken?: throw NotFoundTokenException()
 
-        if(!accessToken.isNullOrBlank()){
-            hasToken=true
-        }
-
-        //AccessToken을 갖고 있지 않음.
-        if(!hasToken){throw NotFoundTokenException() }
-
-        return accessToken!!
+        return accessToken
     }
 
     fun validateToken(accessToken : String){
