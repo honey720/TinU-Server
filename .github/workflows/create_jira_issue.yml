@@ -69,11 +69,11 @@ jobs:
         if: ${{ steps.issue-parser.outputs.issueparser_without_jira_issue != '지라 이슈를 만들지 않을래요' }}
         id: issue-num
         run: |
-          echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"\
+          echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
           FULL_ISSUE="${{ steps.create.outputs.issue }}"
           ISSUE_NUM=$(echo "$FULL_ISSUE" | sed 's/.*-//')
           echo "ISSUE_NUM=$ISSUE_NUM" >> $GITHUB_ENV
-          echo "${{ env.ISSUE_NUM }}"
+          echo "Extracted ISSUE_NUM is: $ISSUE_NUM"
 
       - name: Create branch with Ticket number
         if: ${{ steps.issue-parser.outputs.issueparser_branch != '' }}
