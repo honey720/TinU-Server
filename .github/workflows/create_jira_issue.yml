@@ -71,7 +71,7 @@ jobs:
         run: |
           echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"\
           FULL_ISSUE="${{ steps.create.outputs.issue }}"
-          ISSUE_NUM=$(echo "$FULL_ISSUE" | grep -oE '[0-9]+$' || true)
+          ISSUE_NUM=$(echo "$FULL_ISSUE" | sed 's/.*-//')
           echo "ISSUE_NUM=$ISSUE_NUM" >> $GITHUB_ENV
           echo "${{ env.ISSUE_NUM }}"
 
