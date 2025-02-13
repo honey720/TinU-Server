@@ -38,9 +38,8 @@ class RefreshTokenController(
     @GetMapping("/refresh")
     fun refreshAccessToken(httpServletResponse: HttpServletResponse, @CookieValue(name = "RefreshToken") refreshToken : String?): ResponseEntity<ResponseDTO> {
         log.info("AccessToken 갱신 시도")
-        if(refreshToken==null){
-            throw NotFoundTokenException()
-        }
+
+        refreshToken?:throw NotFoundTokenException()
 
         val tokens : Tokens = refreshTokenService.reissueAccessTokenByRefreshToken(refreshToken)
 
