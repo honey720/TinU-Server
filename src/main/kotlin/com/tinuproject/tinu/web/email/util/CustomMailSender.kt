@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component
 
 
 @Component
-class MailSender(
+class CustomMailSender(
     private val javaMailSender: JavaMailSender,
 
     @Value("\${spring.mail.username}")
     private val account : String
 ) {
-    var code : String = ""
+    lateinit var code : String
 
     fun createNumber() {
         code = ((Math.random() * 90000).toInt() + 100000).toString() //(int) Math.random() * (최댓값-최소값+1) + 최소값

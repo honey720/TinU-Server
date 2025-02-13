@@ -1,9 +1,13 @@
 package com.tinuproject.tinu.domain.member.service
 
+import com.tinuproject.tinu.domain.member.repository.MemberRepository
+import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
 import org.springframework.stereotype.Service
 
 @Service
-class MemberServiceImpl():MemberService {
+class MemberServiceImpl(
+    val memberRepository: MemberRepository
+):MemberService {
     override fun insertEmail(eMail: String) {
         TODO("Not yet implemented")
     }
@@ -17,6 +21,10 @@ class MemberServiceImpl():MemberService {
     }
 
     override fun existMemberByEmail(email: String) :Boolean{
-        TODO("Not yet implemented")
+        val existMember= memberRepository.findMemberByeMail(email)
+
+        existMember?: return false
+
+        return true
     }
 }

@@ -9,8 +9,8 @@ import com.tinuproject.tinu.domain.member.service.RegisterService
 import com.tinuproject.tinu.domain.university.service.UniversityService
 import com.tinuproject.tinu.security.jwt.JwtUtil
 import com.tinuproject.tinu.web.ResponseEntityGenerator
-import com.tinuproject.tinu.web.email.util.MailSender
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -38,9 +38,20 @@ class RegisterController(
     fun emailCodeRequest(httpServeletRequest: HttpServletRequest, @RequestBody emailAuthRequestDTO: EmailAuthRequestDTO){
         checkEmailVaildation(emailAuthRequestDTO.email)
 
-        registerService.sendMail(jwtUtil.getTokenFromHeader(httpServeletRequest),emailAuthRequestDTO)
+        registerService.sendMail(httpServeletRequest.getHeader(HttpHeaders.AUTHORIZATION).substring(7),emailAuthRequestDTO)
+
+        //TODO(병합 이후에 이걸로 수정하세용)
+//        registerService.sendMail(jwtUtil.getTokenFromHeader(httpServeletRequest),emailAuthRequestDTO)
 
 
+    }
+
+    @GetMapping("/test/email/send")
+    fun emailCodeRequestTest(@CookieValue(name = "AccessToken") accessToken : String, @RequestParam(name = "email") email:String):ResponseEntity<ResponseDTO>{
+        registerService.sendMail(accessToken,
+            EmailAuthRequestDTO(email))
+
+        return ResponseEntityGenerator.onSuccess(null)
     }
 
     fun checkEmailVaildation(email : String) {
