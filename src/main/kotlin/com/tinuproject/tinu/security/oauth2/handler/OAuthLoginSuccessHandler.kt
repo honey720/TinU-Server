@@ -66,13 +66,13 @@ class OAuthLoginSuccessHandler(
         refreshTokenRepository.save(newRefreshToken)
 
         // 액세스 토큰 발급
-        var accessToken: String = jwtUtil.generateAccessToken(userId, ACCESS_TOKEN_EXPIRATION_TIME)
+        val accessToken: String = jwtUtil.generateAccessToken(userId, ACCESS_TOKEN_EXPIRATION_TIME)
         // 이름, 액세스 토큰, 리프레쉬 토큰을 담아 리다이렉트
         val encodedName: String = URLEncoder.encode(oauth2User.name, "UTF-8")
         val redirectUri = String.format(REDIRECT_URL,encodedName,accessToken,refreshToken)
 
-        response?.addHeader("Set-Cookie",CookieGenerator.createCookies("AccessToken", accessToken))
-        response?.addHeader("Set-Cookie",CookieGenerator.createCookies("RefreshToken", refreshToken))
+        response?.addHeader(HttpHeaders.AUTHORIZATION,CookieGenerator.createCookies("AccessToken", accessToken))
+        response?.addHeader(HttpHeaders.SET_COOKIE,CookieGenerator.createCookies("RefreshToken", refreshToken))
         response?.sendRedirect(redirectUri)
     }
 
