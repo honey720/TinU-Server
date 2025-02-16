@@ -51,7 +51,8 @@ class JwtTokenFilter(
         var accessToken : String
 
         try{
-            accessToken = hasJwtToken(httpServeletRequest)
+            hasJwtToken(httpServeletRequest)
+            accessToken = jwtUtil.getTokenFromHeader(httpServeletRequest)
             validateToken(accessToken)
             val userId = jwtUtil.getUserIdFromToken(accessToken)
             val authentication = UsernamePasswordAuthenticationToken(userId, null, ArrayList())

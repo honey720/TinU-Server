@@ -3,11 +3,13 @@ package com.tinuproject.tinu.domain.member.service
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class MemberServiceImpl(
     val memberRepository: MemberRepository
 ):MemberService {
+
     override fun insertEmail(eMail: String) {
         TODO("Not yet implemented")
     }
@@ -26,5 +28,11 @@ class MemberServiceImpl(
         existMember?: return false
 
         return true
+    }
+
+    override fun findMemberByUserId(userId: UUID): String {
+        val member = memberRepository.findMemberByUserID(userId)
+
+        return member!!.userID.toString()
     }
 }

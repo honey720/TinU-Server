@@ -4,6 +4,7 @@ import com.tinuproject.tinu.DTO.ResponseDTO
 import com.tinuproject.tinu.domain.exception.member.ExistEmailException
 import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
 import com.tinuproject.tinu.domain.member.dto.EmailAuthRequestDTO
+import com.tinuproject.tinu.domain.member.dto.EmailCodeCheckRequestDTO
 import com.tinuproject.tinu.domain.member.service.MemberService
 import com.tinuproject.tinu.domain.member.service.RegisterService
 import com.tinuproject.tinu.domain.university.service.UniversityService
@@ -12,6 +13,7 @@ import com.tinuproject.tinu.web.ResponseEntityGenerator
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 
@@ -30,29 +32,35 @@ class RegisterController(
     fun emailCheck(httpServeletRequest:HttpServletRequest,@RequestParam(name = "email") email : String) : ResponseEntity<ResponseDTO> {
         checkEmailVaildation(email)
 
-        return ResponseEntityGenerator.onSuccess(null)
+        return ResponseEntityGenerator.onSuccess()
     }
 
     //인증번호 요청
     @PostMapping("/email-auth")
-    fun emailCodeRequest(httpServeletRequest: HttpServletRequest, @RequestBody emailAuthRequestDTO: EmailAuthRequestDTO){
+    fun emailCodeRequest(httpServeletRequest: HttpServletRequest, @RequestBody emailAuthRequestDTO: EmailAuthRequestDTO) : ResponseEntity<ResponseDTO>{
         checkEmailVaildation(emailAuthRequestDTO.email)
 
         registerService.sendMail(httpServeletRequest.getHeader(HttpHeaders.AUTHORIZATION).substring(7),emailAuthRequestDTO)
 
-        //TODO(병합 이후에 이걸로 수정하세용)
-//        registerService.sendMail(jwtUtil.getTokenFromHeader(httpServeletRequest),emailAuthRequestDTO)
-
-
+        return ResponseEntityGenerator.onSuccess()
     }
 
-    @GetMapping("/test/email/send")
-    fun emailCodeRequestTest(@CookieValue(name = "AccessToken") accessToken : String, @RequestParam(name = "email") email:String):ResponseEntity<ResponseDTO>{
-        registerService.sendMail(accessToken,
-            EmailAuthRequestDTO(email))
+    @PostMapping(("/code-check"))
+    fun emailCodeCheckRequest(httpServeletRequest: HttpServletRequest, @RequestParam emailCodeCheckRequestDTO: EmailCodeCheckRequestDTO) : ResponseEntity<ResponseDTO>{
 
-        return ResponseEntityGenerator.onSuccess(null)
+
+//        registerService.checkCode()
+
+        return ResponseEntityGenerator.onSuccess()
     }
+
+    @GetMapping("/test/authentication")
+    fun authentication(@AuthenticationPrincipal userId : String) : ResponseEntity<ResponseDTO>{
+
+
+        return ResponseEntityGenerator.onSuccess(userId)
+    }
+
 
     fun checkEmailVaildation(email : String) {
         val domain = email.split("@")[1]

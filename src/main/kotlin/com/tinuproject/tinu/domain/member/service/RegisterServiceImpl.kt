@@ -24,7 +24,10 @@ class RegisterServiceImpl(
 
         val existEMail = eMailRepository.findByUserId(userId = userId)
 
-        if(existEMail!=null) eMailRepository.delete(existEMail)
+        if(existEMail!=null){
+            log.info((emailAuthRequestDTO.email + " 계정의 기존 인증코드를 삭제합니다"))
+            eMailRepository.delete(existEMail)
+        }
 
         eMailRepository.save(EMailAuth(userId = userId, code = code))
     }
