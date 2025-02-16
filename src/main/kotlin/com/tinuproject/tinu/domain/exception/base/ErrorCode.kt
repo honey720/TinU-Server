@@ -12,6 +12,11 @@ enum class ErrorCode(
 
     MEMBER_EXIST_EMAIL(httpStatusCode = 400, stateCode="ALREADY_EXIST_EMAIL", message = "이미 존재하는 이메일입니다."),
 
+
+    //회원가입 - 이메일 인증
+    NOT_EXIST_CODE(httpStatusCode = 400, stateCode = "NOT_EXIST_CODE", message = "인증 코드를 재요청해주세요."),
+    NOT_MATCH_CODE(httpStatusCode = 400, stateCode = "NOT_MATCH_CODE", message = "인증 코드가 일치하지 않습니다."),
+
     NOT_FOUND(httpStatusCode = 404, stateCode = "NOT_FOUND", message = "없는 페이지입니다."),
 
     UNIVERSITY_NOT_EXIST_DOMAIN(httpStatusCode = 400, stateCode = "NOT_EXIST_DOMAIN", message = "학교 계정이 아닌것 같아요!");

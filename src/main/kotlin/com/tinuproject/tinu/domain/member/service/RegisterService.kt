@@ -1,10 +1,10 @@
 package com.tinuproject.tinu.domain.member.service
 
-import com.tinuproject.tinu.domain.member.dto.EmailAuthRequestDTO
-import com.tinuproject.tinu.domain.member.dto.EmailCodeCheckRequestDTO
+import com.tinuproject.tinu.web.email.dto.client_controller.EmailAuthRequestDTO
+import com.tinuproject.tinu.web.email.dto.client_controller.EmailCodeCheckRequestDTO
 
 interface RegisterService {
-    fun sendMail(accessToken : String,emailAuthRequestDTO: EmailAuthRequestDTO)
+    fun sendMail(userId : String,emailAuthRequestDTO: EmailAuthRequestDTO)
 
-    fun checkCode(accessToken: String, emailCodeCheckRequestDTO : EmailCodeCheckRequestDTO)
+    fun checkCode(userId : String, emailCodeCheckRequestDTO : EmailCodeCheckRequestDTO) : Boolean
 }
