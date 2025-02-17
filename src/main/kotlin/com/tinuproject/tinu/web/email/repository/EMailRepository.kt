@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository
 
 interface EMailRepository : CrudRepository<EMailAuth,Long> {
     fun findByUserId(userId : String) : EMailAuth?
+
+    fun findByeMail(eMail: String) : EMailAuth?
 }

@@ -31,8 +31,8 @@ class MemberServiceImpl(
     }
 
     override fun findMemberByUserId(userId: UUID): String {
-        val member = memberRepository.findMemberByUserID(userId)
+        val member = memberRepository.findMemberByUserId(userId)
 
-        return member!!.userID.toString()
+        return member!!.userId.toString()
     }
 }

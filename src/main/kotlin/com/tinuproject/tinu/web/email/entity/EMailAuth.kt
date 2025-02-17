@@ -17,6 +17,9 @@ class EMailAuth(
     @Column(name = "userId")
     var userId : String,
 
+    @Column(name = "eMail")
+    var eMail : String,
+
     @Column(name = "code")
     var code : String
 

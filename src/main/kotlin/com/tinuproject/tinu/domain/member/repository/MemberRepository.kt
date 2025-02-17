@@ -7,5 +7,5 @@ import java.util.UUID
 interface MemberRepository : CrudRepository<Member, Long> {
     fun findMemberByeMail(eMail: String): Member?
 
-    fun findMemberByUserID(userId: UUID) : Member?
+    fun findMemberByUserId(userId: UUID) : Member?
 }
