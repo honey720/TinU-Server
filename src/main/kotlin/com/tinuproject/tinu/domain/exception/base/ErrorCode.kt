@@ -10,14 +10,19 @@ enum class ErrorCode(
     TOKEN_EXPIRED(httpStatusCode = 401, stateCode = "TOKEN_EXPIRED", message = "토큰이 만료되었습니다."),
 
 
-    MEMBER_EXIST_EMAIL(httpStatusCode = 400, stateCode="ALREADY_EXIST_EMAIL", message = "이미 존재하는 이메일입니다."),
+    //멤버 관련
+    MEMBER_EXIST_EMAIL(httpStatusCode = 400, stateCode="ALREADY_EXIST_EMAIL", message = "이미 사용중인 이메일입니다."),
+    MEMBER_EXIST_NICKNAME(httpStatusCode = 400, stateCode = "ALEADY_EXIST_NICKNAME", message = "이미 사용중인 닉네임입니다."),
+    MEMBER_NOT_EXIST(httpStatusCode = 400, stateCode = "NOT_FOUND_MEMBER", message = "요청하신 이용자는 없는 이용자입니다."),
 
 
     //회원가입 - 이메일 인증
+    UNIVERSITY_NOT_EXIST_DOMAIN(httpStatusCode = 400, stateCode = "NOT_EXIST_DOMAIN", message = "학교 계정이 아닌것 같아요!"),
     NOT_EXIST_CODE(httpStatusCode = 400, stateCode = "NOT_EXIST_CODE", message = "인증 코드를 재요청해주세요."),
     NOT_MATCH_CODE(httpStatusCode = 400, stateCode = "NOT_MATCH_CODE", message = "인증 코드가 일치하지 않습니다."),
 
-    NOT_FOUND(httpStatusCode = 404, stateCode = "NOT_FOUND", message = "없는 페이지입니다."),
 
-    UNIVERSITY_NOT_EXIST_DOMAIN(httpStatusCode = 400, stateCode = "NOT_EXIST_DOMAIN", message = "학교 계정이 아닌것 같아요!");
+    //전역적 사용
+    NOT_FOUND(httpStatusCode = 404, stateCode = "NOT_FOUND", message = "없는 페이지입니다."),
+    UNAUTHORIZED_ACCESS(httpStatusCode = 400, stateCode = "NOT_ACCESS", message = "잘못된 접근이 감지되었습니다.");
 }

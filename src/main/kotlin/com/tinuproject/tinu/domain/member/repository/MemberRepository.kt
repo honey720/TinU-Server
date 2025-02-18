@@ -8,4 +8,6 @@ interface MemberRepository : CrudRepository<Member, Long> {
     fun findMemberByeMail(eMail: String): Member?
 
     fun findMemberByUserId(userId: UUID) : Member?
+
+    fun findMemberByNickname(nickName : String) : Member?
 }
