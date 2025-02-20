@@ -67,15 +67,13 @@ class OAuthLoginSuccessHandler(
 
         // 액세스 토큰 발급
         val accessToken: String = jwtUtil.generateAccessToken(userId, ACCESS_TOKEN_EXPIRATION_TIME)
-        // 이름, 액세스 토큰, 리프레쉬 토큰을 담아 리다이렉트
-        val encodedName: String = URLEncoder.encode(oauth2User.name, "UTF-8")
-//        val redirectUri = String.format(REDIRECT_URL,encodedName,accessToken,refreshToken)
-        val redirectUri = String.format("http://localhost:3000/loading")
+
+
+        val redirectUri = String.format(REDIRECT_URL)
 
         response?.addHeader(HttpHeaders.AUTHORIZATION,("Bearer $accessToken").toString())
         response?.addHeader(HttpHeaders.SET_COOKIE,CookieGenerator.createCookies("RefreshToken", refreshToken))
-        response?.contentType = "application/json"
-        response?.characterEncoding = "UTF-8"
+        response?.sendRedirect(redirectUri)
     }
 
 
