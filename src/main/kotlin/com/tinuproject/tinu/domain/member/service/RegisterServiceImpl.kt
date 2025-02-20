@@ -29,10 +29,8 @@ class RegisterServiceImpl(
 
 
     @Transactional
-    override fun sendMail(userId : String, emailAuthRequestDTO: EmailAuthRequestDTO) {
+    override fun sendMail(userId : UUID, emailAuthRequestDTO: EmailAuthRequestDTO) {
 
-        log.info(emailAuthRequestDTO.email)
-        log.info(userId)
         val code = mailSender.sendMail(emailAuthRequestDTO.email)
 
         val existEMail = eMailRepository.findByUserId(userId = userId)
@@ -46,21 +44,20 @@ class RegisterServiceImpl(
     }
 
     @Transactional
-    override fun checkCode(userId : String, emailCodeCheckRequestDTO: EmailCodeCheckRequestDTO) : Boolean {
+    override fun checkCode(userId : UUID, emailCodeCheckRequestDTO: EmailCodeCheckRequestDTO) : Boolean {
         val eMailAuth = eMailRepository.findByUserId(userId)
-        log.info(userId)
         eMailAuth ?: throw NotExistCodeException()
 
         return if(eMailAuth.code == emailCodeCheckRequestDTO.code){
 
             
-            val existMember = memberRepository.findMemberByUserId(UUID.fromString(userId))
+            val existMember = memberRepository.findMemberByUserId(userId)
 
             //member가 없는 경우 = 최초 이메일 인증
             if(existMember==null){
-                val socialMember = socialMemberRepository.findByUserId(UUID.fromString(userId))
+                val socialMember = socialMemberRepository.findByUserId(userId)
                 val newMember = Member(
-                    userId = UUID.fromString(userId),
+                    userId = userId,
                     nickname = null,
                     major = "중고거래학과",
                     grade = null,

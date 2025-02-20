@@ -12,9 +12,9 @@ interface MemberService {
 
     fun insertNickName(userId : UUID,name : String)
 
-    fun existMemberByNickName(userId : String, name : String) : Boolean
+    fun usableMemberByNickName(userId : UUID, name : String) : Boolean
 
-    fun existMemberByEmail(userId: UUID,email : String) :Boolean
+    fun usableMemberByEmail(userId: UUID,email : String) :Boolean
 
     fun findMemberByUserId(userId : UUID) : String
 }

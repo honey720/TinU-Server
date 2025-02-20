@@ -49,15 +49,15 @@ class MemberServiceImpl(
         memberRepository.save(member)
     }
 
-    override fun existMemberByNickName(userId : String, name: String) :Boolean{
+    override fun usableMemberByNickName(userId : UUID, name: String) :Boolean{
         val existMember = memberRepository.findMemberByNickname(name)
 
-        if(existMember !=null&&UUID.fromString(userId)!=existMember.userId) throw ExistNameException()
+        if(existMember !=null&&userId!=existMember.userId) throw ExistNameException()
 
         return true
     }
 
-    override fun existMemberByEmail(userId: UUID,email: String) :Boolean{
+    override fun usableMemberByEmail(userId: UUID,email: String) :Boolean{
         val existMember= memberRepository.findMemberByeMail(email)
 
         if(existMember!=null&&existMember.userId!=userId) throw ExistEmailException()
