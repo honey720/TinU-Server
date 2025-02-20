@@ -24,7 +24,7 @@ jobs:
           echo "JIRA_KEY=$JIRA_KEY" >> $GITHUB_ENV
 
       - name: Reopen Jira issue
-        if: env.JIRA_KEY != ''
+        if: env.JIRA_KEY != 'TINU-'
         uses: atlassian/gajira-transition@v3
         with:
           issue: ${{ env.JIRA_KEY }}
