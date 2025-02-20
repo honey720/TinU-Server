@@ -8,4 +8,8 @@ interface RegisterService {
     fun sendMail(userId : UUID,emailAuthRequestDTO: EmailAuthRequestDTO)
 
     fun checkCode(userId : UUID, emailCodeCheckRequestDTO : EmailCodeCheckRequestDTO) : Boolean
+
+    fun checkEmailValidation(userId : UUID, email : String) :Boolean
+
+
 }

@@ -1,26 +1,37 @@
 package com.tinuproject.tinu.web.email.util
 
+import com.tinuproject.tinu.domain.entity.Member
+import com.tinuproject.tinu.domain.member.repository.MemberRepository
+import com.tinuproject.tinu.domain.member.service.MemberService
+import com.tinuproject.tinu.web.email.dto.client_controller.EmailAuthRequestDTO
+import com.tinuproject.tinu.web.email.repository.EMailRepository
 import jakarta.mail.internet.MimeMessage
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.messaging.MessagingException
 import org.springframework.stereotype.Component
+import java.util.*
 
 
 @Component
-class CustomMailSender(
+class MailManager(
     private val javaMailSender: JavaMailSender,
+
+    private val memberRepository: MemberRepository,
+
+    private val eMailAuthRepository: EMailRepository,
 
     @Value("\${spring.mail.username}")
     private val account : String
-) {
+) : MailSender{
     lateinit var code : String
 
-    fun createNumber() {
+    //이메일 전송과 관련한 부분.
+    override fun createNumber() {
         code = ((Math.random() * 90000).toInt() + 100000).toString() //(int) Math.random() * (최댓값-최소값+1) + 최소값
     }
 
-    fun createMail(mail: String?): MimeMessage {
+    override fun createMail(mail: String?): MimeMessage {
         createNumber()
         val message = javaMailSender.createMimeMessage()
         try {
@@ -38,7 +49,7 @@ class CustomMailSender(
         return message
     }
 
-    fun sendMail(mail: String?): String {
+    override fun sendMail(mail: String?): String {
         val message: MimeMessage = createMail(mail)
         javaMailSender.send(message)
         return code

@@ -17,18 +17,9 @@ import java.util.*
 @Controller
 @RequestMapping("/api/user")
 class MemberController(
-    val jwtUtil: JwtUtil,
     val memberService: MemberService,
 ) {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
-
-    @GetMapping("/find/member")
-    fun findMember(@AuthenticationPrincipal userId :String) : ResponseEntity<ResponseDTO> {
-        var result = memberService.findMemberByUserId(UUID.fromString(userId))
-        log.info(userId)
-
-        return ResponseEntityGenerator.onSuccess(result)
-    }
 
 
 

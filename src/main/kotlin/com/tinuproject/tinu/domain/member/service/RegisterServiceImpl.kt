@@ -1,16 +1,18 @@
 package com.tinuproject.tinu.domain.member.service
 
-import com.tinuproject.tinu.domain.entity.Member
-import com.tinuproject.tinu.domain.exception.member.NotExistCodeException
-import com.tinuproject.tinu.domain.exception.member.NotMatchCodeException
+import com.tinuproject.tinu.domain.exception.member.ExistEmailException
+import com.tinuproject.tinu.domain.exception.mail.NotExistCodeException
+import com.tinuproject.tinu.domain.exception.mail.NotMatchCodeException
+import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
+import com.tinuproject.tinu.domain.university.repository.UniversityRepository
 import com.tinuproject.tinu.web.email.dto.client_controller.EmailAuthRequestDTO
 import com.tinuproject.tinu.web.email.dto.client_controller.EmailCodeCheckRequestDTO
 import com.tinuproject.tinu.security.jwt.JwtUtil
 import com.tinuproject.tinu.web.email.repository.EMailRepository
 import com.tinuproject.tinu.web.email.entity.EMailAuth
-import com.tinuproject.tinu.web.email.util.CustomMailSender
+import com.tinuproject.tinu.web.email.util.MailManager
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -20,28 +22,42 @@ import java.util.*
 @Service
 class RegisterServiceImpl(
     val jwtUtil: JwtUtil,
-    val mailSender: CustomMailSender,
+    val mailSender: MailManager,
     val eMailRepository: EMailRepository,
     val socialMemberRepository : SocialMemberRepository,
-    val memberRepository : MemberRepository
+    val memberRepository : MemberRepository,
+    val universityRepository: UniversityRepository
 ):RegisterService {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
+
+    @Transactional(readOnly = true)
+    override fun checkEmailValidation(userId: UUID, email: String): Boolean {
+        val domain = email.split("@")[1]
+
+        val university = universityRepository.findByDomain(domain)
+
+        university?: throw NotExistDomainException()
+
+        val member = memberRepository.findMemberByUserId(userId)
+
+        if(member!=null){ throw ExistEmailException()}
+
+        return true
+    }
 
 
     @Transactional
     override fun sendMail(userId : UUID, emailAuthRequestDTO: EmailAuthRequestDTO) {
 
-        val code = mailSender.sendMail(emailAuthRequestDTO.email)
-
-        val existEMail = eMailRepository.findByUserId(userId = userId)
-
+        val existEMail = eMailRepository.findByeMail(emailAuthRequestDTO.email)
         if(existEMail!=null){
-            log.info((emailAuthRequestDTO.email + " 계정의 기존 인증코드를 삭제합니다"))
+            log.info((emailAuthRequestDTO.email + " 계정으로 보낸 기존 인증코드를 삭제합니다"))
             eMailRepository.delete(existEMail)
         }
-
+        val code = mailSender.sendMail(emailAuthRequestDTO.email)
         eMailRepository.save(EMailAuth(userId = userId, eMail = emailAuthRequestDTO.email, code = code))
     }
+
 
     @Transactional
     override fun checkCode(userId : UUID, emailCodeCheckRequestDTO: EmailCodeCheckRequestDTO) : Boolean {
@@ -50,41 +66,16 @@ class RegisterServiceImpl(
 
         return if(eMailAuth.code == emailCodeCheckRequestDTO.code){
 
-            
-            val existMember = memberRepository.findMemberByUserId(userId)
+            eMailAuth.approve = true
 
-            //member가 없는 경우 = 최초 이메일 인증
-            if(existMember==null){
-                val socialMember = socialMemberRepository.findByUserId(userId)
-                val newMember = Member(
-                    userId = userId,
-                    nickname = null,
-                    major = "중고거래학과",
-                    grade = null,
-                    gender = null,
-                    profileImageURL = null,
-                    introduction = null,
-                    eMail = eMailAuth.eMail,
-                    mark = null,
-                    social = socialMember!!.provider,
-                )
+            eMailRepository.save(eMailAuth)
 
-                memberRepository.save(newMember)
-            //member가 있고, 이메일이 다른 경우 = 최초의 이메일 인증 메일과 지금이 다름
-            }else if(eMailAuth.eMail != existMember.eMail){
-                existMember.eMail = eMailAuth.eMail
-                memberRepository.save(existMember)
-            //member가 있고 , 이메일이 같은 경우, 별도의 로직 필요X로 생각
-            //CHECK(맞을지 확인하고 삭제)
-            }else{
-
-            }
-
-            log.info("검증에 성공하였습니다.  계정의 기존 인증코드를 삭제합니다")
-            eMailRepository.deleteById(eMailAuth.id!!)
             true
+
         } else{
             throw NotMatchCodeException()
         }
     }
+
+
 }
