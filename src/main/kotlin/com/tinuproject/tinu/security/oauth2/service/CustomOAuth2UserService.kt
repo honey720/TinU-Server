@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.security.oauth2.service
 
 import com.tinuproject.tinu.domain.entity.SocialMember
-import com.tinuproject.tinu.domain.enum.Social
+import com.tinuproject.tinu.domain.enums.Social
 import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
 import com.tinuproject.tinu.domain.token.refreshtoken.repository.RefreshTokenRepository
 import com.tinuproject.tinu.security.oauth2.dto.*

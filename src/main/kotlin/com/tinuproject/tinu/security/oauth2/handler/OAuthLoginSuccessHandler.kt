@@ -2,7 +2,7 @@ package com.tinuproject.tinu.security.oauth2.handler
 
 import com.tinuproject.tinu.domain.entity.RefreshToken
 import com.tinuproject.tinu.domain.entity.SocialMember
-import com.tinuproject.tinu.domain.enum.Social
+import com.tinuproject.tinu.domain.enums.Social
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
 import com.tinuproject.tinu.domain.token.refreshtoken.repository.RefreshTokenRepository

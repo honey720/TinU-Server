@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.domain.member.service
 
 import com.tinuproject.tinu.domain.entity.Member
-import com.tinuproject.tinu.domain.enum.Gender
+import com.tinuproject.tinu.domain.enums.Gender
 import com.tinuproject.tinu.domain.exception.mail.NeedEmailAuthException
 import com.tinuproject.tinu.domain.exception.member.ExistEmailException
 import com.tinuproject.tinu.domain.exception.member.ExistNameException
