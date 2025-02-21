@@ -24,13 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 class RefreshTokenController(
     private val refreshTokenService : RefreshTokenService,
 
-    @Value("\${cookie.token.access-token}")
-    private val accessTokenKey : String,
-
     @Value("\${cookie.token.refresh-token}")
     private val refreshTokenkey : String,
-
-    private val jwtUtil: JwtUtil
 ) {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
