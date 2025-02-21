@@ -83,7 +83,7 @@ jobs:
           spring.auth-code-expiration-millis=1800000
           spring.mail.username=${{ secrets.MAIL_USERNAME }}
           spring.mail.password=${{ secrets.MAIL_PASSWORD }}
-          jwt.redirect.sign = ${{ secrets.JWT_REDIRECT_SIGN_URL }}
+          jwt.redirect.sign = ${{ secrets.JWT_REDIRECT_SIGN_URI }}
           EOF
 
     # docker image 빌드
