@@ -64,6 +64,7 @@ class CustomOAuth2UserService(
         log.info("유저 이름 : {}", name)
         log.info("PROVIDER : {}", provider)
         log.info("PROVIDER_ID : {}", providerId)
+        log.info("USER_ID : {}",user.userId)
 
         return CustomOAuth2User(userInfoDto = userInfoDto)
     }

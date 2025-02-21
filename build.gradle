@@ -4,7 +4,6 @@ plugins {
 	id 'org.springframework.boot' version '3.2.9'
 	id 'io.spring.dependency-management' version '1.1.6'
 	id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.25'
-	id 'org.jetbrains.kotlin.kapt' version '1.9.21'
 }
 
 group = 'com.TinUproject'
@@ -58,6 +57,9 @@ dependencies {
 
 	//OAuth2 관련 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	//이메일 인증 관련
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'
 
 	//QueryDSL 관련 의존성 추가
 	implementation("com.querydsl:querydsl-jpa:5.1.0:jakarta")

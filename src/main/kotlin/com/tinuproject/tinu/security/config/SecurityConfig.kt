@@ -34,8 +34,6 @@ class SecurityConfig(
     private val oauth2LoginSuccessHandler: OAuthLoginSuccessHandler,
     private val oAuthLoginFailureHandler: OAuthLoginFailureHandler,
     private val customOAuth2UserService: CustomOAuth2UserService,
-    @Value("\${cookie.token.access-token}")
-    private val accessTokenName : String,
 
     @Value("\${web.allowed-path}")
     private val allowedPaths : List<String>,
@@ -103,7 +101,7 @@ class SecurityConfig(
 
 
             httpSecurity
-                .addFilterBefore(JwtTokenFilter(jwtUtil = jwtUtil,ACCESSTOKEN_COOKIE=accessTokenName, excludeUrls =allowedPaths), UsernamePasswordAuthenticationFilter::class.java)
+                .addFilterBefore(JwtTokenFilter(jwtUtil = jwtUtil, excludeUrls =allowedPaths), UsernamePasswordAuthenticationFilter::class.java)
                 .addFilterBefore(ExceptionHandlerFilter(objectMapper), JwtTokenFilter::class.java)
 
 

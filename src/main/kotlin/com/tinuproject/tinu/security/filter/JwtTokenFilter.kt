@@ -13,13 +13,13 @@ import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class JwtTokenFilter(
 
     val jwtUtil : JwtUtil,
-
-    private val ACCESSTOKEN_COOKIE : String,
 
     //토큰이 없어도 되는 api
     private val excludeUrls : List<String>
@@ -51,10 +51,11 @@ class JwtTokenFilter(
         var accessToken : String
 
         try{
-            accessToken = hasJwtToken(httpServeletRequest)
+            hasJwtToken(httpServeletRequest)
+            accessToken = jwtUtil.getTokenFromHeader(httpServeletRequest)
             validateToken(accessToken)
             val userId = jwtUtil.getUserIdFromToken(accessToken)
-            val authentication = UsernamePasswordAuthenticationToken(userId, null, ArrayList())
+            val authentication = UsernamePasswordAuthenticationToken(UUID.fromString(userId), null, ArrayList())
             SecurityContextHolder.getContext().authentication = authentication
         }catch (e : NotFoundTokenException){
             log.warn("토큰이 없습니다.")

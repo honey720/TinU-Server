@@ -10,33 +10,33 @@ import java.util.*
 class Member (
 
     @Column(columnDefinition = "BINARY(16)", unique = true)
-    var userID : UUID,
+    var userId : UUID,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="university_id")
     var university: University? = null,
 
     @Column
-    var nickname : String,
+    var nickname : String?,
 
     @Column
-    var major : String,
+    var major : String?,
 
     @Column
-    var grade : Int,
+    var grade : Int?,
 
     @Column
     @Enumerated(EnumType.ORDINAL)
-    var gender : Gender,
+    var gender : Gender?,
 
     @Column
-    var profileImageURL : String,
+    var profileImageURL : String?,
 
     @Column
-    var introduction : String,
+    var introduction : String?,
 
     @Column
-    var eMail : String,
+    var eMail : String?,
 
     @Column
     var reportCount : Long=0,
