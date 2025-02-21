@@ -1,8 +1,8 @@
 package com.tinuproject.tinu.domain.entity
 
 import com.tinuproject.tinu.domain.entity.base.BaseEntity
-import com.tinuproject.tinu.domain.enum.Gender
-import com.tinuproject.tinu.domain.enum.Social
+import com.tinuproject.tinu.domain.enums.Gender
+import com.tinuproject.tinu.domain.enums.Social
 import jakarta.persistence.*
 import java.util.*
 
