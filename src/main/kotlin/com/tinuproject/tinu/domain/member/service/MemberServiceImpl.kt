@@ -28,10 +28,8 @@ class MemberServiceImpl(
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
     override fun registerMember(userId: UUID, registerRequestDTO: RegisterRequestDTO) {
-        val member = memberRepository.findMemberByUserId(userId)
-
         //이미 회원가입이 완료된 유저가 또 회원가입 요청하는 것을 방지.
-        if(member!=null){
+        if(memberRepository.existsByUserId(userId)){
            throw ExistMemberException()
         }
 

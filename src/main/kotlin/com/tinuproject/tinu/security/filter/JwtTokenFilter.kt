@@ -21,8 +21,6 @@ class JwtTokenFilter(
 
     val jwtUtil : JwtUtil,
 
-    private val ACCESSTOKEN_COOKIE : String,
-
     //토큰이 없어도 되는 api
     private val excludeUrls : List<String>
 

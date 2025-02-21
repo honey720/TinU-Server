@@ -3,6 +3,7 @@ package com.tinuproject.tinu.security.oauth2.handler
 import com.tinuproject.tinu.domain.entity.RefreshToken
 import com.tinuproject.tinu.domain.entity.SocialMember
 import com.tinuproject.tinu.domain.enum.Social
+import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
 import com.tinuproject.tinu.domain.token.refreshtoken.repository.RefreshTokenRepository
 import com.tinuproject.tinu.security.jwt.JwtUtil
@@ -35,8 +36,13 @@ class OAuthLoginSuccessHandler(
 
     private val refreshTokenRepository: RefreshTokenRepository,
 
+    private val memberRepository: MemberRepository,
+
     @Value("\${jwt.redirect}")
     private val REDIRECT_URL : String,
+
+    @Value("\${jwt.redirect.sign}")
+    private val SIGN_REDIRECT_URL : String,
 
     @Value("\${jwt.access-token.expiration-time}")
     private val ACCESS_TOKEN_EXPIRATION_TIME: Long, // 액세스 토큰 유효기간
@@ -68,8 +74,11 @@ class OAuthLoginSuccessHandler(
         // 액세스 토큰 발급
         val accessToken: String = jwtUtil.generateAccessToken(userId, ACCESS_TOKEN_EXPIRATION_TIME)
 
-
-        val redirectUri = String.format(REDIRECT_URL)
+        val redirectUri = if(memberRepository.existsByUserId(userId)){
+            String.format(REDIRECT_URL)
+        }else{
+            String.format(SIGN_REDIRECT_URL)
+        }
 
         response?.addHeader(HttpHeaders.AUTHORIZATION,("Bearer $accessToken").toString())
         response?.addHeader(HttpHeaders.SET_COOKIE,CookieGenerator.createCookies("RefreshToken", refreshToken))

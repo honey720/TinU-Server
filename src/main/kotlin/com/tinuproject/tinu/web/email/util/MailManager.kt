@@ -1,25 +1,17 @@
 package com.tinuproject.tinu.web.email.util
 
-import com.tinuproject.tinu.domain.entity.Member
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
-import com.tinuproject.tinu.domain.member.service.MemberService
-import com.tinuproject.tinu.web.email.dto.client_controller.EmailAuthRequestDTO
 import com.tinuproject.tinu.web.email.repository.EMailRepository
 import jakarta.mail.internet.MimeMessage
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.messaging.MessagingException
 import org.springframework.stereotype.Component
-import java.util.*
 
 
 @Component
 class MailManager(
     private val javaMailSender: JavaMailSender,
-
-    private val memberRepository: MemberRepository,
-
-    private val eMailAuthRepository: EMailRepository,
 
     @Value("\${spring.mail.username}")
     private val account : String

@@ -10,4 +10,10 @@ interface MemberRepository : CrudRepository<Member, Long> {
     fun findMemberByUserId(userId: UUID) : Member?
 
     fun findMemberByNickname(nickName : String) : Member?
+
+    fun existsByUserId(userId : UUID) : Boolean
+
+    fun existsByNickname(name : String) : Boolean
+
+    
 }

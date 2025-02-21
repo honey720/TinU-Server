@@ -5,11 +5,9 @@ import com.tinuproject.tinu.domain.exception.mail.NotExistCodeException
 import com.tinuproject.tinu.domain.exception.mail.NotMatchCodeException
 import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
-import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
 import com.tinuproject.tinu.domain.university.repository.UniversityRepository
 import com.tinuproject.tinu.web.email.dto.client_controller.EmailAuthRequestDTO
 import com.tinuproject.tinu.web.email.dto.client_controller.EmailCodeCheckRequestDTO
-import com.tinuproject.tinu.security.jwt.JwtUtil
 import com.tinuproject.tinu.web.email.repository.EMailRepository
 import com.tinuproject.tinu.web.email.entity.EMailAuth
 import com.tinuproject.tinu.web.email.util.MailManager
@@ -21,10 +19,8 @@ import java.util.*
 
 @Service
 class RegisterServiceImpl(
-    val jwtUtil: JwtUtil,
     val mailSender: MailManager,
     val eMailRepository: EMailRepository,
-    val socialMemberRepository : SocialMemberRepository,
     val memberRepository : MemberRepository,
     val universityRepository: UniversityRepository
 ):RegisterService {
