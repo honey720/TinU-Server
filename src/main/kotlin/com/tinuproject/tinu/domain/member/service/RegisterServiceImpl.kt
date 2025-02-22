@@ -49,6 +49,7 @@ class RegisterServiceImpl(
         if(existEMail!=null){
             log.info((emailAuthRequestDTO.email + " 계정으로 보낸 기존 인증코드를 삭제합니다"))
             eMailRepository.delete(existEMail)
+            eMailRepository.flush()
         }
         val code = mailSender.sendMail(emailAuthRequestDTO.email)
         eMailRepository.save(EMailAuth(userId = userId, eMail = emailAuthRequestDTO.email, code = code))
