@@ -21,7 +21,7 @@ class MailManager(
         code = ((Math.random() * 90000).toInt() + 100000).toString() //(int) Math.random() * (최댓값-최소값+1) + 최소값
     }
 
-    override fun creatEmail(mail: String?): MimeMessage {
+    override fun createEmail(mail: String?): MimeMessage {
         createNumber()
         val message = javaMailSender.createMimeMessage()
         try {
@@ -40,7 +40,7 @@ class MailManager(
     }
 
     override fun sendMail(mail: String?): String {
-        val message: MimeMessage = creatEmail(mail)
+        val message: MimeMessage = createEmail(mail)
         javaMailSender.send(message)
         return code
     }
