@@ -88,7 +88,6 @@ class RegisterController(
 
     @PostMapping("/info-verify")
     fun registerRequest(@AuthenticationPrincipal userId : UUID, @RequestBody registerRequestDTO : RegisterRequestDTO) : ResponseEntity<ResponseDTO>{
-        memberService.usableMemberByNickName(userId, registerRequestDTO.nickName)
         memberService.registerMember(userId = userId, registerRequestDTO = registerRequestDTO)
 
         return ResponseEntityGenerator.onSuccess()

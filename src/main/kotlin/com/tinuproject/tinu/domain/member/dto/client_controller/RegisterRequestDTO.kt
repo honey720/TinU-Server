@@ -5,6 +5,6 @@ data class RegisterRequestDTO(
     val profileImageURL : String?,
     val major : String,
     val grade : Int,
-    val eMail : String,
+    val email : String,
     val introduction : String?
 )

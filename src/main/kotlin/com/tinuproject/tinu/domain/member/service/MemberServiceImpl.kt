@@ -10,37 +10,35 @@ import com.tinuproject.tinu.domain.member.dto.client_controller.RegisterRequestD
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
 import com.tinuproject.tinu.domain.university.repository.UniversityRepository
-import com.tinuproject.tinu.web.email.repository.EMailRepository
+import com.tinuproject.tinu.web.email.entity.EmailAuth
+import com.tinuproject.tinu.web.email.repository.EmailRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
-import kotlin.math.log
 
 @Service
 class MemberServiceImpl(
     val memberRepository: MemberRepository,
     val universityRepository: UniversityRepository,
-    val emailAuthRepository: EMailRepository,
+    val emailAuthRepository: EmailRepository,
     val socialMemberRepository: SocialMemberRepository
 ):MemberService {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
+    @Transactional
     override fun registerMember(userId: UUID, registerRequestDTO: RegisterRequestDTO) {
+        //닉네임 사용 가능 여부 체크
+        usableMemberByNickName(userId, registerRequestDTO.nickName)
+
         //이미 회원가입이 완료된 유저가 또 회원가입 요청하는 것을 방지.
-        if(memberRepository.existsByUserId(userId)){
-           throw ExistMemberException()
-        }
+        existMemberByUserId(userId)
 
-        val eMailAuth = emailAuthRepository.findByUserId(userId)
+        //이메일 인증 체크
+        val emailAuth = emailAuthCheck(userId, registerRequestDTO.email)
         
-        //이메일 인증이 진행되지 않은 유저
-        if(eMailAuth==null||!eMailAuth.approve||eMailAuth.eMail!=registerRequestDTO.eMail){
-                throw NeedEmailAuthException()
-        }
-
-
-        val university = universityRepository.findByDomain(registerRequestDTO.eMail.split("@")[1])
+        val university = universityRepository.findByDomain(registerRequestDTO.email.split("@")[1])
 
         university ?: throw NotExistDomainException()
 
@@ -53,12 +51,12 @@ class MemberServiceImpl(
             grade = registerRequestDTO.grade,
             profileImageURL = registerRequestDTO.profileImageURL,
             introduction = registerRequestDTO.introduction,
-            eMail = registerRequestDTO.eMail,
+            email = registerRequestDTO.email,
             mark = 0.0,
             social = socialMember!!.provider
         )
         log.info("회원가입이 완료되었습니다. eMailAuth 관련 데이터를 삭제합니다.")
-        emailAuthRepository.delete(eMailAuth)
+        emailAuthRepository.delete(emailAuth)
 
         memberRepository.save(newMember)
     }
@@ -68,6 +66,7 @@ class MemberServiceImpl(
         이 때 본인의 닉네임은 본인이 그대로 사용할 수 있어야하기 때문에
         해당 내용이 IF문에 반영이 되어 있음.
      */
+    @Transactional(readOnly = true)
     override fun usableMemberByNickName(userId : UUID, name: String) :Boolean{
         val existMember = memberRepository.findMemberByNickname(name)
 
@@ -76,12 +75,35 @@ class MemberServiceImpl(
         return true
     }
 
-    override fun usableMemberByEmail(userId: UUID,email: String) :Boolean{
-        val existMember= memberRepository.findMemberByeMail(email)
 
-        if(existMember!=null&&existMember.userId!=userId) throw ExistEmailException()
+    @Transactional(readOnly = true)
+    override fun usableMemberByEmail(userId: UUID,email: String) :Boolean{
+        val existMember= memberRepository.findMemberByEmail(email)
+
+        if(existMember!=null&&existMember.userId!=userId){
+            throw ExistEmailException()
+        }
 
         return true
+    }
+
+    @Transactional(readOnly = true)
+    fun emailAuthCheck(userId :UUID, email : String) : EmailAuth{
+        val emailAuth = emailAuthRepository.findByUserId(userId)
+
+        //이메일 인증이 진행되지 않은 유저
+        if(emailAuth==null||!emailAuth.approve||emailAuth.email!=email){
+            throw NeedEmailAuthException()
+        }
+
+        return emailAuth
+    }
+
+    @Transactional(readOnly = true)
+    fun existMemberByUserId(userId: UUID){
+        if(memberRepository.findMemberByUserId(userId)!=null){
+            throw ExistMemberException()
+        }
     }
 
 }
