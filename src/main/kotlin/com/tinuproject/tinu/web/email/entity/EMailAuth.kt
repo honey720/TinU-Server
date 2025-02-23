@@ -24,8 +24,8 @@ class EMailAuth(
     @Column(columnDefinition = "BINARY(16)", unique = true)
     var userId : UUID,
 
-    @Column(name = "eMail")
-    var eMail : String,
+    @Column
+    var email : String,
 
     @Column(name = "code")
     var code : String,

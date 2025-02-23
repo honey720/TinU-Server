@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID
 
 interface MemberRepository : JpaRepository<Member, Long> {
-    fun findMemberByeMail(eMail: String): Member?
+    fun findMemberByEmail(eMail: String): Member?
 
     fun findMemberByUserId(userId: UUID) : Member?
 

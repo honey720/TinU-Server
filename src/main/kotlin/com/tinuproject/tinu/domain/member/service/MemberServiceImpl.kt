@@ -52,7 +52,7 @@ class MemberServiceImpl(
             grade = registerRequestDTO.grade,
             profileImageURL = registerRequestDTO.profileImageURL,
             introduction = registerRequestDTO.introduction,
-            eMail = registerRequestDTO.eMail,
+            email = registerRequestDTO.eMail,
             mark = 0.0,
             social = socialMember!!.provider
         )
@@ -79,7 +79,7 @@ class MemberServiceImpl(
 
     @Transactional(readOnly = true)
     override fun usableMemberByEmail(userId: UUID,email: String) :Boolean{
-        val existMember= memberRepository.findMemberByeMail(email)
+        val existMember= memberRepository.findMemberByEmail(email)
 
         if(existMember!=null&&existMember.userId!=userId){
             throw ExistEmailException()
@@ -93,7 +93,7 @@ class MemberServiceImpl(
         val eMailAuth = emailAuthRepository.findByUserId(userId)
 
         //이메일 인증이 진행되지 않은 유저
-        if(eMailAuth==null||!eMailAuth.approve||eMailAuth.eMail!=email){
+        if(eMailAuth==null||!eMailAuth.approve||eMailAuth.email!=email){
             throw NeedEmailAuthException()
         }
 

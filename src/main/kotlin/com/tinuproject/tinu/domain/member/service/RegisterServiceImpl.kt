@@ -45,14 +45,14 @@ class RegisterServiceImpl(
     @Transactional
     override fun sendMail(userId : UUID, emailAuthRequestDTO: EmailAuthRequestDTO) {
 
-        val existEMail = eMailRepository.findByeMail(emailAuthRequestDTO.email)
+        val existEMail = eMailRepository.findByEmail(emailAuthRequestDTO.email)
         if(existEMail!=null){
             log.info((emailAuthRequestDTO.email + " 계정으로 보낸 기존 인증코드를 삭제합니다"))
             eMailRepository.delete(existEMail)
             eMailRepository.flush()
         }
         val code = mailSender.sendMail(emailAuthRequestDTO.email)
-        eMailRepository.save(EMailAuth(userId = userId, eMail = emailAuthRequestDTO.email, code = code))
+        eMailRepository.save(EMailAuth(userId = userId, email = emailAuthRequestDTO.email, code = code))
     }
 
 

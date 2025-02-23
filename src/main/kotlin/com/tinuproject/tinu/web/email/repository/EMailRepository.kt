@@ -8,5 +8,5 @@ import java.util.*
 interface EMailRepository : JpaRepository<EMailAuth, Long> {
     fun findByUserId(userId : UUID) : EMailAuth?
 
-    fun findByeMail(eMail: String) : EMailAuth?
+    fun findByEmail(eMail: String) : EMailAuth?
 }

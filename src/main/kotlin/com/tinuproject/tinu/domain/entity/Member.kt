@@ -31,7 +31,7 @@ class Member (
     var introduction : String?,
 
     @Column
-    var eMail : String?,
+    var email : String?,
 
     @Column
     var reportCount : Long=0,
