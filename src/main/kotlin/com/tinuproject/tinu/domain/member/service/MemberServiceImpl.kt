@@ -37,9 +37,9 @@ class MemberServiceImpl(
         existMemberByUserId(userId)
 
         //이메일 인증 체크
-        val eMailAuth = eMailAuthCheck(userId, registerRequestDTO.eMail)
+        val emailAuth = emailAuthCheck(userId, registerRequestDTO.email)
         
-        val university = universityRepository.findByDomain(registerRequestDTO.eMail.split("@")[1])
+        val university = universityRepository.findByDomain(registerRequestDTO.email.split("@")[1])
 
         university ?: throw NotExistDomainException()
 
@@ -52,12 +52,12 @@ class MemberServiceImpl(
             grade = registerRequestDTO.grade,
             profileImageURL = registerRequestDTO.profileImageURL,
             introduction = registerRequestDTO.introduction,
-            email = registerRequestDTO.eMail,
+            email = registerRequestDTO.email,
             mark = 0.0,
             social = socialMember!!.provider
         )
         log.info("회원가입이 완료되었습니다. eMailAuth 관련 데이터를 삭제합니다.")
-        emailAuthRepository.delete(eMailAuth)
+        emailAuthRepository.delete(emailAuth)
 
         memberRepository.save(newMember)
     }
@@ -89,15 +89,15 @@ class MemberServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    fun eMailAuthCheck(userId :UUID, email : String) : EMailAuth{
-        val eMailAuth = emailAuthRepository.findByUserId(userId)
+    fun emailAuthCheck(userId :UUID, email : String) : EMailAuth{
+        val emailAuth = emailAuthRepository.findByUserId(userId)
 
         //이메일 인증이 진행되지 않은 유저
-        if(eMailAuth==null||!eMailAuth.approve||eMailAuth.email!=email){
+        if(emailAuth==null||!emailAuth.approve||emailAuth.email!=email){
             throw NeedEmailAuthException()
         }
 
-        return eMailAuth
+        return emailAuth
     }
 
     @Transactional(readOnly = true)

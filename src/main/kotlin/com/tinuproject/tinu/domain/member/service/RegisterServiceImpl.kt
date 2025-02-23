@@ -20,7 +20,7 @@ import java.util.*
 @Service
 class RegisterServiceImpl(
     val mailSender: MailManager,
-    val eMailRepository: EMailRepository,
+    val emailRepository: EMailRepository,
     val memberRepository : MemberRepository,
     val universityRepository: UniversityRepository
 ):RegisterService {
@@ -45,27 +45,27 @@ class RegisterServiceImpl(
     @Transactional
     override fun sendMail(userId : UUID, emailAuthRequestDTO: EmailAuthRequestDTO) {
 
-        val existEMail = eMailRepository.findByEmail(emailAuthRequestDTO.email)
+        val existEMail = emailRepository.findByEmail(emailAuthRequestDTO.email)
         if(existEMail!=null){
             log.info((emailAuthRequestDTO.email + " 계정으로 보낸 기존 인증코드를 삭제합니다"))
-            eMailRepository.delete(existEMail)
-            eMailRepository.flush()
+            emailRepository.delete(existEMail)
+            emailRepository.flush()
         }
         val code = mailSender.sendMail(emailAuthRequestDTO.email)
-        eMailRepository.save(EMailAuth(userId = userId, email = emailAuthRequestDTO.email, code = code))
+        emailRepository.save(EMailAuth(userId = userId, email = emailAuthRequestDTO.email, code = code))
     }
 
 
     @Transactional
     override fun checkCode(userId : UUID, emailCodeCheckRequestDTO: EmailCodeCheckRequestDTO) : Boolean {
-        val eMailAuth = eMailRepository.findByUserId(userId)
-        eMailAuth ?: throw NotExistCodeException()
+        val emailAuth = emailRepository.findByUserId(userId)
+        emailAuth ?: throw NotExistCodeException()
 
-        return if(eMailAuth.code == emailCodeCheckRequestDTO.code){
+        return if(emailAuth.code == emailCodeCheckRequestDTO.code){
 
-            eMailAuth.approve = true
+            emailAuth.approve = true
 
-            eMailRepository.save(eMailAuth)
+            emailRepository.save(emailAuth)
 
             true
 
