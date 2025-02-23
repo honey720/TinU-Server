@@ -16,7 +16,7 @@ import java.util.UUID
     Register  - userId, Email, nickName 존재
  */
 @Entity
-class EMailAuth(
+class EmailAuth(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id : Long? = null,

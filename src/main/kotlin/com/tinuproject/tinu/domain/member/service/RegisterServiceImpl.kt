@@ -8,8 +8,8 @@ import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.university.repository.UniversityRepository
 import com.tinuproject.tinu.web.email.dto.client_controller.EmailAuthRequestDTO
 import com.tinuproject.tinu.web.email.dto.client_controller.EmailCodeCheckRequestDTO
-import com.tinuproject.tinu.web.email.repository.EMailRepository
-import com.tinuproject.tinu.web.email.entity.EMailAuth
+import com.tinuproject.tinu.web.email.repository.EmailRepository
+import com.tinuproject.tinu.web.email.entity.EmailAuth
 import com.tinuproject.tinu.web.email.util.MailManager
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -20,7 +20,7 @@ import java.util.*
 @Service
 class RegisterServiceImpl(
     val mailSender: MailManager,
-    val emailRepository: EMailRepository,
+    val emailRepository: EmailRepository,
     val memberRepository : MemberRepository,
     val universityRepository: UniversityRepository
 ):RegisterService {
@@ -52,7 +52,7 @@ class RegisterServiceImpl(
             emailRepository.flush()
         }
         val code = mailSender.sendMail(emailAuthRequestDTO.email)
-        emailRepository.save(EMailAuth(userId = userId, email = emailAuthRequestDTO.email, code = code))
+        emailRepository.save(EmailAuth(userId = userId, email = emailAuthRequestDTO.email, code = code))
     }
 
 

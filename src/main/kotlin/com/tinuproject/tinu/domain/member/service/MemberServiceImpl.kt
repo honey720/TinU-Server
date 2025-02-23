@@ -10,20 +10,19 @@ import com.tinuproject.tinu.domain.member.dto.client_controller.RegisterRequestD
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
 import com.tinuproject.tinu.domain.university.repository.UniversityRepository
-import com.tinuproject.tinu.web.email.entity.EMailAuth
-import com.tinuproject.tinu.web.email.repository.EMailRepository
+import com.tinuproject.tinu.web.email.entity.EmailAuth
+import com.tinuproject.tinu.web.email.repository.EmailRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
-import kotlin.math.log
 
 @Service
 class MemberServiceImpl(
     val memberRepository: MemberRepository,
     val universityRepository: UniversityRepository,
-    val emailAuthRepository: EMailRepository,
+    val emailAuthRepository: EmailRepository,
     val socialMemberRepository: SocialMemberRepository
 ):MemberService {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
@@ -89,7 +88,7 @@ class MemberServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    fun emailAuthCheck(userId :UUID, email : String) : EMailAuth{
+    fun emailAuthCheck(userId :UUID, email : String) : EmailAuth{
         val emailAuth = emailAuthRepository.findByUserId(userId)
 
         //이메일 인증이 진행되지 않은 유저
