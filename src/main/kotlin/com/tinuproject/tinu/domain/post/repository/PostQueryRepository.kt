@@ -1,7 +1,6 @@
 package com.tinuproject.tinu.domain.post.repository
 
 import com.querydsl.core.types.dsl.BooleanExpression
-import com.tinuproject.tinu.domain.entity.Category
 import com.tinuproject.tinu.domain.entity.Post
 import com.tinuproject.tinu.domain.entity.University
 
@@ -22,28 +21,28 @@ interface PostQueryRepository {
             cursorId: Long?
     ): BooleanExpression?
 
-    fun containsPostTitle(
+    fun containsTitle(
             keyword: String?
     ): BooleanExpression?
 
-    fun containsPostBody(
+    fun containsBody(
             keyword: String?
     ): BooleanExpression?
 
-    fun inPostCategory(
+    fun inCategory(
             category: List<Long>?
     ): BooleanExpression?
 
-    fun betweenPostPrice(
+    fun betweenPrice(
             maxPrice: Int?,
             minPrice: Int?
     ): BooleanExpression?
 
-    fun eqPostOnlySell(
+    fun eqOnlySell(
             onlySell: Boolean
     ): BooleanExpression?
 
-    fun postOrderBy(
+    fun orderBy(
             orderBy: String
     ): BooleanExpression?
 }

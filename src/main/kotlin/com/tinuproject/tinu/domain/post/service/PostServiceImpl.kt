@@ -6,7 +6,6 @@ import com.tinuproject.tinu.domain.exception.post.UniversityNotFoundException
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.post.repository.PostQueryRepositoryImpl
 import com.tinuproject.tinu.domain.post.repository.PostRepository
-import com.tinuproject.tinu.security.jwt.JwtUtil
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.data.domain.SliceImpl
