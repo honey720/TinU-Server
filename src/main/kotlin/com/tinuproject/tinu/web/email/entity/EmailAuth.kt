@@ -16,7 +16,7 @@ import java.util.UUID
     Register  - userId, Email, nickName 존재
  */
 @Entity
-class EMailAuth(
+class EmailAuth(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id : Long? = null,
@@ -24,8 +24,8 @@ class EMailAuth(
     @Column(columnDefinition = "BINARY(16)", unique = true)
     var userId : UUID,
 
-    @Column(name = "eMail")
-    var eMail : String,
+    @Column
+    var email : String,
 
     @Column(name = "code")
     var code : String,
