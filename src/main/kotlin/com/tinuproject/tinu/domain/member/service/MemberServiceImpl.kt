@@ -8,6 +8,7 @@ import com.tinuproject.tinu.domain.exception.member.ExistNameException
 import com.tinuproject.tinu.domain.exception.member.ExistMemberException
 import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
 import com.tinuproject.tinu.domain.member.dto.client_controller.request.RegisterRequestDTO
+import com.tinuproject.tinu.domain.member.dto.client_controller.request.UpdateUserInfoRequestDTO
 import com.tinuproject.tinu.domain.member.dto.client_controller.response.MemberSearchResponseDTO
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
@@ -89,6 +90,7 @@ class MemberServiceImpl(
         return true
     }
 
+    @Transactional(readOnly = true)
     override fun findMemberByUserId(userId: UUID): MemberSearchResponseDTO {
         val member = memberRepository.findMemberByUserId(userId)
 
@@ -98,8 +100,21 @@ class MemberServiceImpl(
 
     }
 
-    @Transactional(readOnly = true)
-    fun emailAuthCheck(userId :UUID, email : String) : EmailAuth{
+    @Transactional
+    override fun updateMember(userId: UUID, updateUserInfoRequestDTO: UpdateUserInfoRequestDTO) {
+        val member = memberRepository.findMemberByUserId(userId)
+
+        member?: throw NotExistMemberException()
+
+        usableMemberByNickName(userId = userId, name = updateUserInfoRequestDTO.name)
+
+        member.updateMemberInfo(updateUserInfoRequestDTO)
+
+        memberRepository.save(member)
+
+    }
+
+    private fun emailAuthCheck(userId :UUID, email : String) : EmailAuth{
         val emailAuth = emailAuthRepository.findByUserId(userId)
 
         //이메일 인증이 진행되지 않은 유저
@@ -110,8 +125,7 @@ class MemberServiceImpl(
         return emailAuth
     }
 
-    @Transactional(readOnly = true)
-    fun existMemberByUserId(userId: UUID){
+    private fun existMemberByUserId(userId: UUID){
         if(memberRepository.findMemberByUserId(userId)!=null){
             throw ExistMemberException()
         }
