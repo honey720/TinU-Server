@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import java.util.*
 
 
@@ -21,6 +22,11 @@ class MemberController(
 ) {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
+    @GetMapping()
+    fun requestUserInfo(@AuthenticationPrincipal userId : UUID, @RequestParam(name = "userId") searchUserId : String? ) : ResponseEntity<ResponseDTO>{
+        val findUserId = searchUserId?.let{UUID.fromString(it)}?:userId
 
+        return ResponseEntityGenerator.onSuccess(memberService.findMemberByUserId(findUserId))
+    }
 
 }

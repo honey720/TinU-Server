@@ -1,6 +1,7 @@
 package com.tinuproject.tinu.domain.member.service
 
-import com.tinuproject.tinu.domain.member.dto.client_controller.RegisterRequestDTO
+import com.tinuproject.tinu.domain.member.dto.client_controller.response.MemberSearchResponseDTO
+import com.tinuproject.tinu.domain.member.dto.client_controller.request.RegisterRequestDTO
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -12,4 +13,6 @@ interface MemberService {
     fun usableMemberByNickName(userId : UUID, name : String) : Boolean
 
     fun usableMemberByEmail(userId: UUID,email : String) :Boolean
+
+    fun findMemberByUserId(userId: UUID) : MemberSearchResponseDTO
 }

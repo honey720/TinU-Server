@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.domain.member.controller
 
 import com.tinuproject.tinu.DTO.ResponseDTO
-import com.tinuproject.tinu.domain.member.dto.client_controller.RegisterRequestDTO
+import com.tinuproject.tinu.domain.member.dto.client_controller.request.RegisterRequestDTO
 import com.tinuproject.tinu.web.email.dto.client_controller.EmailAuthRequestDTO
 import com.tinuproject.tinu.web.email.dto.client_controller.EmailCodeCheckRequestDTO
 import com.tinuproject.tinu.domain.member.service.MemberService

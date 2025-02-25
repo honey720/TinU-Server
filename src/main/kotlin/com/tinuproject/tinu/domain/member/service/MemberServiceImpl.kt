@@ -2,11 +2,13 @@ package com.tinuproject.tinu.domain.member.service
 
 import com.tinuproject.tinu.domain.entity.Member
 import com.tinuproject.tinu.domain.exception.mail.NeedEmailAuthException
+import com.tinuproject.tinu.domain.exception.mail.NotExistMemberException
 import com.tinuproject.tinu.domain.exception.member.ExistEmailException
 import com.tinuproject.tinu.domain.exception.member.ExistNameException
 import com.tinuproject.tinu.domain.exception.member.ExistMemberException
 import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
-import com.tinuproject.tinu.domain.member.dto.client_controller.RegisterRequestDTO
+import com.tinuproject.tinu.domain.member.dto.client_controller.request.RegisterRequestDTO
+import com.tinuproject.tinu.domain.member.dto.client_controller.response.MemberSearchResponseDTO
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
 import com.tinuproject.tinu.domain.university.repository.UniversityRepository
@@ -85,6 +87,15 @@ class MemberServiceImpl(
         }
 
         return true
+    }
+
+    override fun findMemberByUserId(userId: UUID): MemberSearchResponseDTO {
+        val member = memberRepository.findMemberByUserId(userId)
+
+        member?:NotExistMemberException()
+
+        return MemberSearchResponseDTO(member!!)
+
     }
 
     @Transactional(readOnly = true)
