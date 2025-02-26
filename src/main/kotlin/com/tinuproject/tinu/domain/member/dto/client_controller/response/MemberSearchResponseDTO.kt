@@ -32,7 +32,6 @@ data class MemberSearchResponseDTO(
                 else if(3.5<=mark&&mark<4.0) "A"
                 else if(4.0<=mark&&mark<4.5) "A+"
                 else "U"
-            }
         }
     }
 }
