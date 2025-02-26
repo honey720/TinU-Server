@@ -11,7 +11,7 @@ interface MemberService {
 
     fun registerMember(userId: UUID, registerRequestDTO: RegisterRequestDTO)
 
-    fun usableMemberByNickName(userId : UUID, name : String) : Boolean
+    fun usableMemberByNickname(userId : UUID, nickName : String) : Boolean
 
     fun usableMemberByEmail(userId: UUID,email : String) :Boolean
 

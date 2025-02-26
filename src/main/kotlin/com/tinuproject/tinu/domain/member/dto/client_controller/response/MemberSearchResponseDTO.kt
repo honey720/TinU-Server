@@ -24,15 +24,14 @@ data class MemberSearchResponseDTO(
 
     companion object {
         fun convertMarkToGrade(mark: Double): String {
-            return when (mark) {
-                in 0.0..0.5 -> "F"
-                in 0.5..1.5 -> "C"
-                in 1.5..2.5 -> "C+"
-                in 2.5..3.0 -> "B"
-                in 3.0..3.5 -> "B+"
-                in 3.5..4.0 -> "A"
-                in 4.0..4.5 -> "A+"
-                else -> "Invalid" // 범위를 벗어난 값 방어 로직
+                return if(0.0<=mark&&mark<0.5) "F"
+                else if(0.5<=mark&&mark<1.5) "D"
+                else if(1.5<=mark&&mark<2.5) "C"
+                else if(2.5<=mark&&mark<3.0) "B"
+                else if(3.0<=mark&&mark<3.5) "B+"
+                else if(3.5<=mark&&mark<4.0) "A"
+                else if(4.0<=mark&&mark<4.5) "A+"
+                else "U"
             }
         }
     }

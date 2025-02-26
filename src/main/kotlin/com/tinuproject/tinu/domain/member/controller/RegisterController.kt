@@ -82,7 +82,7 @@ class RegisterController(
      */
     @GetMapping("/nick-check")
     fun nickNameCheckRequest(@AuthenticationPrincipal userId : UUID,@RequestParam(name = "name") nickName :String) : ResponseEntity<ResponseDTO>{
-        memberService.usableMemberByNickName(userId,nickName)
+        memberService.usableMemberByNickname(userId,nickName)
         return ResponseEntityGenerator.onSuccess()
     }
 

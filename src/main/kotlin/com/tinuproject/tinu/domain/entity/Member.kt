@@ -77,7 +77,7 @@ class Member (
 ) : BaseEntity(){
 
     fun updateMemberInfo(updateUserInfoRequestDTO: UpdateUserInfoRequestDTO){
-        this.nickname = updateUserInfoRequestDTO.name
+        this.nickname = updateUserInfoRequestDTO.nickname
         this.grade = updateUserInfoRequestDTO.grade
         this.major = updateUserInfoRequestDTO.major
         this.introduction = updateUserInfoRequestDTO.introduction

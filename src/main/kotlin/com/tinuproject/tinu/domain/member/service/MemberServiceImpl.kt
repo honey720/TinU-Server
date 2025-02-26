@@ -33,7 +33,7 @@ class MemberServiceImpl(
     @Transactional
     override fun registerMember(userId: UUID, registerRequestDTO: RegisterRequestDTO) {
         //닉네임 사용 가능 여부 체크
-        usableMemberByNickName(userId, registerRequestDTO.nickName)
+        usableMemberByNickname(userId, registerRequestDTO.nickName)
 
         //이미 회원가입이 완료된 유저가 또 회원가입 요청하는 것을 방지.
         existMemberByUserId(userId)
@@ -70,8 +70,8 @@ class MemberServiceImpl(
         해당 내용이 IF문에 반영이 되어 있음.
      */
     @Transactional(readOnly = true)
-    override fun usableMemberByNickName(userId : UUID, name: String) :Boolean{
-        val existMember = memberRepository.findMemberByNickname(name)
+    override fun usableMemberByNickname(userId : UUID, nickName: String) :Boolean{
+        val existMember = memberRepository.findMemberByNickname(nickName)
 
         if(existMember !=null&&userId!=existMember.userId) throw ExistNameException()
 
@@ -106,7 +106,7 @@ class MemberServiceImpl(
 
         member?: throw NotExistMemberException()
 
-        usableMemberByNickName(userId = userId, name = updateUserInfoRequestDTO.name)
+        usableMemberByNickname(userId = userId, nickName = updateUserInfoRequestDTO.nickname)
 
         member.updateMemberInfo(updateUserInfoRequestDTO)
 
