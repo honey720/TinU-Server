@@ -2,11 +2,14 @@ package com.tinuproject.tinu.domain.member.service
 
 import com.tinuproject.tinu.domain.entity.Member
 import com.tinuproject.tinu.domain.exception.mail.NeedEmailAuthException
+import com.tinuproject.tinu.domain.exception.mail.NotExistMemberException
 import com.tinuproject.tinu.domain.exception.member.ExistEmailException
 import com.tinuproject.tinu.domain.exception.member.ExistNameException
 import com.tinuproject.tinu.domain.exception.member.ExistMemberException
 import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
-import com.tinuproject.tinu.domain.member.dto.client_controller.RegisterRequestDTO
+import com.tinuproject.tinu.domain.member.dto.client_controller.request.RegisterRequestDTO
+import com.tinuproject.tinu.domain.member.dto.client_controller.request.UpdateUserInfoRequestDTO
+import com.tinuproject.tinu.domain.member.dto.client_controller.response.MemberSearchResponseDTO
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
 import com.tinuproject.tinu.domain.university.repository.UniversityRepository
@@ -30,7 +33,7 @@ class MemberServiceImpl(
     @Transactional
     override fun registerMember(userId: UUID, registerRequestDTO: RegisterRequestDTO) {
         //닉네임 사용 가능 여부 체크
-        usableMemberByNickName(userId, registerRequestDTO.nickName)
+        usableMemberByNickname(userId, registerRequestDTO.nickName)
 
         //이미 회원가입이 완료된 유저가 또 회원가입 요청하는 것을 방지.
         existMemberByUserId(userId)
@@ -67,8 +70,8 @@ class MemberServiceImpl(
         해당 내용이 IF문에 반영이 되어 있음.
      */
     @Transactional(readOnly = true)
-    override fun usableMemberByNickName(userId : UUID, name: String) :Boolean{
-        val existMember = memberRepository.findMemberByNickname(name)
+    override fun usableMemberByNickname(userId : UUID, nickName: String) :Boolean{
+        val existMember = memberRepository.findMemberByNickname(nickName)
 
         if(existMember !=null&&userId!=existMember.userId) throw ExistNameException()
 
@@ -88,7 +91,30 @@ class MemberServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    fun emailAuthCheck(userId :UUID, email : String) : EmailAuth{
+    override fun findMemberByUserId(userId: UUID): MemberSearchResponseDTO {
+        val member = memberRepository.findMemberByUserId(userId)
+
+        member?:NotExistMemberException()
+
+        return MemberSearchResponseDTO(member!!)
+
+    }
+
+    @Transactional
+    override fun updateMember(userId: UUID, updateUserInfoRequestDTO: UpdateUserInfoRequestDTO) {
+        val member = memberRepository.findMemberByUserId(userId)
+
+        member?: throw NotExistMemberException()
+
+        usableMemberByNickname(userId = userId, nickName = updateUserInfoRequestDTO.nickname)
+
+        member.updateMemberInfo(updateUserInfoRequestDTO)
+
+        memberRepository.save(member)
+
+    }
+
+    private fun emailAuthCheck(userId :UUID, email : String) : EmailAuth{
         val emailAuth = emailAuthRepository.findByUserId(userId)
 
         //이메일 인증이 진행되지 않은 유저
@@ -99,8 +125,7 @@ class MemberServiceImpl(
         return emailAuth
     }
 
-    @Transactional(readOnly = true)
-    fun existMemberByUserId(userId: UUID){
+    private fun existMemberByUserId(userId: UUID){
         if(memberRepository.findMemberByUserId(userId)!=null){
             throw ExistMemberException()
         }

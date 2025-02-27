@@ -1,4 +1,4 @@
-package com.tinuproject.tinu.domain.member.dto.client_controller
+package com.tinuproject.tinu.domain.member.dto.client_controller.request
 
 data class RegisterRequestDTO(
     val nickName : String,
