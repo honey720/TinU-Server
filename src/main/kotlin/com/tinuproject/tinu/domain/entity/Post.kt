@@ -53,7 +53,7 @@ class Post (
     var paymentMethod: Set<PaymentMethod> = setOf(),
 
     @Column
-    var thumbnailImageURL : String?,
+    var thumbnail : String?,
 
     @Column
     var reportCount : Long = 0,

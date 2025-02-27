@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.domain.post.controller
 
 import com.tinuproject.tinu.DTO.ResponseDTO
-import com.tinuproject.tinu.domain.post.service.PostServiceImpl
+import com.tinuproject.tinu.domain.post.service.PostService
 import com.tinuproject.tinu.web.ResponseEntityGenerator
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/api/post")
 class PostController(
-        private val postServiceImpl: PostServiceImpl
+        private val postService: PostService
 ) {
     @GetMapping
     fun getPosts(
             @AuthenticationPrincipal userId: UUID,
-            @RequestParam(required = false) cursorId: Long?,
+            @RequestParam(required = false) cursorId: String?,
             @RequestParam(required = false) keyword: String?,
             @RequestParam(required = false) category: List<Long>?,
             @RequestParam(required = false) minPrice: Int?,
@@ -27,7 +27,7 @@ class PostController(
             @RequestParam onlySell: Boolean,
             @RequestParam(defaultValue = "recent") orderBy: String
     ): ResponseEntity<ResponseDTO> {
-        return ResponseEntityGenerator.onSuccess(postServiceImpl.getPostList(
+        return ResponseEntityGenerator.onSuccess(postService.getPostList(
                 userId,
                 cursorId,
                 keyword,

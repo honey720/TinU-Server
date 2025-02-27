@@ -1,6 +1,8 @@
 package com.tinuproject.tinu.domain.post.repository
 
+import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
+import com.querydsl.core.types.dsl.StringExpressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import com.tinuproject.tinu.domain.entity.Post
 import com.tinuproject.tinu.domain.entity.QPost
@@ -15,7 +17,7 @@ class PostQueryRepositoryImpl(
 
     override fun findPosts(
             university: University,
-            cursorId: Long?,
+            cursorId: String?,
             size: Long,
             keyword: String?,
             category: List<Long>?,
@@ -28,7 +30,7 @@ class PostQueryRepositoryImpl(
                 .selectFrom(post)
                 .where(
                         post.university.eq(university),
-                        ltPostId(cursorId),
+                        customCursor(orderBy, cursorId),
                         containsTitle(keyword),
                         containsBody(keyword),
                         inCategory(category),
@@ -36,15 +38,20 @@ class PostQueryRepositoryImpl(
                         eqOnlySell(onlySell)
                 )
                 .limit(size + 1)
-                .orderBy(post.createdAt.desc()) //TODO: 인기순 구현 예정
+                .orderBy(orderBy(orderBy))
                 .fetch()
     }
 
-    override fun ltPostId(cursorId: Long?): BooleanExpression? {
-        return when {
-            cursorId != null -> post.id.lt(cursorId)
-            else -> null
+    override fun customCursor(orderBy: String, cursorId: String?): BooleanExpression? {
+        if (cursorId == null) {
+            return null
         }
+        else if (orderBy == "popular") {
+            return StringExpressions.lpad(post.scrapCount.stringValue(), 10, '0')
+                    .concat(StringExpressions.lpad(post.id.stringValue(), 10, '0'))
+                    .lt(cursorId)
+        }
+        return post.id.stringValue().lt(cursorId)
     }
 
     override fun containsTitle(keyword: String?): BooleanExpression? {
@@ -78,13 +85,16 @@ class PostQueryRepositoryImpl(
     }
 
     override fun eqOnlySell(onlySell: Boolean): BooleanExpression? {
-        return when {
-            onlySell -> post.isSell.eq(onlySell)
-            else -> null
+        return when (onlySell) {
+            true -> post.isSell.eq(true)
+            false -> null
         }
     }
 
-    override fun orderBy(orderBy: String): BooleanExpression? {
-        TODO("Not yet implemented")
+    override fun orderBy(orderBy: String): OrderSpecifier<*>? {
+        return when (orderBy) {
+            "popular" -> post.scrapCount.desc()
+            else -> post.createdAt.desc()
+        }
     }
 }

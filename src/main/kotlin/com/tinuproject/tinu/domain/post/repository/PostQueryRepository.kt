@@ -1,5 +1,6 @@
 package com.tinuproject.tinu.domain.post.repository
 
+import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.tinuproject.tinu.domain.entity.Post
 import com.tinuproject.tinu.domain.entity.University
@@ -7,7 +8,7 @@ import com.tinuproject.tinu.domain.entity.University
 interface PostQueryRepository {
     fun findPosts(
             university: University,
-            cursorId: Long?,
+            cursorId: String?,
             size: Long,
             keyword: String?,
             category: List<Long>?,
@@ -17,32 +18,17 @@ interface PostQueryRepository {
             orderBy: String
     ): List<Post>
 
-    fun ltPostId(
-            cursorId: Long?
-    ): BooleanExpression?
+    fun customCursor(orderBy: String, cursorId: String?): BooleanExpression?
 
-    fun containsTitle(
-            keyword: String?
-    ): BooleanExpression?
+    fun containsTitle(keyword: String?): BooleanExpression?
 
-    fun containsBody(
-            keyword: String?
-    ): BooleanExpression?
+    fun containsBody(keyword: String?): BooleanExpression?
 
-    fun inCategory(
-            category: List<Long>?
-    ): BooleanExpression?
+    fun inCategory(category: List<Long>?): BooleanExpression?
 
-    fun betweenPrice(
-            maxPrice: Int?,
-            minPrice: Int?
-    ): BooleanExpression?
+    fun betweenPrice(maxPrice: Int?, minPrice: Int?): BooleanExpression?
 
-    fun eqOnlySell(
-            onlySell: Boolean
-    ): BooleanExpression?
+    fun eqOnlySell(onlySell: Boolean): BooleanExpression?
 
-    fun orderBy(
-            orderBy: String
-    ): BooleanExpression?
+    fun orderBy(orderBy: String): OrderSpecifier<*>?
 }
