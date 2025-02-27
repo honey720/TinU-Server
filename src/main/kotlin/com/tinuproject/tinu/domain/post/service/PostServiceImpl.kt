@@ -51,7 +51,7 @@ class PostServiceImpl(
             rawPosts = rawPosts.subList(0, SIZE)
 
             nextCursorId = if (orderBy == "popular") {
-                String.format("%010d%010d", rawPosts.last().scrapCount, rawPosts.last().id)
+                String.format("%010d%020d", rawPosts.last().scrapCount, rawPosts.last().id)
             } else {
                 rawPosts.last().id.toString()
             }
@@ -59,7 +59,7 @@ class PostServiceImpl(
 
         val posts = rawPosts.map { post ->
             PostResponseDTO(
-                    postId = post.id!!,
+                    postId = post.id,
                     createdAt = post.createdAt,
                     title = post.title,
                     price = post.price,
@@ -75,4 +75,6 @@ class PostServiceImpl(
                 nextCursorId = nextCursorId
         )
     }
+
+
 }
