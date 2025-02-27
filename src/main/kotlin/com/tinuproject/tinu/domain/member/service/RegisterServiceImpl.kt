@@ -3,6 +3,7 @@ package com.tinuproject.tinu.domain.member.service
 import com.tinuproject.tinu.domain.exception.member.ExistEmailException
 import com.tinuproject.tinu.domain.exception.mail.NotExistCodeException
 import com.tinuproject.tinu.domain.exception.mail.NotMatchCodeException
+import com.tinuproject.tinu.domain.exception.member.ExistMemberException
 import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.university.repository.UniversityRepository
@@ -36,7 +37,7 @@ class RegisterServiceImpl(
 
         val member = memberRepository.findMemberByUserId(userId)
 
-        if(member!=null){ throw ExistEmailException()}
+        if(member!=null){ throw ExistMemberException()}
 
         return true
     }
