@@ -23,6 +23,9 @@ enum class ErrorCode(
     NEED_EMAIL_AUTH(httpStatusCode = 400, stateCode = "NEED_EMAIL_AUTH", message = "이메일 인증이 필요합니다."),
 
 
+    //S3 관련
+    UPLOAD_OUT_OF_RANGE(httpStatusCode = 400, stateCode = "UPLOAD_OUT_OF_RANGE", message = "업로드 범위를 벗어났습니다."),
+
     //전역적 사용
     NOT_FOUND(httpStatusCode = 404, stateCode = "NOT_FOUND", message = "없는 페이지입니다."),
     UNAUTHORIZED_ACCESS(httpStatusCode = 400, stateCode = "NOT_ACCESS", message = "잘못된 접근이 감지되었습니다.");

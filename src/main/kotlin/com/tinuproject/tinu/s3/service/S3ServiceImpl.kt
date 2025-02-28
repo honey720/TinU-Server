@@ -1,8 +1,9 @@
 package com.tinuproject.tinu.s3.service
 
+import com.tinuproject.tinu.domain.exception.s3.UploadOutOfRangeException
 import com.tinuproject.tinu.s3.dto.request.*
+import com.tinuproject.tinu.s3.dto.response.S3PresignedUrlResponse
 import com.tinuproject.tinu.s3.dto.response.S3UploadCompleteResponse
-import com.tinuproject.tinu.s3.dto.response.S3UploadCreatePresignedUrlResponse
 import com.tinuproject.tinu.s3.dto.response.S3UploadInitiateResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -10,10 +11,11 @@ import org.springframework.transaction.annotation.Transactional
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.*
 import software.amazon.awssdk.services.s3.presigner.S3Presigner
-import software.amazon.awssdk.services.s3.presigner.model.PresignedUploadPartRequest
-import software.amazon.awssdk.services.s3.presigner.model.UploadPartPresignRequest
+import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest
+import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest
 import java.time.Duration
 import java.time.LocalDateTime
+import java.util.*
 
 @Service
 @Transactional
@@ -32,18 +34,10 @@ class S3ServiceImpl(
         //S3에 저장할 객체 키 생성 (현재 시간 + 원본 파일 이름)
         val targetObjectDir = "original/${System.currentTimeMillis()}_${s3UploadInitiateRequest.originalFileName}"
 
-        //S3 객체 메타데이터 설정
-        val metadata = mapOf(
-                "originalFileName" to s3UploadInitiateRequest.originalFileName,
-                "fileType" to s3UploadInitiateRequest.fileType,
-                "fileSize" to s3UploadInitiateRequest.fileSize.toString()
-        )
-
         //S3에 멀티파트 업로드를 요청할 양식을 작성
         val createMultipartUploadRequest: CreateMultipartUploadRequest = CreateMultipartUploadRequest.builder()
                 .bucket(bucketName)
                 .key(targetObjectDir)
-                .metadata(metadata)
                 .build()
 
         //S3에 멀티파트 업로드 초기화 요청
@@ -56,33 +50,32 @@ class S3ServiceImpl(
         )
     }
 
-    override fun getUploadPreSignedUrl(s3UploadPresignedUrlRequest: S3UploadPresignedUrlRequest): S3UploadCreatePresignedUrlResponse {
+    override fun getPreSignedUrl(s3PresignedUrlRequest: S3PresignedUrlRequest): S3PresignedUrlResponse {
 
-        //Presigned URL 기한 설정
-        val expiration = Duration.ofMinutes(10)
+        //업로드할 파일의 갯수가 1개 이상 10개 이하인지 확인
+        if (s3PresignedUrlRequest.size !in 1..10)
+            throw UploadOutOfRangeException()
 
-        //S3에 Presigned URL 요청할 정보 저장
-        val uploadPartRequest: UploadPartRequest = UploadPartRequest.builder()
-                .bucket(bucketName)
-                .key(s3UploadPresignedUrlRequest.key)
-                .uploadId(s3UploadPresignedUrlRequest.uploadId)
-                .partNumber(s3UploadPresignedUrlRequest.partNumber)
-                .build()
+        //Presigned URL 만료 시간 설정
+        val expiration = Duration.ofMinutes(2)
 
-        //S3에 Presigned URL을 요청할 양식을 작성
-        val uploadPartPresignRequest: UploadPartPresignRequest = UploadPartPresignRequest.builder()
-                .signatureDuration(expiration)
-                .uploadPartRequest(uploadPartRequest)
-                .build()
-
-        //클라이언트에서 S3로 직접 업로드하기 위해 사용할 Presigned URL를 요청
-        val presignedUploadPartRequest: PresignedUploadPartRequest = s3Presigner.presignUploadPart(uploadPartPresignRequest)
+        //Presigned URL 생성
+        val presignedUrls = (1..s3PresignedUrlRequest.size).map { index ->
+            val key = "original/${System.currentTimeMillis()}_${UUID.randomUUID()}_$index"
+            val presignedPutObjectRequest: PresignedPutObjectRequest = s3Presigner.presignPutObject(PutObjectPresignRequest.builder()
+                    .signatureDuration(expiration)
+                    .putObjectRequest {
+                        it.bucket(bucketName)
+                                .key(key)
+                    }
+                    .build()
+            )
+            presignedPutObjectRequest.url().toString()
+        }.toMutableList()
 
         //응답 DTO 생성 및 반환
-        return S3UploadCreatePresignedUrlResponse(
-                presignedUrl = presignedUploadPartRequest.url().toString(),
-                uploadId = s3UploadPresignedUrlRequest.uploadId,
-                partNumber = s3UploadPresignedUrlRequest.partNumber,
+        return S3PresignedUrlResponse(
+                presignedUrls = presignedUrls,
                 expiration = LocalDateTime.now().plus(expiration)
         )
     }
