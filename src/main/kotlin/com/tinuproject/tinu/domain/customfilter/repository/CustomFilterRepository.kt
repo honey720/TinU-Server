@@ -1,4 +1,7 @@
 package com.tinuproject.tinu.domain.customfilter.repository
 
-interface CustomFilterRepository {
+import com.tinuproject.tinu.domain.entity.CustomFilter
+import org.springframework.data.jpa.repository.JpaRepository
+
+interface CustomFilterRepository : JpaRepository<CustomFilter, Long> {
 }
