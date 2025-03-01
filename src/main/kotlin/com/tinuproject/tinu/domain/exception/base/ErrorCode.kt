@@ -25,8 +25,10 @@ enum class ErrorCode(
 
     //S3 관련
     UPLOAD_OUT_OF_RANGE(httpStatusCode = 400, stateCode = "UPLOAD_OUT_OF_RANGE", message = "업로드 범위를 벗어났습니다."),
+    NO_SUCH_KEY(httpStatusCode = 400, stateCode = "NO_SUCH_KEY", message = "키가 존재하지 않습니다."),
+    INVALID_ETAG(httpStatusCode = 400, stateCode = "INVALID_ETAG", message = "ETag가 일치하지 않습니다."),
 
     //전역적 사용
     NOT_FOUND(httpStatusCode = 404, stateCode = "NOT_FOUND", message = "없는 페이지입니다."),
-    UNAUTHORIZED_ACCESS(httpStatusCode = 400, stateCode = "NOT_ACCESS", message = "잘못된 접근이 감지되었습니다.");
+    UNAUTHORIZED_ACCESS(httpStatusCode = 400, stateCode = "NOT_ACCESS", message = "잘못된 접근이 감지되었습니다."),
 }
