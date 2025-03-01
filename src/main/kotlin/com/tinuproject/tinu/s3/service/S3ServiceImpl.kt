@@ -1,8 +1,7 @@
 package com.tinuproject.tinu.s3.service
 
-import com.tinuproject.tinu.domain.exception.s3.InvalidETagException
+import com.tinuproject.tinu.domain.exception.s3.*
 import com.tinuproject.tinu.domain.exception.s3.NoSuchKeyException
-import com.tinuproject.tinu.domain.exception.s3.UploadOutOfRangeException
 import com.tinuproject.tinu.s3.dto.request.*
 import com.tinuproject.tinu.s3.dto.response.S3PresignedUrlResponse
 import org.springframework.beans.factory.annotation.Value
@@ -29,24 +28,37 @@ class S3ServiceImpl(
 ) : S3Service {
     override fun getPreSignedUrl(s3PresignedUrlRequest: S3PresignedUrlRequest): S3PresignedUrlResponse {
 
-        //업로드할 파일의 갯수가 1개 이상 10개 이하인지 확인
-        if (s3PresignedUrlRequest.size !in 1..10)
-            throw UploadOutOfRangeException()
+        val contents = s3PresignedUrlRequest.contents
+        if (contents.size !in 1..10)
+            throw UploadSizeOutOfRangeException()
 
-        //Presigned URL 만료 시간 설정
-        val expiration = Duration.ofMinutes(2)
+        contents.map { content ->
+            if (content.contentType !in ALLOWED_EXTENSIONS)
+                throw NotAllowedExtensionException()
+            if (content.contentLength !in 1..(1024 * 1024 * 10))
+                throw FileLengthOutOfRange()
+        }
 
-        //Presigned URL 생성
-        val objects = (1..s3PresignedUrlRequest.size).map { index ->
-            val key = "original/${System.currentTimeMillis()}_${UUID.randomUUID()}_$index"
+        val currentTimeMillis = System.currentTimeMillis()
+        val uuid = UUID.randomUUID()
+        val expiration = Duration.ofMinutes(10)
+
+        //각 파일에 대한 Presigned URL 생성
+        val objects = contents.mapIndexed() { index, content ->
+            val extension = content.contentType.split("/")[1]
+            val key = "original/${currentTimeMillis}_${uuid}_${index}.${extension}"
+
             val presignedPutObjectRequest: PresignedPutObjectRequest = s3Presigner.presignPutObject(PutObjectPresignRequest.builder()
                     .signatureDuration(expiration)
                     .putObjectRequest {
                         it.bucket(bucketName)
+                                .contentType(content.contentType)
+                                .contentLength(content.contentLength)
                                 .key(key)
                     }
                     .build()
             )
+
             S3PresignedUrlResponse.Object(
                     presignedUrl = presignedPutObjectRequest.url().toString(),
                     key = key
@@ -58,6 +70,10 @@ class S3ServiceImpl(
                 objects = objects,
                 expiration = LocalDateTime.now().plus(expiration)
         )
+    }
+
+    companion object {
+        private val ALLOWED_EXTENSIONS = listOf("image/jpg", "image/jpeg", "image/png", "image/webp")
     }
 
     override fun verifyImage(objects: MutableList<Object>): MutableList<String> {
