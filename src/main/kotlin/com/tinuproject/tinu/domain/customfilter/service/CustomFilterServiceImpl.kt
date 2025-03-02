@@ -48,7 +48,7 @@ class CustomFilterServiceImpl(
                 filterName =  customFilter.filterName,
                 maxPrice = customFilter.maxPrice,
                 minPrice = customFilter.minPrice,
-                isSell = customFilter.isSell,
+                onlySell = customFilter.onlySell,
                 category = categorys
             ))
         }
@@ -62,7 +62,7 @@ class CustomFilterServiceImpl(
 
         val customFilter = CustomFilter(
             filterName = createCustomFilter.filterName,
-            isSell = createCustomFilter.isSell,
+            onlySell = createCustomFilter.onlySell,
             maxPrice = createCustomFilter.maxPrice,
             minPrice = createCustomFilter.minPrice,
             member = member

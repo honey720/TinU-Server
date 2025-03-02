@@ -18,7 +18,7 @@ class CustomFilter (
     var minPrice :Int?,
 
     @Column
-    var isSell : Boolean?,
+    var onlySell : Boolean?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
@@ -30,7 +30,7 @@ class CustomFilter (
 
     fun updateCustomFilter(updateCustomFilter: UpdateCustomFilter){
         this.filterName = updateCustomFilter.filterName
-        this.isSell = updateCustomFilter.isSell
+        this.onlySell = updateCustomFilter.onlySell
         this.maxPrice = updateCustomFilter.maxPrice
         this.minPrice = updateCustomFilter.minPrice
     }

@@ -5,5 +5,5 @@ data class CreateCustomFilter(
     val category : List<Long>,
     val maxPrice : Int,
     val minPrice : Int,
-    val isSell : Boolean
+    val onlySell : Boolean
 )

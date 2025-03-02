@@ -6,5 +6,5 @@ data class SelectCustomFilter(
     val category: MutableList<Long>,
     val maxPrice: Int?,
     val minPrice: Int?,
-    val isSell: Boolean?
+    val onlySell: Boolean?
 )
