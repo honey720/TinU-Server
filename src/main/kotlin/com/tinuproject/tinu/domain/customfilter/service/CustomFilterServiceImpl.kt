@@ -8,6 +8,9 @@ import com.tinuproject.tinu.domain.customfilter.dto.client_controller.response.S
 import com.tinuproject.tinu.domain.customfilter.repository.CustomFilterRepository
 import com.tinuproject.tinu.domain.entity.CustomCategory
 import com.tinuproject.tinu.domain.entity.CustomFilter
+import com.tinuproject.tinu.domain.exception.common.NotFoundException
+import com.tinuproject.tinu.domain.exception.common.UnauthorizedAccessException
+import com.tinuproject.tinu.domain.exception.customfilter.NotExistCustomFilter
 import com.tinuproject.tinu.domain.exception.mail.NotExistMemberException
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import org.springframework.stereotype.Service
@@ -76,7 +79,31 @@ class CustomFilterServiceImpl(
         }
     }
 
+    @Transactional
     override fun updateCustomFilter(userId: UUID, updateCustomFilter: UpdateCustomFilter) {
-        TODO("Not yet implemented")
+        val customFilter = customFilterRepository.findCustomFilterById(updateCustomFilter.filterId!!) ?: throw NotExistCustomFilter()
+
+        if(customFilter.member.userId!=userId){
+            throw UnauthorizedAccessException()
+        }
+
+        customFilter.updateCustomFilter(updateCustomFilter)
+
+        customCategoryRepository.deleteAllByCustomFilter(customFilter = customFilter)
+
+        customCategoryRepository.flush()
+
+        mappingCustomCategory(customFilter,updateCustomFilter.category)
+    }
+
+
+    private fun mappingCustomCategory(customFilter: CustomFilter, categorys : MutableList<Long>){
+        val categories = categoryRepository.findAllById(categorys)
+
+        val customCategories = categories.map { category ->
+            CustomCategory(category = category, customFilter = customFilter)
+        }
+
+        customCategoryRepository.saveAll(customCategories)
     }
 }
