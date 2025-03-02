@@ -3,16 +3,18 @@ package com.tinuproject.tinu.domain.customfilter.service
 import com.tinuproject.tinu.domain.category.repository.CategoryRepository
 import com.tinuproject.tinu.domain.customcategory.repository.CustomCategoryRepository
 import com.tinuproject.tinu.domain.customfilter.dto.client_controller.request.CreateCustomFilter
+import com.tinuproject.tinu.domain.customfilter.dto.client_controller.request.DeleteCustomFilter
 import com.tinuproject.tinu.domain.customfilter.dto.client_controller.request.UpdateCustomFilter
 import com.tinuproject.tinu.domain.customfilter.dto.client_controller.response.SelectCustomFilter
 import com.tinuproject.tinu.domain.customfilter.repository.CustomFilterRepository
 import com.tinuproject.tinu.domain.entity.CustomCategory
 import com.tinuproject.tinu.domain.entity.CustomFilter
-import com.tinuproject.tinu.domain.exception.common.NotFoundException
 import com.tinuproject.tinu.domain.exception.common.UnauthorizedAccessException
 import com.tinuproject.tinu.domain.exception.customfilter.NotExistCustomFilter
 import com.tinuproject.tinu.domain.exception.mail.NotExistMemberException
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -24,7 +26,7 @@ class CustomFilterServiceImpl(
     val customCategoryRepository: CustomCategoryRepository,
     val categoryRepository: CategoryRepository
 ):CustomFilterService {
-
+    val log :Logger = LoggerFactory.getLogger(this::class.java)
 
     @Transactional(readOnly = true)
     override fun getCustomFilter(userId: UUID): List<SelectCustomFilter> {
@@ -67,16 +69,7 @@ class CustomFilterServiceImpl(
         )
 
         customFilterRepository.save(customFilter)
-
-        for(i  in createCustomFilter.category){
-            val category = categoryRepository.findById(i).get()
-
-            val customCategory = CustomCategory(
-                category =  category,
-                customFilter = customFilter
-            )
-            customCategoryRepository.save(customCategory)
-        }
+        mappingCustomCategory(customFilter, createCustomFilter.category.toMutableList() )
     }
 
     @Transactional
@@ -88,22 +81,46 @@ class CustomFilterServiceImpl(
         }
 
         customFilter.updateCustomFilter(updateCustomFilter)
+        log.info("delete 실행.")
+        customCategoryRepository.deleteAllByCustomFilterId(customFilterId = customFilter.id!!)
+        mappingCustomCategory(customFilter,updateCustomFilter.category.toMutableList())
+    }
 
-        customCategoryRepository.deleteAllByCustomFilter(customFilter = customFilter)
+    @Transactional
+    override fun deleteCustomFilter(userId :UUID, deleteCustomFilter : DeleteCustomFilter){
+        val existCustomFilter = customFilterRepository.findCustomFilterById(deleteCustomFilter.filterId)?: throw NotExistCustomFilter()
 
-        customCategoryRepository.flush()
 
-        mappingCustomCategory(customFilter,updateCustomFilter.category)
+        if(existCustomFilter.member.userId != userId) throw UnauthorizedAccessException()
+        log.info("커스텀 필터 삭제")
+        customCategoryRepository.deleteAllByCustomFilterId(existCustomFilter.id!!)
+        customFilterRepository.deleteById(deleteCustomFilter.filterId)
+        customFilterRepository.flush()
+        log.info("커스텀 필터 삭제 완료")
+    
     }
 
 
-    private fun mappingCustomCategory(customFilter: CustomFilter, categorys : MutableList<Long>){
-        val categories = categoryRepository.findAllById(categorys)
+    private fun mappingCustomCategory(customFilter: CustomFilter, categorylist : MutableList<Long>){
+        val categories = categoryRepository.findAllById(categorylist)
 
         val customCategories = categories.map { category ->
             CustomCategory(category = category, customFilter = customFilter)
         }
 
         customCategoryRepository.saveAll(customCategories)
+    }
+
+    private fun garbageMappingCustomCategory(customFilter: CustomFilter, categorylist: MutableList<Long>){
+        for(i  in categorylist){
+            val category = categoryRepository.findById(i).get()
+
+            val customCategory = CustomCategory(
+                category = category,
+                customFilter = customFilter
+            )
+
+            customCategoryRepository.save(customCategory)
+        }
     }
 }
