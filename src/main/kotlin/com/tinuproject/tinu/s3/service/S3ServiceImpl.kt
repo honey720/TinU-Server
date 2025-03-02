@@ -4,6 +4,10 @@ import com.tinuproject.tinu.domain.exception.s3.*
 import com.tinuproject.tinu.domain.exception.s3.NoSuchKeyException
 import com.tinuproject.tinu.s3.dto.request.*
 import com.tinuproject.tinu.s3.dto.response.S3PresignedUrlResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -26,13 +30,13 @@ class S3ServiceImpl(
         @Value("\${cloudfront.domain}")
         private var cloudFrontDomain: String
 ) : S3Service {
-    override fun getPreSignedUrl(s3PresignedUrlRequest: S3PresignedUrlRequest): S3PresignedUrlResponse {
+    override suspend fun getPreSignedUrl(s3PresignedUrlRequest: S3PresignedUrlRequest): S3PresignedUrlResponse = withContext(Dispatchers.IO) {
 
         val contents = s3PresignedUrlRequest.contents
         if (contents.size !in 1..10)
             throw UploadSizeOutOfRangeException()
 
-        contents.map { content ->
+        contents.forEach { content ->
             if (content.contentType !in ALLOWED_EXTENSIONS)
                 throw NotAllowedExtensionException()
             if (content.contentLength !in 1..(1024 * 1024 * 10))
@@ -45,28 +49,30 @@ class S3ServiceImpl(
 
         //각 파일에 대한 Presigned URL 생성
         val objects = contents.mapIndexed() { index, content ->
-            val extension = content.contentType.split("/")[1]
-            val key = "original/${currentTimeMillis}_${uuid}_${index}.${extension}"
+            async {
+                val extension = content.contentType.split("/")[1]
+                val key = "original/${currentTimeMillis}_${uuid}_${index}.${extension}"
 
-            val presignedPutObjectRequest: PresignedPutObjectRequest = s3Presigner.presignPutObject(PutObjectPresignRequest.builder()
-                    .signatureDuration(expiration)
-                    .putObjectRequest {
-                        it.bucket(bucketName)
-                                .contentType(content.contentType)
-                                .contentLength(content.contentLength)
-                                .key(key)
-                    }
-                    .build()
-            )
+                val presignedPutObjectRequest: PresignedPutObjectRequest = s3Presigner.presignPutObject(PutObjectPresignRequest.builder()
+                        .signatureDuration(expiration)
+                        .putObjectRequest {
+                            it.bucket(bucketName)
+                                    .contentType(content.contentType)
+                                    .contentLength(content.contentLength)
+                                    .key(key)
+                        }
+                        .build()
+                )
 
-            S3PresignedUrlResponse.Object(
-                    presignedUrl = presignedPutObjectRequest.url().toString(),
-                    key = key
-            )
-        }.toMutableList()
+                S3PresignedUrlResponse.Object(
+                        presignedUrl = presignedPutObjectRequest.url().toString(),
+                        key = key
+                )
+            }
+        }.awaitAll().toMutableList()
 
         //응답 DTO 생성 및 반환
-        return S3PresignedUrlResponse(
+        S3PresignedUrlResponse(
                 objects = objects,
                 expiration = LocalDateTime.now().plus(expiration)
         )

@@ -15,7 +15,7 @@ class S3Controller(
         private val s3Service: S3Service,
 ) {
     @PostMapping("/presigned-url")
-    fun getUploadPresignedUrl(@AuthenticationPrincipal userId: UUID, @RequestBody s3PresignedUrlRequest: S3PresignedUrlRequest): ResponseEntity<ResponseDTO> {
+    suspend fun getUploadPresignedUrl(@AuthenticationPrincipal userId: UUID, @RequestBody s3PresignedUrlRequest: S3PresignedUrlRequest): ResponseEntity<ResponseDTO> {
 
         return ResponseEntityGenerator.onSuccess(s3Service.getPreSignedUrl(s3PresignedUrlRequest))
     }
