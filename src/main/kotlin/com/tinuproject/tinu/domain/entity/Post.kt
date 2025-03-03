@@ -68,7 +68,7 @@ class Post (
     var multimedia : MutableList<Multimedia> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY,
-        cascade = [CascadeType.REMOVE],
+        cascade = [CascadeType.ALL],
         mappedBy = "post")
     var postHashTagMap: MutableList<PostHashTagMap> = mutableListOf(),
 
@@ -77,4 +77,9 @@ class Post (
         cascade = [CascadeType.REMOVE],
         mappedBy = "post")
     var scrap: MutableList<Scrap> = mutableListOf()
-) : BaseEntity()
+) : BaseEntity() {
+    fun addHashTag(hashTag: HashTag) {
+        val postHashTagMap = PostHashTagMap(post = this, hashTag = hashTag)
+        postHashTagMap.addToCollections() // 동기화 메서드 호출
+    }
+}

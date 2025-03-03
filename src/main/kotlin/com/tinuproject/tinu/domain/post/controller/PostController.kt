@@ -1,6 +1,7 @@
 package com.tinuproject.tinu.domain.post.controller
 
 import com.tinuproject.tinu.DTO.ResponseDTO
+import com.tinuproject.tinu.domain.post.dto.request.PostCreateRequest
 import com.tinuproject.tinu.domain.post.service.PostService
 import com.tinuproject.tinu.web.ResponseEntityGenerator
 import org.springframework.http.ResponseEntity
@@ -42,6 +43,14 @@ class PostController(
             @RequestParam postId: Long
     ): ResponseEntity<ResponseDTO> {
         return ResponseEntityGenerator.onSuccess(postService.getPostDetail(userId, postId))
+    }
+
+    @PostMapping
+    fun createPost(
+            @AuthenticationPrincipal userId: UUID,
+            @RequestBody postCreateRequest: PostCreateRequest
+    ): ResponseEntity<ResponseDTO> {
+        return ResponseEntityGenerator.onSuccess(postService.createPost(userId, postCreateRequest))
     }
 
 }

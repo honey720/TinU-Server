@@ -13,4 +13,9 @@ class PostHashTagMap (
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hashTag_id")
     var hashTag : HashTag
-) : BaseEntity()
+) : BaseEntity() {
+    fun addToCollections() {
+        post.postHashTagMap.add(this)
+        hashTag.postHashTagMap.add(this)
+    }
+}

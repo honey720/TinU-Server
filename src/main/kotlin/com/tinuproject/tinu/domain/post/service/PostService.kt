@@ -1,5 +1,6 @@
 package com.tinuproject.tinu.domain.post.service
 
+import com.tinuproject.tinu.domain.post.dto.request.PostCreateRequest
 import com.tinuproject.tinu.domain.post.dto.response.PostDetailResponse
 import com.tinuproject.tinu.domain.post.dto.response.PostsListResponse
 import java.util.UUID
@@ -21,4 +22,8 @@ interface PostService {
             postId: Long
     ): PostDetailResponse
 
+    fun createPost(
+            userId: UUID,
+            postCreateRequest: PostCreateRequest
+    ): Long
 }
