@@ -19,8 +19,13 @@ const val SIZE = 20
 class PostServiceImpl(
         private val memberRepository: MemberRepository,
         private val postRepository: PostRepository,
-        private val postQueryRepository: PostQueryRepository
+        private val postQueryRepository: PostQueryRepository,
+        private val categoryRepository: CategoryRepository,
+        private val hashTagRepository: HashTagRepository,
+        private val s3Service: S3Service
 ): PostService {
+
+    @Transactional(readOnly = true)
     override fun getPostList(
             userId: UUID,
             cursorId: String?,
@@ -36,6 +41,9 @@ class PostServiceImpl(
 
         val university = member.university
                 ?: throw UniversityNotFoundException()
+
+        println("University ID: ${university.id}")
+        println("Params: cursorId=$cursorId, keyword=$keyword, category=$category, minPrice=$minPrice, maxPrice=$maxPrice, onlySell=$onlySell, orderBy=$orderBy")
 
         var rawPosts = postQueryRepository.findPosts(
                 university,
@@ -80,6 +88,7 @@ class PostServiceImpl(
         )
     }
 
+    @Transactional(readOnly = true)
     override fun getPostDetail(userId: UUID, postId: Long): PostDetailResponse {
         val member = memberRepository.findMemberByUserId(userId)
                 ?: throw MemberNotFoundException()
@@ -105,11 +114,11 @@ class PostServiceImpl(
                 body = post.body,
                 memberId = post.author.id!!,
                 nickname = post.author.nickname!!,
-                profile = post.author.profileImageURL!!,
+                profile = post.author.profileImageURL,
                 categoryId = post.category.id!!,
                 price = post.price,
-                sellMethod = post.sellMethod,
-                paymentMethod = post.paymentMethod,
+                sellMethod = post.sellMethod.toSet(),
+                paymentMethod = post.paymentMethod.toSet(),
                 isSell = post.isSell,
                 isLike = member.scrap.any { it.post == post },
                 isWriter = member == post.author,

@@ -40,7 +40,7 @@ class PostController(
     @GetMapping("/{postId}")
     fun getPostDetail(
             @AuthenticationPrincipal userId: UUID,
-            @RequestParam postId: Long
+            @PathVariable postId: Long
     ): ResponseEntity<ResponseDTO> {
         return ResponseEntityGenerator.onSuccess(postService.getPostDetail(userId, postId))
     }

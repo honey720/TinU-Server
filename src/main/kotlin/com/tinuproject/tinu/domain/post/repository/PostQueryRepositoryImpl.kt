@@ -43,7 +43,7 @@ class PostQueryRepositoryImpl(
     }
 
     override fun customCursor(orderBy: String, cursorId: String?): BooleanExpression? {
-        if (cursorId == null) {
+        if (cursorId.isNullOrBlank()) {
             return null
         }
         else if (orderBy == "popular") {
@@ -56,22 +56,22 @@ class PostQueryRepositoryImpl(
 
     override fun containsTitle(keyword: String?): BooleanExpression? {
         return when {
-            keyword != null -> post.title.contains(keyword)
+            keyword.isNullOrBlank() -> post.title.contains(keyword)
             else -> null
         }
     }
 
     override fun containsBody(keyword: String?): BooleanExpression? {
         return when {
-            keyword != null -> post.body.contains(keyword)
+            keyword.isNullOrBlank() -> post.body.contains(keyword)
             else -> null
         }
     }
 
     override fun inCategory(category: List<Long>?): BooleanExpression? {
         return when {
-            category != null -> post.category.id.`in`(category)
-            else -> null
+            category.isNullOrEmpty() -> null
+            else -> post.category.id.`in`(category)
         }
     }
 

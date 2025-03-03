@@ -11,7 +11,7 @@ data class PostDetailResponse(
         val body: String,
         val memberId: Long,
         val nickname: String,
-        val profile: String,
+        val profile: String?,
         val categoryId: Long,
         val price: Int,
         val sellMethod: Set<SellMethod>,
