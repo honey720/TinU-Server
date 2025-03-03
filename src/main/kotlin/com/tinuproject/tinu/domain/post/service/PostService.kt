@@ -1,6 +1,7 @@
 package com.tinuproject.tinu.domain.post.service
 
-import com.tinuproject.tinu.domain.post.dto.response.PostsListResponseDTO
+import com.tinuproject.tinu.domain.post.dto.response.PostDetailResponse
+import com.tinuproject.tinu.domain.post.dto.response.PostsListResponse
 import java.util.UUID
 
 interface PostService {
@@ -13,5 +14,11 @@ interface PostService {
             maxPrice: Int?,
             onlySell: Boolean,
             orderBy: String
-    ): PostsListResponseDTO
+    ): PostsListResponse
+
+    fun getPostDetail(
+            userId: UUID,
+            postId: Long
+    ): PostDetailResponse
+
 }

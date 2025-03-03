@@ -25,6 +25,10 @@ enum class ErrorCode(
     //판매글
     MEMBER_NOT_FOUND(httpStatusCode = 403, stateCode = "MEMBER_NOT_FOUND", message = "회원 정보가 존재하지 않습니다."),
     UNIVERSITY_NOT_FOUND(httpStatusCode = 403, stateCode = "UNIVERSITY_NOT_FOUND", message = "소속 대학이 존재하지 않습니다. 회원가입을 마무리 한 후 시도하세요."),
+    POST_NOT_FOUND(httpStatusCode = 404, stateCode = "POST_NOT_FOUND", message = "게시글이 존재하지 않습니다."),
+    UNIVERSITY_NOT_MATCH(httpStatusCode = 403, stateCode = "UNIVERSITY_NOT_MATCH", message = "대학이 일치하지 않습니다."),
+    POST_HIDDEN(httpStatusCode = 403, stateCode = "POST_HIDDEN", message = "숨김 처리된 게시글입니다."),
+
 
     //전역적 사용
     NOT_FOUND(httpStatusCode = 404, stateCode = "NOT_FOUND", message = "없는 페이지입니다."),

@@ -1,10 +1,9 @@
 package com.tinuproject.tinu.domain.post.service
 
-import com.tinuproject.tinu.domain.exception.post.MemberNotFoundException
-import com.tinuproject.tinu.domain.exception.post.UniversityNotFoundException
+import com.tinuproject.tinu.domain.exception.post.*
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
-import com.tinuproject.tinu.domain.post.dto.response.PostResponseDTO
-import com.tinuproject.tinu.domain.post.dto.response.PostsListResponseDTO
+import com.tinuproject.tinu.domain.post.dto.response.PostDetailResponse
+import com.tinuproject.tinu.domain.post.dto.response.PostsListResponse
 import com.tinuproject.tinu.domain.post.repository.PostQueryRepository
 import com.tinuproject.tinu.domain.post.repository.PostRepository
 import org.springframework.stereotype.Service
@@ -26,7 +25,7 @@ class PostServiceImpl(
             maxPrice: Int?,
             onlySell: Boolean,
             orderBy: String
-    ): PostsListResponseDTO {
+    ): PostsListResponse {
         val member = memberRepository.findMemberByUserId(userId)
                 ?: throw MemberNotFoundException()
 
@@ -58,23 +57,65 @@ class PostServiceImpl(
         }
 
         val posts = rawPosts.map { post ->
-            PostResponseDTO(
-                    postId = post.id,
-                    createdAt = post.createdAt,
+            PostsListResponse.PostResponse(
+                    postId = post.id!!,
+                    createdAt = post.createdAt!!,
                     title = post.title,
                     price = post.price,
-                    thumbnail = post.thumbnail,
+                    thumbnail = post.thumbnail!!,
                     isLike = member.scrap.any { it.post == post },
                     isSell = post.isSell
             )
         }
 
-        return PostsListResponseDTO(
+        return PostsListResponse(
                 posts = posts,
                 size = posts.size,
                 nextCursorId = nextCursorId
         )
     }
 
+    override fun getPostDetail(userId: UUID, postId: Long): PostDetailResponse {
+        val member = memberRepository.findMemberByUserId(userId)
+                ?: throw MemberNotFoundException()
+
+        if (member.university == null)
+                throw UniversityNotFoundException()
+
+        val post = postRepository.findPostById(postId)
+                ?: throw PostNotFoundException()
+
+        if (member.university != post.university) {
+            throw UniversityNotMatchException()
+        }
+
+        if (post.isHide) {
+            throw PostHiddenException()
+        }
+
+        return PostDetailResponse(
+                postId = post.id!!,
+                date = post.createdAt!!,
+                title = post.title,
+                body = post.body,
+                memberId = post.author.id!!,
+                nickname = post.author.nickname!!,
+                profile = post.author.profileImageURL!!,
+                categoryId = post.category.id!!,
+                price = post.price,
+                sellMethod = post.sellMethod,
+                paymentMethod = post.paymentMethod,
+                isSell = post.isSell,
+                isLike = member.scrap.any { it.post == post },
+                isWriter = member == post.author,
+                images = post.multimedia.map { it.url },
+                postHashTagMap = post.postHashTagMap.map {
+                    PostDetailResponse.HashTag(
+                            hashTagId = it.hashTag.id!!,
+                            hashTagName = it.hashTag.tagName
+                    )
+                }
+        )
+    }
 
 }
