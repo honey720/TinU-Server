@@ -3,22 +3,16 @@ package com.tinuproject.tinu.domain.member.controller
 import com.tinuproject.tinu.DTO.ResponseDTO
 import com.tinuproject.tinu.domain.member.dto.client_controller.request.UpdateUserInfoRequestDTO
 import com.tinuproject.tinu.domain.member.service.MemberService
-import com.tinuproject.tinu.security.jwt.JwtUtil
 import com.tinuproject.tinu.web.ResponseEntityGenerator
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.*
 import java.util.*
 
 
-@Controller
+@RestController
 @RequestMapping("/api/user")
 class MemberController(
     val memberService: MemberService,
