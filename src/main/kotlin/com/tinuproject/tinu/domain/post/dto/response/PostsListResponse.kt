@@ -9,11 +9,11 @@ data class PostsListResponse (
         val nextCursorId: String
 ) {
     data class PostResponse (
-            val postId: Long,
-            val createdAt: LocalDateTime,
+            val postId: Long?,
+            val createdAt: LocalDateTime?,
             val title: String,
             val price: Int,
-            val thumbnail: String,
+            val thumbnail: String?,
             val isLike: Boolean,
             val isSell: Boolean
     )
