@@ -70,6 +70,11 @@ dependencies {
 	kapt("com.querydsl:querydsl-apt:5.1.0:jakarta")
 	kapt("org.springframework.boot:spring-boot-configuration-processor")
 
+	//Swagger 관련 의존성 추가
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.2.0")
+
+
 }
 
 // Querydsl 설정부
