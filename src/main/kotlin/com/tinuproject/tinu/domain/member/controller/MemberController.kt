@@ -1,8 +1,15 @@
 package com.tinuproject.tinu.domain.member.controller
 
 import com.tinuproject.tinu.DTO.ResponseDTO
+import com.tinuproject.tinu.domain.exception.base.ErrorCode
+import com.tinuproject.tinu.domain.exception.member.ExistMemberException
+import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
 import com.tinuproject.tinu.domain.member.dto.client_controller.request.UpdateUserInfoRequestDTO
+import com.tinuproject.tinu.domain.member.dto.client_controller.response.MemberSearchResponseDTO
 import com.tinuproject.tinu.domain.member.service.MemberService
+import com.tinuproject.tinu.swagger.annotation.SwaggerErrorResponseByClass
+import com.tinuproject.tinu.swagger.annotation.SwaggerErrorResponsesByEnum
+import com.tinuproject.tinu.web.NullResponse
 import com.tinuproject.tinu.web.ResponseEntityGenerator
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -20,21 +27,22 @@ class MemberController(
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
     @GetMapping()
-    fun requestUserInfo(@AuthenticationPrincipal userId : UUID, @RequestParam(name = "userId") searchUserId : String? ) : ResponseEntity<ResponseDTO>{
+    @SwaggerErrorResponseByClass(errorCodes = [NotExistDomainException::class,ExistMemberException::class])
+    fun requestUserInfo(@AuthenticationPrincipal userId : UUID, @RequestParam(name = "userId") searchUserId : String? ) : ResponseEntity<ResponseDTO<MemberSearchResponseDTO?>>{
         val findUserId = searchUserId?.let{UUID.fromString(it)}?:userId
 
         return ResponseEntityGenerator.onSuccess(memberService.findMemberByUserId(findUserId))
     }
 
     @PutMapping()
-    fun requestUpdateUserInfo(@AuthenticationPrincipal userId: UUID, @RequestBody updateUserInfoRequestDTO: UpdateUserInfoRequestDTO) : ResponseEntity<ResponseDTO>{
+    fun requestUpdateUserInfo(@AuthenticationPrincipal userId: UUID, @RequestBody updateUserInfoRequestDTO: UpdateUserInfoRequestDTO) : ResponseEntity<ResponseDTO<NullResponse?>>{
         memberService.updateMember(userId, updateUserInfoRequestDTO)
 
         return ResponseEntityGenerator.onSuccess()
     }
 
     @GetMapping("/is-login")
-    fun requestIsLogin(@AuthenticationPrincipal userId : UUID):ResponseEntity<ResponseDTO>{
+    fun requestIsLogin(@AuthenticationPrincipal userId : UUID):ResponseEntity<ResponseDTO<NullResponse?>>{
         return ResponseEntityGenerator.onSuccess()
     }
 }

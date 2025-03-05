@@ -5,6 +5,7 @@ import com.tinuproject.tinu.domain.exception.token.NotFoundTokenException
 import com.tinuproject.tinu.domain.token.Tokens
 import com.tinuproject.tinu.domain.token.refreshtoken.service.RefreshTokenService
 import com.tinuproject.tinu.web.CookieGenerator
+import com.tinuproject.tinu.web.NullResponse
 import com.tinuproject.tinu.web.ResponseEntityGenerator
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.Logger
@@ -29,7 +30,7 @@ class RefreshTokenController(
 
 
     @GetMapping("/refresh")
-    fun refreshAccessToken(httpServletResponse: HttpServletResponse, @CookieValue(name = "RefreshToken") refreshToken : String?): ResponseEntity<ResponseDTO> {
+    fun refreshAccessToken(httpServletResponse: HttpServletResponse, @CookieValue(name = "RefreshToken") refreshToken : String?): ResponseEntity<ResponseDTO<NullResponse?>> {
         log.info("AccessToken 갱신 시도")
 
         refreshToken?:throw NotFoundTokenException()
@@ -39,6 +40,6 @@ class RefreshTokenController(
         httpServletResponse.addHeader(HttpHeaders.AUTHORIZATION,"Bearer "+ tokens.accessToken)
         httpServletResponse.addHeader(HttpHeaders.SET_COOKIE,CookieGenerator.createCookies(refreshTokenkey, tokens.refreshToken))
 
-        return ResponseEntityGenerator.onSuccess(null)
+        return ResponseEntityGenerator.onSuccess()
     }
 }
