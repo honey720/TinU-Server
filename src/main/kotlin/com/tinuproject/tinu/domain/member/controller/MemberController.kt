@@ -25,7 +25,6 @@ class MemberController(
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
     @GetMapping()
-    @SwaggerExceptionResponses(exceptions = [NotExistDomainException::class,ExistMemberException::class])
     fun requestUserInfo(@AuthenticationPrincipal userId : UUID, @RequestParam(name = "userId") searchUserId : String? ) : ResponseEntity<ResponseDTO<MemberSearchResponseDTO?>>{
         val findUserId = searchUserId?.let{UUID.fromString(it)}?:userId
 
