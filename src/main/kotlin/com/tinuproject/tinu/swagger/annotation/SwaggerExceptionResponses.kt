@@ -6,7 +6,7 @@ import kotlin.reflect.KClass
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class SwaggerExceptionResponses(
-    val errorCodes: Array<KClass<out BaseException>> = []
+    val exceptions: Array<KClass<out BaseException>> = []
 ){
 
 }

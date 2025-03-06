@@ -58,10 +58,10 @@ class SwaggerConfig(val swaggerExceptionResponseAdaptor: SwaggerExceptionRespons
 
 
             if(swaggerExceptionResponses!=null){
-                if(swaggerExceptionResponses.errorCodes.size==1){
-                    swaggerExceptionResponseAdaptor.generateErrorCodeResponseExample(operation!!, swaggerExceptionResponses.errorCodes[0] )
+                if(swaggerExceptionResponses.exceptions.size==1){
+                    swaggerExceptionResponseAdaptor.generateErrorCodeResponseExample(operation!!, swaggerExceptionResponses.exceptions[0] )
                 }else{
-                    swaggerExceptionResponseAdaptor.generateErrorCodeResponseExample(operation!!, swaggerExceptionResponses.errorCodes)
+                    swaggerExceptionResponseAdaptor.generateErrorCodeResponseExample(operation!!, swaggerExceptionResponses.exceptions)
                 }
             }
 

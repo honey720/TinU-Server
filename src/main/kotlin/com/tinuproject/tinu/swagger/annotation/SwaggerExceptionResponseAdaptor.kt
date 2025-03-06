@@ -18,12 +18,12 @@ import java.lang.String
 class SwaggerExceptionResponseAdaptor {
 
 
-    fun generateErrorCodeResponseExample(operation : Operation, errorCodes: Array<KClass<out BaseException>>){
+    fun generateErrorCodeResponseExample(operation : Operation, exceptions: Array<KClass<out BaseException>>){
         val responses: ApiResponses = operation.responses
 
-        val statusWithExampleHolders: Map<Int, MutableList<ExampleHolder>> = errorCodes
-            .map { errorCode ->
-                val ex = errorCode.constructors.first().call().getResponse()
+        val statusWithExampleHolders: Map<Int, MutableList<ExampleHolder>> = exceptions
+            .map { exception ->
+                val ex = exception.constructors.first().call().getResponse()
                 ExampleHolder(
                     holder = getSwaggerExample(ex),
                     code = ex.stateCode,
@@ -37,10 +37,10 @@ class SwaggerExceptionResponseAdaptor {
         addExamplesToResponses(responses, statusWithExampleHolders)
     }
 
-    fun generateErrorCodeResponseExample(operation : Operation, errorCode: KClass<out BaseException>){
+    fun generateErrorCodeResponseExample(operation : Operation, exception: KClass<out BaseException>){
         val responses: ApiResponses = operation.responses
 
-        val ex = errorCode.constructors.first().call().getResponse()
+        val ex = exception.constructors.first().call().getResponse()
         // ExampleHolder 객체 생성 및 ApiResponses에 추가
         val exampleHolder: ExampleHolder = ExampleHolder(
             holder = getSwaggerExample(ex),
