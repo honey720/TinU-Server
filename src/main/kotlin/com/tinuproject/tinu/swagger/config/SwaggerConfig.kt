@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.swagger.config
 
-import com.tinuproject.tinu.swagger.annotation.SwaggerErrorResponseByClass
-import com.tinuproject.tinu.swagger.annotation.SwaggerErrorResponseByClassAdaptor
+import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponses
+import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponseAdaptor
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.Operation
@@ -17,7 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 @EnableAspectJAutoProxy
-class SwaggerConfig(val swaggerErrorResponseByClassAdaptor: SwaggerErrorResponseByClassAdaptor) :WebMvcConfigurer{
+class SwaggerConfig(val swaggerExceptionResponseAdaptor: SwaggerExceptionResponseAdaptor) :WebMvcConfigurer{
 
 
     @Bean
@@ -52,16 +52,16 @@ class SwaggerConfig(val swaggerErrorResponseByClassAdaptor: SwaggerErrorResponse
     fun customize(): OperationCustomizer {
         return OperationCustomizer { operation: Operation?, handlerMethod: HandlerMethod ->
 
-            val swaggerErrorResponseByClass : SwaggerErrorResponseByClass? = handlerMethod.getMethodAnnotation(
-                SwaggerErrorResponseByClass::class.java
+            val swaggerExceptionResponses : SwaggerExceptionResponses? = handlerMethod.getMethodAnnotation(
+                SwaggerExceptionResponses::class.java
             )
 
 
-            if(swaggerErrorResponseByClass!=null){
-                if(swaggerErrorResponseByClass.errorCodes.size==1){
-                    swaggerErrorResponseByClassAdaptor.generateErrorCodeResponseExample(operation!!, swaggerErrorResponseByClass.errorCodes[0] )
+            if(swaggerExceptionResponses!=null){
+                if(swaggerExceptionResponses.errorCodes.size==1){
+                    swaggerExceptionResponseAdaptor.generateErrorCodeResponseExample(operation!!, swaggerExceptionResponses.errorCodes[0] )
                 }else{
-                    swaggerErrorResponseByClassAdaptor.generateErrorCodeResponseExample(operation!!, swaggerErrorResponseByClass.errorCodes)
+                    swaggerExceptionResponseAdaptor.generateErrorCodeResponseExample(operation!!, swaggerExceptionResponses.errorCodes)
                 }
             }
 

@@ -3,7 +3,6 @@ package com.tinuproject.tinu.swagger.annotation
 import com.tinuproject.tinu.DTO.ErrorResponse
 import com.tinuproject.tinu.DTO.ResponseDTO
 import com.tinuproject.tinu.domain.exception.base.BaseException
-import com.tinuproject.tinu.domain.exception.base.ErrorCode
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.examples.Example
 import io.swagger.v3.oas.models.media.Content
@@ -16,7 +15,7 @@ import kotlin.reflect.KClass
 import java.lang.String
 
 @Component
-class SwaggerErrorResponseByClassAdaptor {
+class SwaggerExceptionResponseAdaptor {
 
 
     fun generateErrorCodeResponseExample(operation : Operation, errorCodes: Array<KClass<out BaseException>>){

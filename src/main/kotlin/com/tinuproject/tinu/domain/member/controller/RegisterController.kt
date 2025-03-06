@@ -1,13 +1,11 @@
 package com.tinuproject.tinu.domain.member.controller
 
 import com.tinuproject.tinu.DTO.ResponseDTO
-import com.tinuproject.tinu.domain.exception.base.ErrorCode
 import com.tinuproject.tinu.domain.member.dto.client_controller.request.RegisterRequestDTO
 import com.tinuproject.tinu.web.email.dto.client_controller.EmailAuthRequestDTO
 import com.tinuproject.tinu.web.email.dto.client_controller.EmailCodeCheckRequestDTO
 import com.tinuproject.tinu.domain.member.service.MemberService
 import com.tinuproject.tinu.domain.member.service.RegisterService
-import com.tinuproject.tinu.swagger.annotation.SwaggerErrorResponsesByEnum
 import com.tinuproject.tinu.web.NullResponse
 import com.tinuproject.tinu.web.ResponseEntityGenerator
 import org.slf4j.Logger
@@ -35,7 +33,6 @@ class RegisterController(
                 -> 있다면 이미 사용 중인 이메일이라는 결과 반환
      */
     @GetMapping("/email-check")
-    @SwaggerErrorResponsesByEnum(errorCodes = [ErrorCode.TOKEN_MISSING])
     fun emailCheck(@AuthenticationPrincipal userId : UUID,@RequestParam(name = "email") email : String) : ResponseEntity<ResponseDTO<NullResponse?>> {
         registerService.checkEmailValidation(userId,email)
 
