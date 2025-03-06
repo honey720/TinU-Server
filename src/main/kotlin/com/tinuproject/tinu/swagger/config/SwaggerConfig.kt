@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.swagger.config
 
 import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponses
-import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponseAdaptor
+import com.tinuproject.tinu.swagger.adaptor.SwaggerExceptionResponseAdaptor
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.Operation
@@ -20,16 +20,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 class SwaggerConfig(val swaggerExceptionResponseAdaptor: SwaggerExceptionResponseAdaptor) :WebMvcConfigurer{
 
 
+    val jwt = "JWT"
     @Bean
     fun openAPI(): OpenAPI {
-        val jwt = "JWT"
         val securityRequirement = SecurityRequirement().addList(jwt)
         val components = Components().addSecuritySchemes(
-            jwt, SecurityScheme()
-                .name(jwt)
-                .type(SecurityScheme.Type.HTTP)
-                .scheme("bearer")
-                .bearerFormat("JWT")
+            jwt, jwtComponent()
         )
         val openAPI = OpenAPI()
             .components(Components())
@@ -41,10 +37,18 @@ class SwaggerConfig(val swaggerExceptionResponseAdaptor: SwaggerExceptionRespons
         return openAPI
     }
 
+    private fun jwtComponent() :SecurityScheme{
+        return SecurityScheme()
+            .name(jwt)
+            .type(SecurityScheme.Type.HTTP)
+            .scheme("bearer")
+            .bearerFormat("JWT")
+    }
+
     private fun apiInfo(): Info {
         return Info()
-            .title("API Test") // API의 제목
-            .description("Let's practice Swagger UI") // API에 대한 설명
+            .title("TinU API 명세서") // API의 제목
+            .description("TinU API 명세서 종류입니다.") // API에 대한 설명
             .version("1.0.0") // API의 버전
     }
 
