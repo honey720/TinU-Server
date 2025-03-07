@@ -1,5 +1,7 @@
 package com.tinuproject.tinu.domain.exception.base
 
+import io.swagger.v3.oas.annotations.media.Schema
+
 enum class ErrorCode(
     val httpStatusCode : Int,
     val stateCode : String?,
