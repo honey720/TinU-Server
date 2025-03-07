@@ -2,12 +2,15 @@ package com.tinuproject.tinu.s3.service
 
 import com.tinuproject.tinu.domain.exception.s3.*
 import com.tinuproject.tinu.domain.exception.s3.NoSuchKeyException
+import com.tinuproject.tinu.s3.dto.S3Verifiable
 import com.tinuproject.tinu.s3.dto.request.*
 import com.tinuproject.tinu.s3.dto.response.S3PresignedUrlResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -30,6 +33,8 @@ class S3ServiceImpl(
         @Value("\${cloudfront.domain}")
         private var cloudFrontDomain: String
 ) : S3Service {
+
+    val log : Logger = LoggerFactory.getLogger(this::class.java)
     override suspend fun getPreSignedUrl(s3PresignedUrlRequest: S3PresignedUrlRequest): S3PresignedUrlResponse = withContext(Dispatchers.IO) {
 
         val contents = s3PresignedUrlRequest.contents
@@ -47,7 +52,6 @@ class S3ServiceImpl(
         val uuid = UUID.randomUUID()
         val expiration = Duration.ofMinutes(10)
 
-        //각 파일에 대한 Presigned URL 생성
         val objects = contents.mapIndexed() { index, content ->
             async {
                 val extension = content.contentType.split("/")[1]
@@ -82,29 +86,47 @@ class S3ServiceImpl(
         private val ALLOWED_EXTENSIONS = listOf("image/jpg", "image/jpeg", "image/png", "image/webp")
     }
 
-    override fun verifyImage(objects: MutableList<Object>): MutableList<String> {
+    override suspend fun verifyImage(objects: List<S3Verifiable>): MutableList<String> = withContext(Dispatchers.IO) {
         val urls = objects.map { obj ->
-            val response: HeadObjectResponse
-            try {
-                response = s3Client.headObject(HeadObjectRequest.builder()
-                        .bucket(bucketName)
-                        .key(obj.key)
-                        .build())
-            } catch (e: software.amazon.awssdk.services.s3.model.NoSuchKeyException) {
-                throw NoSuchKeyException()
-            }
-            if (response.eTag() != obj.eTag) {
-                throw InvalidETagException()
-            }
+            async {
+                val response: HeadObjectResponse
+                try {
+                    response = s3Client.headObject(HeadObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(obj.key)
+                            .build())
+                } catch (e: software.amazon.awssdk.services.s3.model.NoSuchKeyException) {
+                    throw NoSuchKeyException()
+                }
+                println(response.eTag())
+                println(obj.ETag)
+                if (response.eTag().trim('"') != obj.ETag) {
+                    throw InvalidETagException()
+                }
 
-            "${cloudFrontDomain}/${obj.key}"
-        }.toMutableList()
+                "${cloudFrontDomain}/${obj.key}"
+            }
+        }.awaitAll().toMutableList()
 
-        return urls
+        urls
     }
 
-    data class Object(
-            val key: String,
-            val eTag: String
-    )
+    override suspend fun removeImage(objects: MutableList<String>) = withContext(Dispatchers.IO) {
+        val tagging = Tagging.builder()
+                .tagSet(Tag.builder().key("status").value("deleted").build())
+                .build()
+
+        objects.forEach { url ->
+            async {
+                val key = url.removePrefix("${cloudFrontDomain}/")
+                log.info(key)
+                s3Client.putObjectTagging(PutObjectTaggingRequest.builder()
+                        .bucket(bucketName)
+                        .key(key)
+                        .tagging(tagging)
+                        .build())
+            }.await()
+        }
+    }
+
 }
