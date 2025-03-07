@@ -98,8 +98,8 @@ class S3ServiceImpl(
                 } catch (e: software.amazon.awssdk.services.s3.model.NoSuchKeyException) {
                     throw NoSuchKeyException()
                 }
-                println(response.eTag())
-                println(obj.ETag)
+                log.info(response.eTag())
+                log.info(obj.ETag)
                 if (response.eTag().trim('"') != obj.ETag) {
                     throw InvalidETagException()
                 }
