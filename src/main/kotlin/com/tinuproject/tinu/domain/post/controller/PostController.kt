@@ -2,6 +2,7 @@ package com.tinuproject.tinu.domain.post.controller
 
 import com.tinuproject.tinu.DTO.ResponseDTO
 import com.tinuproject.tinu.domain.post.dto.request.PostCreateRequest
+import com.tinuproject.tinu.domain.post.dto.request.PostDeleteRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostUpdateRequest
 import com.tinuproject.tinu.domain.post.service.PostService
 import com.tinuproject.tinu.web.ResponseEntityGenerator
@@ -61,6 +62,14 @@ class PostController(
             @RequestBody postUpdateRequest: PostUpdateRequest
     ): ResponseEntity<ResponseDTO> {
         return ResponseEntityGenerator.onSuccess(postService.updatePost(userId, postId, postUpdateRequest))
+    }
+
+    @DeleteMapping("/{postId}")
+    fun deletePost(
+            @AuthenticationPrincipal userId: UUID,
+            @PathVariable postId: Long
+    ): ResponseEntity<ResponseDTO> {
+        return ResponseEntityGenerator.onSuccess(postService.deletePost(userId, PostDeleteRequest(postId = postId)))
     }
 
 }

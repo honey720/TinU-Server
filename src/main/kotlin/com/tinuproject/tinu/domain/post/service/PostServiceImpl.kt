@@ -7,6 +7,7 @@ import com.tinuproject.tinu.domain.entity.PostHashTagMap
 import com.tinuproject.tinu.domain.exception.post.*
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.post.dto.request.PostCreateRequest
+import com.tinuproject.tinu.domain.post.dto.request.PostDeleteRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostUpdateRequest
 import com.tinuproject.tinu.domain.post.dto.response.PostDetailResponse
 import com.tinuproject.tinu.domain.post.dto.response.PostsListResponse
@@ -257,6 +258,34 @@ class PostServiceImpl(
         postRepository.save(post)
 
         return post.id!!
+    }
+
+    @Transactional
+    override fun deletePost(userId: UUID, postDeleteRequest: PostDeleteRequest) {
+
+        log.info("게시글 작성자 검증")
+        val member = memberRepository.findMemberByUserId(userId)
+                ?: throw MemberNotFoundException()
+
+        if (member.university == null)
+            throw UniversityNotFoundException()
+
+        log.info("게시글 검증")
+        val post = postRepository.findPostById(postDeleteRequest.postId)
+                ?: throw PostNotFoundException()
+
+        if (member != post.author)
+            throw AuthorNotMatchException()
+
+        log.info("이미지 삭제")
+        runBlocking { s3Service.removeImage(post.multimedia.map { it.url }.toMutableList()) }
+
+        postRepository.deleteById(postDeleteRequest.postId)
+
+        multimediaRepository.deleteAllByPostId(postDeleteRequest.postId)
+
+        postHashTagMapRepository.deleteAllByPostId(postDeleteRequest.postId)
+
     }
 
     private fun mappingMultimedia(post: Post, urls : MutableList<String>){

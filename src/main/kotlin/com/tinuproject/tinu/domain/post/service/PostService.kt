@@ -1,6 +1,7 @@
 package com.tinuproject.tinu.domain.post.service
 
 import com.tinuproject.tinu.domain.post.dto.request.PostCreateRequest
+import com.tinuproject.tinu.domain.post.dto.request.PostDeleteRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostUpdateRequest
 import com.tinuproject.tinu.domain.post.dto.response.PostDetailResponse
 import com.tinuproject.tinu.domain.post.dto.response.PostsListResponse
@@ -34,4 +35,8 @@ interface PostService {
             postUpdateRequest: PostUpdateRequest
     ): Long
 
+    fun deletePost(
+            userId: UUID,
+            postDeleteRequest: PostDeleteRequest
+    )
 }
