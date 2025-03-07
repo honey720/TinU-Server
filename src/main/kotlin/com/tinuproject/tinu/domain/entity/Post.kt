@@ -3,6 +3,7 @@ package com.tinuproject.tinu.domain.entity
 import com.tinuproject.tinu.domain.entity.base.BaseEntity
 import com.tinuproject.tinu.domain.enums.PaymentMethod
 import com.tinuproject.tinu.domain.enums.SellMethod
+import com.tinuproject.tinu.domain.post.dto.request.PostUpdateRequest
 import jakarta.persistence.*
 
 @Entity
@@ -62,13 +63,13 @@ class Post (
     var scrapCount : Long = 0,
 
     @OneToMany(fetch = FetchType.LAZY,
-        cascade = [CascadeType.ALL],
+        cascade = [CascadeType.REMOVE],
         orphanRemoval = true,
         mappedBy = "post")
     var multimedia : MutableList<Multimedia> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY,
-        cascade = [CascadeType.ALL],
+        cascade = [CascadeType.REMOVE],
         mappedBy = "post")
     var postHashTagMap: MutableList<PostHashTagMap> = mutableListOf(),
 
@@ -81,5 +82,13 @@ class Post (
     fun addHashTag(hashTag: HashTag) {
         val postHashTagMap = PostHashTagMap(post = this, hashTag = hashTag)
         postHashTagMap.addToCollections() // 동기화 메서드 호출
+    }
+
+    fun updatePost(postUpdateRequest: PostUpdateRequest) {
+        title = postUpdateRequest.title
+        body = postUpdateRequest.body
+        price = postUpdateRequest.price
+        sellMethod = mutableSetOf(postUpdateRequest.sellMethod)
+        paymentMethod = mutableSetOf(postUpdateRequest.paymentMethod)
     }
 }

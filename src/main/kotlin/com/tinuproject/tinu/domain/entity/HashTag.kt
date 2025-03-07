@@ -10,7 +10,7 @@ class HashTag (
     var tagName : String,
 
     @OneToMany(fetch = FetchType.LAZY,
-        cascade = [CascadeType.ALL],
+        cascade = [CascadeType.REMOVE],
         mappedBy = "hashTag")
     var postHashTagMap:  MutableList<PostHashTagMap> = mutableListOf()
 ) : BaseEntity()

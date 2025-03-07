@@ -4,7 +4,7 @@ import com.tinuproject.tinu.domain.enums.PaymentMethod
 import com.tinuproject.tinu.domain.enums.SellMethod
 import com.tinuproject.tinu.s3.dto.S3Verifiable
 
-data class PostCreateRequest(
+data class PostUpdateRequest(
         val title: String,
         val body: String,
         val categoryId: Long,
