@@ -116,7 +116,7 @@ class S3ServiceImpl(
                 .tagSet(Tag.builder().key("status").value("deleted").build())
                 .build()
 
-        objects.forEach { url ->
+        objects.map { url ->
             async {
                 val key = url.removePrefix("${cloudFrontDomain}/")
                 log.info(key)
@@ -125,8 +125,9 @@ class S3ServiceImpl(
                         .key(key)
                         .tagging(tagging)
                         .build())
-            }.await()
-        }
+            }
+        }.awaitAll()
+        Unit
     }
 
 }
