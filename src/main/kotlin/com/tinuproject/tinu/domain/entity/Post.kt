@@ -79,16 +79,15 @@ class Post (
         mappedBy = "post")
     var scrap: MutableList<Scrap> = mutableListOf()
 ) : BaseEntity() {
-    fun addHashTag(hashTag: HashTag) {
-        val postHashTagMap = PostHashTagMap(post = this, hashTag = hashTag)
-        postHashTagMap.addToCollections() // 동기화 메서드 호출
-    }
-
-    fun updatePost(postUpdateRequest: PostUpdateRequest) {
-        title = postUpdateRequest.title
-        body = postUpdateRequest.body
-        price = postUpdateRequest.price
-        sellMethod = mutableSetOf(postUpdateRequest.sellMethod)
-        paymentMethod = mutableSetOf(postUpdateRequest.paymentMethod)
+    fun updatePost(
+            postUpdateRequest: PostUpdateRequest,
+            category: Category
+    ) {
+        this.title = postUpdateRequest.title
+        this.body = postUpdateRequest.body
+        this.category = category
+        this.price = postUpdateRequest.price
+        this.sellMethod = mutableSetOf(postUpdateRequest.sellMethod)
+        this.paymentMethod = mutableSetOf(postUpdateRequest.paymentMethod)
     }
 }

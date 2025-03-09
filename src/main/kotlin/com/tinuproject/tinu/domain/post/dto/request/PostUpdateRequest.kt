@@ -11,8 +11,8 @@ data class PostUpdateRequest(
         val price: Int,
         val sellMethod: SellMethod,
         val paymentMethod: PaymentMethod,
-        val images: MutableList<Image>,
-        val hashTag: MutableList<String>
+        val images: List<Image>,
+        val hashTag: List<String>
 ) {
     data class Image(
             override val key: String,

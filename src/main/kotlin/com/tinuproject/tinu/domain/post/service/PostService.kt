@@ -3,6 +3,7 @@ package com.tinuproject.tinu.domain.post.service
 import com.tinuproject.tinu.domain.post.dto.request.PostCreateRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostDeleteRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostUpdateRequest
+import com.tinuproject.tinu.domain.post.dto.response.PostCreateResponse
 import com.tinuproject.tinu.domain.post.dto.response.PostDetailResponse
 import com.tinuproject.tinu.domain.post.dto.response.PostsListResponse
 import java.util.UUID
@@ -27,13 +28,13 @@ interface PostService {
     fun createPost(
             userId: UUID,
             postCreateRequest: PostCreateRequest
-    ): Long
+    ): PostCreateResponse
 
     fun updatePost(
             userId: UUID,
             postId: Long,
             postUpdateRequest: PostUpdateRequest
-    ): Long
+    )
 
     fun deletePost(
             userId: UUID,

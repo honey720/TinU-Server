@@ -4,7 +4,11 @@ import com.tinuproject.tinu.DTO.ResponseDTO
 import com.tinuproject.tinu.domain.post.dto.request.PostCreateRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostDeleteRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostUpdateRequest
+import com.tinuproject.tinu.domain.post.dto.response.PostCreateResponse
+import com.tinuproject.tinu.domain.post.dto.response.PostDetailResponse
+import com.tinuproject.tinu.domain.post.dto.response.PostsListResponse
 import com.tinuproject.tinu.domain.post.service.PostService
+import com.tinuproject.tinu.web.NullResponse
 import com.tinuproject.tinu.web.ResponseEntityGenerator
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -26,7 +30,7 @@ class PostController(
             @RequestParam(required = false) maxPrice: Int?,
             @RequestParam onlySell: Boolean,
             @RequestParam(defaultValue = "recent") orderBy: String
-    ): ResponseEntity<ResponseDTO> {
+    ): ResponseEntity<ResponseDTO<PostsListResponse?>> {
         return ResponseEntityGenerator.onSuccess(postService.getPostList(
                 userId,
                 cursorId,
@@ -43,7 +47,7 @@ class PostController(
     fun getPostDetail(
             @AuthenticationPrincipal userId: UUID,
             @PathVariable postId: Long
-    ): ResponseEntity<ResponseDTO> {
+    ): ResponseEntity<ResponseDTO<PostDetailResponse?>> {
         return ResponseEntityGenerator.onSuccess(postService.getPostDetail(userId, postId))
     }
 
@@ -51,7 +55,7 @@ class PostController(
     fun createPost(
             @AuthenticationPrincipal userId: UUID,
             @RequestBody postCreateRequest: PostCreateRequest
-    ): ResponseEntity<ResponseDTO> {
+    ): ResponseEntity<ResponseDTO<PostCreateResponse?>> {
         return ResponseEntityGenerator.onSuccess(postService.createPost(userId, postCreateRequest))
     }
 
@@ -60,16 +64,18 @@ class PostController(
             @AuthenticationPrincipal userId: UUID,
             @PathVariable postId: Long,
             @RequestBody postUpdateRequest: PostUpdateRequest
-    ): ResponseEntity<ResponseDTO> {
-        return ResponseEntityGenerator.onSuccess(postService.updatePost(userId, postId, postUpdateRequest))
+    ): ResponseEntity<ResponseDTO<NullResponse?>> {
+        postService.updatePost(userId, postId, postUpdateRequest)
+        return ResponseEntityGenerator.onSuccess()
     }
 
     @DeleteMapping("/{postId}")
     fun deletePost(
             @AuthenticationPrincipal userId: UUID,
             @PathVariable postId: Long
-    ): ResponseEntity<ResponseDTO> {
-        return ResponseEntityGenerator.onSuccess(postService.deletePost(userId, PostDeleteRequest(postId = postId)))
+    ): ResponseEntity<ResponseDTO<NullResponse?>> {
+        postService.deletePost(userId, PostDeleteRequest(postId = postId))
+        return ResponseEntityGenerator.onSuccess()
     }
 
 }

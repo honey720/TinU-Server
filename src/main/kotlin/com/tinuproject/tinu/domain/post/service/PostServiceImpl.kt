@@ -1,17 +1,22 @@
 package com.tinuproject.tinu.domain.post.service
 
+import com.tinuproject.tinu.domain.category.repository.CategoryRepository
 import com.tinuproject.tinu.domain.entity.HashTag
 import com.tinuproject.tinu.domain.entity.Multimedia
 import com.tinuproject.tinu.domain.entity.Post
 import com.tinuproject.tinu.domain.entity.PostHashTagMap
 import com.tinuproject.tinu.domain.exception.post.*
+import com.tinuproject.tinu.domain.hashTagRepository.repository.HashTagRepository
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
+import com.tinuproject.tinu.domain.multimedia.repository.MultimediaRepository
 import com.tinuproject.tinu.domain.post.dto.request.PostCreateRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostDeleteRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostUpdateRequest
+import com.tinuproject.tinu.domain.post.dto.response.PostCreateResponse
 import com.tinuproject.tinu.domain.post.dto.response.PostDetailResponse
 import com.tinuproject.tinu.domain.post.dto.response.PostsListResponse
 import com.tinuproject.tinu.domain.post.repository.*
+import com.tinuproject.tinu.domain.postHashTagMap.repository.PostHashTagMapRepository
 import com.tinuproject.tinu.s3.service.S3Service
 import kotlinx.coroutines.runBlocking
 import org.slf4j.Logger
@@ -29,7 +34,7 @@ class PostServiceImpl(
         private val categoryRepository: CategoryRepository,
         private val hashTagRepository: HashTagRepository,
         private val multimediaRepository: MultimediaRepository,
-        private val postHashTagMapRepository: PostHastTagMapRepository,
+        private val postHashTagMapRepository: PostHashTagMapRepository,
         private val s3Service: S3Service,
 ): PostService {
     val log : Logger = LoggerFactory.getLogger(this::class.java)
@@ -142,7 +147,7 @@ class PostServiceImpl(
     }
 
     @Transactional
-    override fun createPost(userId: UUID, postCreateRequest: PostCreateRequest): Long {
+    override fun createPost(userId: UUID, postCreateRequest: PostCreateRequest): PostCreateResponse {
         val member = memberRepository.findMemberByUserId(userId)
                 ?: throw MemberNotFoundException()
 
@@ -152,7 +157,11 @@ class PostServiceImpl(
         val category = categoryRepository.findCategoryById(postCreateRequest.categoryId)
                 ?: throw CategoryNotFoundException()
 
-        val urls = runBlocking { s3Service.verifyImage(postCreateRequest.images) }
+            log.info("이미지 검증")
+
+        val urlList = runBlocking {
+            s3Service.verifyImage(postCreateRequest.images)
+        }
 
         val newPost = Post(
                 university = university,
@@ -166,7 +175,7 @@ class PostServiceImpl(
                 isSell = true,
                 isHide = false,
                 paymentMethod = setOf(postCreateRequest.paymentMethod),
-                thumbnail = urls[0],
+                thumbnail = urlList[0],
                 reportCount = 0,
                 scrapCount = 0,
                 multimedia = mutableListOf(),
@@ -174,34 +183,20 @@ class PostServiceImpl(
                 scrap = mutableListOf()
         )
 
-        log.info("멀티미디어 추가")
-        urls.forEach { url ->
-            val multimedia = Multimedia(url = url, isImage = false, post = newPost)
-            newPost.multimedia.add(multimedia)
-        }
-
-        log.info("해시태그 추가")
-        val hashTagList = hashTagRepository.saveAll(
-                postCreateRequest.hashTag.map { tagName ->
-                    hashTagRepository.findHashTagByTagName(tagName) ?: HashTag(tagName = tagName)
-                }
-        ).toMutableList()
-
-
-        log.info("게시글해시태그맵 추가")
-        hashTagList.forEach { hashTag ->
-            newPost.addHashTag(hashTag)
-        }
-
+        log.info("게시글 추가")
         postRepository.save(newPost)
-        mappingMultimedia(newPost, urls)
-        mappingPostHashTagMap(newPost, hashTagList)
 
-        return newPost.id!!
+        log.info("이미지 추가")
+        mappingMultimedia(newPost, urlList.toMutableList())
+
+        log.info("해시태그맵 추가")
+        mappingPostHashTagMap(newPost, postCreateRequest.hashTag.toMutableList())
+
+        return PostCreateResponse(postId = newPost.id!!)
     }
 
     @Transactional
-    override fun updatePost(userId: UUID, postId: Long, postUpdateRequest: PostUpdateRequest): Long {
+    override fun updatePost(userId: UUID, postId: Long, postUpdateRequest: PostUpdateRequest) {
 
         log.info("게시글 작성자 검증")
         val member = memberRepository.findMemberByUserId(userId)
@@ -214,50 +209,33 @@ class PostServiceImpl(
         val post = postRepository.findPostById(postId)
                 ?: throw PostNotFoundException()
 
-        if (member != post.author)
+        if (userId != post.author.userId)
             throw AuthorNotMatchException()
 
-        post.updatePost(postUpdateRequest)
-
         log.info("카테고리 검증")
-
         val category = categoryRepository.findCategoryById(postUpdateRequest.categoryId)
                 ?: throw CategoryNotFoundException()
 
-        post.category = category
-
         log.info("이미지 검증")
-        val urls = runBlocking { s3Service.verifyImage(postUpdateRequest.images) }
+        val urlList = runBlocking { s3Service.verifyImage(postUpdateRequest.images) }
 
         log.info("이미지 삭제")
         runBlocking { s3Service.removeImage(post.multimedia.map { it.url }.toMutableList()) }
         multimediaRepository.deleteAllByPostId(postId)
 
         log.info("이미지 추가")
-        post.multimedia.clear()
-        urls.forEach { url ->
-            val multimedia = Multimedia(url = url, isImage = false, post = post)
-            post.multimedia.add(multimedia)
-        }
-        mappingMultimedia(post, urls)
+        mappingMultimedia(post, urlList.toMutableList())
 
+        log.info("해시태그맵 추가")
         postHashTagMapRepository.deleteAllByPostId(postId)
+        mappingPostHashTagMap(post, postUpdateRequest.hashTag.toMutableList())
 
-        log.info("해시태그 추가")
-        val hashTagList = hashTagRepository.saveAll(
-                postUpdateRequest.hashTag.map { tagName ->
-                    hashTagRepository.findHashTagByTagName(tagName) ?: HashTag(tagName = tagName)
-                }
-        ).toMutableList()
-        mappingPostHashTagMap(post, hashTagList)
+        log.info("게시글 업데이트")
+        post.updatePost(postUpdateRequest, category)
 
-        hashTagList.forEach { hashTag ->
-            post.addHashTag(hashTag)
-        }
-
+        log.info("게시글 저장")
         postRepository.save(post)
 
-        return post.id!!
     }
 
     @Transactional
@@ -274,7 +252,7 @@ class PostServiceImpl(
         val post = postRepository.findPostById(postDeleteRequest.postId)
                 ?: throw PostNotFoundException()
 
-        if (member != post.author)
+        if (userId != post.author.userId)
             throw AuthorNotMatchException()
 
         log.info("이미지 삭제")
@@ -282,23 +260,36 @@ class PostServiceImpl(
 
         postRepository.deleteById(postDeleteRequest.postId)
 
-        multimediaRepository.deleteAllByPostId(postDeleteRequest.postId)
-
-        postHashTagMapRepository.deleteAllByPostId(postDeleteRequest.postId)
-
     }
 
-    private fun mappingMultimedia(post: Post, urls : MutableList<String>){
+    private fun mappingMultimedia(post: Post, urls : MutableList<String>) {
         val images = urls.map { url ->
             Multimedia(url = url, isImage = false, post = post)
         }
+
         multimediaRepository.saveAll(images)
     }
 
-    private fun mappingPostHashTagMap(post: Post, hashTagList: MutableList<HashTag>) {
-        val postHashTagMaps = hashTagList.map { hashTag ->
+    private fun mappingPostHashTagMap(post: Post, hashTagList: MutableList<String>) {
+        val existingTags = hashTagRepository.findAllByTagNameIn(hashTagList)
+        val existingTagNames = existingTags.map { it.tagName }
+
+        val newTags = hashTagList
+                .filter { tagName -> !existingTagNames.contains(tagName) }
+                .map { tagName -> HashTag(tagName = tagName) }
+
+        val savedNewTags = if (newTags.isNotEmpty()) {
+            hashTagRepository.saveAll(newTags)
+        } else {
+            emptyList()
+        }
+
+        val hashTags = existingTags + savedNewTags
+
+        val postHashTagMaps = hashTags.map { hashTag ->
             PostHashTagMap(post = post, hashTag = hashTag)
         }
+
         postHashTagMapRepository.saveAll(postHashTagMaps)
     }
 
