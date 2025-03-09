@@ -86,7 +86,7 @@ class S3ServiceImpl(
         private val ALLOWED_EXTENSIONS = listOf("image/jpg", "image/jpeg", "image/png", "image/webp")
     }
 
-    override suspend fun verifyImage(objects: List<S3Verifiable>): MutableList<String> = withContext(Dispatchers.IO) {
+    override suspend fun verifyImage(objects: List<S3Verifiable>): List<String> = withContext(Dispatchers.IO) {
         val urls = objects.map { obj ->
             async {
                 val response: HeadObjectResponse
@@ -111,7 +111,7 @@ class S3ServiceImpl(
         urls
     }
 
-    override suspend fun removeImage(objects: MutableList<String>) = withContext(Dispatchers.IO) {
+    override suspend fun removeImage(objects: List<String>) = withContext(Dispatchers.IO) {
         val tagging = Tagging.builder()
                 .tagSet(Tag.builder().key("status").value("deleted").build())
                 .build()

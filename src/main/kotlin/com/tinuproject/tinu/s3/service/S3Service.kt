@@ -7,8 +7,8 @@ import com.tinuproject.tinu.s3.dto.response.S3PresignedUrlResponse
 interface S3Service {
     suspend fun getPreSignedUrl(s3PresignedUrlRequest: S3PresignedUrlRequest): S3PresignedUrlResponse
 
-    suspend fun verifyImage(objects: List<S3Verifiable>): MutableList<String>
+    suspend fun verifyImage(objects: List<S3Verifiable>): List<String>
 
-    suspend fun removeImage(objects: MutableList<String>)
+    suspend fun removeImage(objects: List<String>)
 
 }
