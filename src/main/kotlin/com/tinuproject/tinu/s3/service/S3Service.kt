@@ -9,6 +9,6 @@ interface S3Service {
 
     suspend fun verifyImage(objects: List<S3Verifiable>): List<String>
 
-    suspend fun removeImage(objects: List<String>)
+    fun removeImage(objects: List<String>)
 
 }

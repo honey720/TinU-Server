@@ -111,23 +111,16 @@ class S3ServiceImpl(
         urls
     }
 
-    override suspend fun removeImage(objects: List<String>) = withContext(Dispatchers.IO) {
-        val tagging = Tagging.builder()
-                .tagSet(Tag.builder().key("status").value("deleted").build())
-                .build()
-
-        objects.map { url ->
-            async {
-                val key = url.removePrefix("${cloudFrontDomain}/")
-                log.info(key)
-                s3Client.putObjectTagging(PutObjectTaggingRequest.builder()
-                        .bucket(bucketName)
-                        .key(key)
-                        .tagging(tagging)
+    override fun removeImage(objects: List<String>) {
+        val keys = objects.map { url ->
+            url.removePrefix("${cloudFrontDomain}/")
+        }
+        s3Client.deleteObjects(DeleteObjectsRequest.builder()
+                .bucket(bucketName)
+                .delete(Delete.builder()
+                        .objects(keys.map { ObjectIdentifier.builder().key(it).build() })
                         .build())
-            }
-        }.awaitAll()
-        Unit
+                .build()
+        )
     }
-
 }
