@@ -6,6 +6,7 @@ import com.tinuproject.tinu.domain.entity.Multimedia
 import com.tinuproject.tinu.domain.entity.Post
 import com.tinuproject.tinu.domain.entity.PostHashTagMap
 import com.tinuproject.tinu.domain.exception.post.*
+import com.tinuproject.tinu.domain.exception.s3.UploadSizeOutOfRangeException
 import com.tinuproject.tinu.domain.hashTagRepository.repository.HashTagRepository
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.multimedia.repository.MultimediaRepository
@@ -89,7 +90,7 @@ class PostServiceImpl(
                     createdAt = post.createdAt!!,
                     title = post.title,
                     price = post.price,
-                    thumbnail = post.thumbnail!!,
+                    thumbnail = post.thumbnail,
                     isLike = member.scrap.any { it.post == post },
                     isSell = post.isSell
             )
@@ -159,6 +160,9 @@ class PostServiceImpl(
 
             log.info("이미지 검증")
 
+        if (postCreateRequest.images.size !in 0..10)
+            throw UploadSizeOutOfRangeException()
+
         val urlList = runBlocking {
             s3Service.verifyImage(postCreateRequest.images)
         }
@@ -175,7 +179,7 @@ class PostServiceImpl(
                 isSell = true,
                 isHide = false,
                 paymentMethod = setOf(postCreateRequest.paymentMethod),
-                thumbnail = urlList[0],
+                thumbnail = urlList.firstOrNull(),
                 reportCount = 0,
                 scrapCount = 0,
                 multimedia = mutableListOf(),
@@ -217,10 +221,17 @@ class PostServiceImpl(
                 ?: throw CategoryNotFoundException()
 
         log.info("이미지 검증")
-        val urlList = runBlocking { s3Service.verifyImage(postUpdateRequest.images) }
+        if (postUpdateRequest.images.size !in 0..10)
+            throw UploadSizeOutOfRangeException()
+
+        var urlList = emptyList<String>()
+        if (postUpdateRequest.images.isNotEmpty())
+            urlList = runBlocking { s3Service.verifyImage(postUpdateRequest.images) }
 
         log.info("이미지 삭제")
-        runBlocking { s3Service.removeImage(post.multimedia.map { it.url }.toMutableList()) }
+        if (post.multimedia.isNotEmpty())
+            s3Service.removeImage(post.multimedia.map { it.url })
+
         multimediaRepository.deleteAllByPostId(postId)
 
         log.info("이미지 추가")
@@ -231,7 +242,7 @@ class PostServiceImpl(
         mappingPostHashTagMap(post, postUpdateRequest.hashTag.toMutableList())
 
         log.info("게시글 업데이트")
-        post.updatePost(postUpdateRequest, category)
+        post.updatePost(postUpdateRequest, category, urlList.firstOrNull())
 
         log.info("게시글 저장")
         postRepository.save(post)
@@ -256,7 +267,8 @@ class PostServiceImpl(
             throw AuthorNotMatchException()
 
         log.info("이미지 삭제")
-        runBlocking { s3Service.removeImage(post.multimedia.map { it.url }.toMutableList()) }
+        if (post.multimedia.isNotEmpty())
+            s3Service.removeImage(post.multimedia.map { it.url })
 
         postRepository.deleteById(postDeleteRequest.postId)
 

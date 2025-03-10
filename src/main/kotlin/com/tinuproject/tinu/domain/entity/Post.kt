@@ -81,7 +81,8 @@ class Post (
 ) : BaseEntity() {
     fun updatePost(
             postUpdateRequest: PostUpdateRequest,
-            category: Category
+            category: Category,
+            thumbnail: String?
     ) {
         this.title = postUpdateRequest.title
         this.body = postUpdateRequest.body
@@ -89,5 +90,6 @@ class Post (
         this.price = postUpdateRequest.price
         this.sellMethod = mutableSetOf(postUpdateRequest.sellMethod)
         this.paymentMethod = mutableSetOf(postUpdateRequest.paymentMethod)
+        thumbnail?.let { this.thumbnail = it }
     }
 }
