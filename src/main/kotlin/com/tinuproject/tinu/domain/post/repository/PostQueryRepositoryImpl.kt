@@ -51,7 +51,7 @@ class PostQueryRepositoryImpl(
                     .concat(StringExpressions.lpad(post.id.stringValue(), 10, '0'))
                     .lt(cursorId)
         }
-        return post.id.stringValue().lt(cursorId)
+        return post.id.lt(cursorId.toLong())
     }
 
     override fun containsTitle(keyword: String?): BooleanExpression? {
