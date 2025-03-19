@@ -4,8 +4,6 @@ services:
   tinu-server:
     image: tinu24/tinu-server
     container_name: tinu-server
-    ports:
-      - 8080:8080
     restart: unless-stopped
 
   prometheus:
