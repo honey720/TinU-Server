@@ -17,7 +17,7 @@ services:
     restart: unless-stopped
 
   nginx :
-    image : nginx/latest
+    image : nginx
     ports :
       - 80:80
     volumes:
