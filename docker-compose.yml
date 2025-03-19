@@ -4,8 +4,6 @@ services:
   tinu-server:
     image: tinu24/tinu-server
     container_name: tinu-server
-    ports:
-      - 8080:8080
     restart: unless-stopped
 
   prometheus:
@@ -17,6 +15,15 @@ services:
       - ./config/rules.yml:/etc/prometheus/rules.yml
       - prom_data:/prometheus
     restart: unless-stopped
+
+  nginx :
+    image : nginx/latest
+    ports :
+      - 80:80
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - tinu-server
 
 volumes:
   prom_data:
