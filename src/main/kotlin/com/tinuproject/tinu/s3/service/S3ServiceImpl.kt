@@ -86,7 +86,7 @@ class S3ServiceImpl(
         private val ALLOWED_EXTENSIONS = listOf("image/jpg", "image/jpeg", "image/png", "image/webp")
     }
 
-    override suspend fun verifyImage(objects: List<S3Verifiable>): List<String> = withContext(Dispatchers.IO) {
+    override suspend fun verifyImages(objects: List<S3Verifiable>): List<String> = withContext(Dispatchers.IO) {
         val urls = objects.map { obj ->
             async {
                 val response: HeadObjectResponse
@@ -111,7 +111,26 @@ class S3ServiceImpl(
         urls
     }
 
-    override fun removeImage(objects: List<String>) {
+    override fun verifyImage(obj: S3Verifiable): String {
+        val response: HeadObjectResponse
+        try {
+            response = s3Client.headObject(HeadObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(obj.key)
+                    .build())
+        } catch (e: software.amazon.awssdk.services.s3.model.NoSuchKeyException) {
+            throw NoSuchKeyException()
+        }
+        log.info(response.eTag())
+        log.info(obj.ETag)
+        if (response.eTag().trim('"') != obj.ETag) {
+            throw InvalidETagException()
+        }
+
+        return "${cloudFrontDomain}/${obj.key}"
+    }
+
+    override fun removeImages(objects: List<String>) {
         val keys = objects.map { url ->
             url.removePrefix("${cloudFrontDomain}/")
         }
