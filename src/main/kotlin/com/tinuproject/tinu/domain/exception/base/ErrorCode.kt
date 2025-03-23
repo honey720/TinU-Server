@@ -37,6 +37,13 @@ enum class ErrorCode(
     //커스텀 필터
     FILTER_NOT_EXIST(httpStatusCode = 404, stateCode = "NOT_EXIST_FILTER", message = "요청하신 커스텀 필터를 찾을 수 없습니다."),
 
+    //S3 관련
+    UPLOAD_SIZE_OUT_OF_RANGE(httpStatusCode = 400, stateCode = "UPLOAD_SIZE_OUT_OF_RANGE", message = "업로드 요청 범위를 벗어났습니다."),
+    NOT_ALLOWED_EXTENSION(httpStatusCode = 400, stateCode = "NOT_ALLOWED_EXTENSION", message = "제공되지 않는 확장자 파일입니다."),
+    FILE_LENGTH_OUT_OF_RANGE(httpStatusCode = 400, stateCode = "FILE_LENGTH_OUT_OF_RANGE", message = "파일 크기 범위를 벗어났습니다."),
+    NO_SUCH_KEY(httpStatusCode = 400, stateCode = "NO_SUCH_KEY", message = "키가 존재하지 않습니다."),
+    INVALID_ETAG(httpStatusCode = 400, stateCode = "INVALID_ETAG", message = "ETag가 일치하지 않습니다."),
+
     //전역적 사용
     NOT_FOUND(httpStatusCode = 404, stateCode = "NOT_FOUND", message = "없는 페이지입니다."),
     UNAUTHORIZED_ACCESS(httpStatusCode = 403, stateCode = "FORBIDDEN", message = "요청에 대한 권한이 없습니다.");
