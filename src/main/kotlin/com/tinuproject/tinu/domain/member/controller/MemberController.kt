@@ -1,6 +1,7 @@
 package com.tinuproject.tinu.domain.member.controller
 
 import com.tinuproject.tinu.DTO.ResponseDTO
+import com.tinuproject.tinu.domain.exception.mail.NotExistMemberException
 import com.tinuproject.tinu.domain.exception.member.ExistMemberException
 import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
 import com.tinuproject.tinu.domain.member.dto.client_controller.request.UpdateUserInfoRequestDTO
@@ -25,6 +26,7 @@ class MemberController(
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
     @GetMapping()
+    @SwaggerExceptionResponses(exceptions = [NotExistMemberException::class])
     fun requestUserInfo(@AuthenticationPrincipal userId : UUID, @RequestParam(name = "userId") searchUserId : String? ) : ResponseEntity<ResponseDTO<MemberSearchResponseDTO?>>{
         val findUserId = searchUserId?.let{UUID.fromString(it)}?:userId
 
