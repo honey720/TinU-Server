@@ -48,8 +48,7 @@ class PostServiceImpl(
             category: List<Long>?,
             minPrice: Int?,
             maxPrice: Int?,
-            onlySell: Boolean,
-            orderBy: String
+            onlySell: Boolean
     ): PostsListResponse {
         val member = memberRepository.findMemberByUserId(userId)
                 ?: throw MemberNotFoundException()
@@ -58,7 +57,7 @@ class PostServiceImpl(
                 ?: throw UniversityNotFoundException()
 
         log.info("University ID: ${university.id}")
-        log.info("Params: cursorId=$cursorId, keyword=$keyword, category=$category, minPrice=$minPrice, maxPrice=$maxPrice, onlySell=$onlySell, orderBy=$orderBy")
+        log.info("Params: cursorId=$cursorId, keyword=$keyword, category=$category, minPrice=$minPrice, maxPrice=$maxPrice, onlySell=$onlySell")
 
         var rawPosts = postQueryRepository.findPosts(
                 university,
@@ -68,20 +67,13 @@ class PostServiceImpl(
                 category,
                 minPrice,
                 maxPrice,
-                onlySell,
-                orderBy
+                onlySell
         )
 
         var nextCursorId = ""
-
         if (rawPosts.size > SIZE) {
             rawPosts = rawPosts.subList(0, SIZE)
-
-            nextCursorId = if (orderBy == "popular") {
-                String.format("%010d%020d", rawPosts.last().scrapCount, rawPosts.last().id)
-            } else {
-                rawPosts.last().id.toString()
-            }
+            nextCursorId = rawPosts.last().id.toString()
         }
 
         val posts = rawPosts.map { post ->
