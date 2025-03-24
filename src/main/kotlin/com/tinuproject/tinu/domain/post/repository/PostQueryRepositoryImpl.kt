@@ -23,14 +23,13 @@ class PostQueryRepositoryImpl(
             category: List<Long>?,
             minPrice: Int?,
             maxPrice: Int?,
-            onlySell: Boolean,
-            orderBy: String
+            onlySell: Boolean
     ): List<Post> {
         return queryFactory
                 .selectFrom(post)
                 .where(
                         post.university.eq(university),
-                        customCursor(orderBy, cursorId),
+                        customCursor(cursorId),
                         containsTitle(keyword),
                         containsBody(keyword),
                         inCategory(category),
@@ -38,18 +37,13 @@ class PostQueryRepositoryImpl(
                         eqOnlySell(onlySell)
                 )
                 .limit(size + 1)
-                .orderBy(orderBy(orderBy))
+                .orderBy(post.createdAt.desc())
                 .fetch()
     }
 
-    override fun customCursor(orderBy: String, cursorId: String?): BooleanExpression? {
+    override fun customCursor(cursorId: String?): BooleanExpression? {
         if (cursorId.isNullOrBlank()) {
             return null
-        }
-        else if (orderBy == "popular") {
-            return StringExpressions.lpad(post.scrapCount.stringValue(), 10, '0')
-                    .concat(StringExpressions.lpad(post.id.stringValue(), 10, '0'))
-                    .lt(cursorId)
         }
         return post.id.lt(cursorId.toLong())
     }
@@ -91,10 +85,4 @@ class PostQueryRepositoryImpl(
         }
     }
 
-    override fun orderBy(orderBy: String): OrderSpecifier<*>? {
-        return when (orderBy) {
-            "popular" -> post.scrapCount.desc()
-            else -> post.createdAt.desc()
-        }
-    }
 }

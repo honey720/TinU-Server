@@ -16,8 +16,7 @@ interface PostService {
             category: List<Long>?,
             minPrice: Int?,
             maxPrice: Int?,
-            onlySell: Boolean,
-            orderBy: String
+            onlySell: Boolean
     ): PostsListResponse
 
     fun getPostDetail(

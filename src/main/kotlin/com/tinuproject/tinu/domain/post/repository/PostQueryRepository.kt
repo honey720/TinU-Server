@@ -14,11 +14,10 @@ interface PostQueryRepository {
             category: List<Long>?,
             minPrice: Int?,
             maxPrice: Int?,
-            onlySell: Boolean,
-            orderBy: String
+            onlySell: Boolean
     ): List<Post>
 
-    fun customCursor(orderBy: String, cursorId: String?): BooleanExpression?
+    fun customCursor(cursorId: String?): BooleanExpression?
 
     fun containsTitle(keyword: String?): BooleanExpression?
 
@@ -29,6 +28,4 @@ interface PostQueryRepository {
     fun betweenPrice(maxPrice: Int?, minPrice: Int?): BooleanExpression?
 
     fun eqOnlySell(onlySell: Boolean): BooleanExpression?
-
-    fun orderBy(orderBy: String): OrderSpecifier<*>?
 }

@@ -28,8 +28,7 @@ class PostController(
             @RequestParam(required = false) category: List<Long>?,
             @RequestParam(required = false) minPrice: Int?,
             @RequestParam(required = false) maxPrice: Int?,
-            @RequestParam onlySell: Boolean,
-            @RequestParam(defaultValue = "recent") orderBy: String
+            @RequestParam onlySell: Boolean
     ): ResponseEntity<ResponseDTO<PostsListResponse?>> {
         return ResponseEntityGenerator.onSuccess(postService.getPostList(
                 userId,
@@ -38,8 +37,7 @@ class PostController(
                 category,
                 minPrice,
                 maxPrice,
-                onlySell,
-                orderBy
+                onlySell
         ))
     }
 
