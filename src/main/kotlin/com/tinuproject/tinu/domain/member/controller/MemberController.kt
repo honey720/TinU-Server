@@ -10,6 +10,7 @@ import com.tinuproject.tinu.domain.member.service.MemberService
 import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponses
 import com.tinuproject.tinu.web.NullResponse
 import com.tinuproject.tinu.web.ResponseEntityGenerator
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
@@ -17,7 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
-
+@Tag( name = "사용자 API",description = "사용자의 정보와 관련한 API입니다.")
 @RestController
 @RequestMapping("/api/user")
 class MemberController(
