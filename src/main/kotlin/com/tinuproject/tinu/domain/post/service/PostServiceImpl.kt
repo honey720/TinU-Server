@@ -318,6 +318,7 @@ class PostServiceImpl(
 
         scrapRepository.save(Scrap(member = member, post = post))
         post.scrapCount++
+        postRepository.save(post)
     }
 
     @Transactional
@@ -330,6 +331,47 @@ class PostServiceImpl(
 
         scrapRepository.delete(scrap)
         scrap.post.scrapCount--
+        postRepository.save(scrap.post)
+    }
+
+    @Transactional
+    override fun updatePostStatus(userId: UUID, postId: Long, isSell: Boolean) {
+        log.info("게시글 작성자 검증")
+        val member = memberRepository.findMemberByUserId(userId)
+                ?: throw MemberNotFoundException()
+
+        if (member.university == null)
+            throw UniversityNotFoundException()
+
+        log.info("게시글 검증")
+        val post = postRepository.findPostById(postId)
+                ?: throw PostNotFoundException()
+
+        if (userId != post.author.userId)
+            throw AuthorNotMatchException()
+
+        post.isSell = isSell
+        postRepository.save(post)
+    }
+
+    @Transactional
+    override fun updatePostHide(userId: UUID, postId: Long, isHide: Boolean) {
+        log.info("게시글 작성자 검증")
+        val member = memberRepository.findMemberByUserId(userId)
+                ?: throw MemberNotFoundException()
+
+        if (member.university == null)
+            throw UniversityNotFoundException()
+
+        log.info("게시글 검증")
+        val post = postRepository.findPostById(postId)
+                ?: throw PostNotFoundException()
+
+        if (userId != post.author.userId)
+            throw AuthorNotMatchException()
+
+        post.isHide = isHide
+        postRepository.save(post)
     }
 
 }

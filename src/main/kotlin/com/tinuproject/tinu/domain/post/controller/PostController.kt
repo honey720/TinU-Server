@@ -94,4 +94,24 @@ class PostController(
         return ResponseEntityGenerator.onSuccess()
     }
 
+    @PutMapping("/{postId}/status")
+    fun updatePostStatus(
+            @AuthenticationPrincipal userId: UUID,
+            @PathVariable postId: Long,
+            @RequestParam(required = true) isSell: Boolean
+    ): ResponseEntity<ResponseDTO<NullResponse?>> {
+        postService.updatePostStatus(userId, postId, isSell)
+        return ResponseEntityGenerator.onSuccess()
+    }
+
+    @PutMapping("/{postId}/hide")
+    fun updatePostHide(
+            @AuthenticationPrincipal userId: UUID,
+            @PathVariable postId: Long,
+            @RequestParam(required = true) isHide: Boolean
+    ): ResponseEntity<ResponseDTO<NullResponse?>> {
+        postService.updatePostHide(userId, postId, isHide)
+        return ResponseEntityGenerator.onSuccess()
+    }
+
 }

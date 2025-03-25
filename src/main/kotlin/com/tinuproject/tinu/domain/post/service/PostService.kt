@@ -49,4 +49,16 @@ interface PostService {
             userId: UUID,
             postId: Long
     )
+
+    fun updatePostStatus(
+            userId: UUID,
+            postId: Long,
+            isSell: Boolean
+    )
+
+    fun updatePostHide(
+            userId: UUID,
+            postId: Long,
+            isHide: Boolean
+    )
 }
