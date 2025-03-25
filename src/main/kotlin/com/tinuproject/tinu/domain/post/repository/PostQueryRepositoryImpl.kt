@@ -29,6 +29,7 @@ class PostQueryRepositoryImpl(
                 .selectFrom(post)
                 .where(
                         post.university.eq(university),
+                        post.isHide.eq(false),
                         customCursor(cursorId),
                         containsTitle(keyword),
                         containsBody(keyword),
