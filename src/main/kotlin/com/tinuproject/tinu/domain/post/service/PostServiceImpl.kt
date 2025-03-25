@@ -282,15 +282,16 @@ class PostServiceImpl(
                 .filter { tagName -> !existingTagNames.contains(tagName) }
                 .map { tagName -> HashTag(tagName = tagName) }
 
-        val savedNewTags = if (newTags.isNotEmpty()) {
+        if (newTags.isNotEmpty()) {
             hashTagRepository.saveAll(newTags)
-        } else {
-            emptyList()
         }
 
-        val hashTags = existingTags + savedNewTags
+        //newTagMaps에는 hashTagList 순서대로 existingTags와 saveNewTags에 있는 HashTag 엔티티가 들어간다.
+        val newTagMaps: List<HashTag> = hashTagList.map { tagName ->
+            existingTags.find { it.tagName == tagName } ?: newTags.find { it.tagName == tagName }!!
+        }
 
-        val postHashTagMaps = hashTags.map { hashTag ->
+        val postHashTagMaps = newTagMaps.map { hashTag ->
             PostHashTagMap(post = post, hashTag = hashTag)
         }
 
