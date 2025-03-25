@@ -76,4 +76,22 @@ class PostController(
         return ResponseEntityGenerator.onSuccess()
     }
 
+    @PostMapping("/{postId}/scrap")
+    fun createPostScrap(
+            @AuthenticationPrincipal userId: UUID,
+            @PathVariable postId: Long
+    ): ResponseEntity<ResponseDTO<NullResponse?>> {
+        postService.createPostScrap(userId, postId)
+        return ResponseEntityGenerator.onSuccess()
+    }
+
+    @DeleteMapping("/{postId}/scrap")
+    fun deletePostScrap(
+            @AuthenticationPrincipal userId: UUID,
+            @PathVariable postId: Long
+    ): ResponseEntity<ResponseDTO<NullResponse?>> {
+        postService.deletePostScrap(userId, postId)
+        return ResponseEntityGenerator.onSuccess()
+    }
+
 }

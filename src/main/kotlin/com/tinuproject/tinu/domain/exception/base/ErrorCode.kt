@@ -34,6 +34,10 @@ enum class ErrorCode(
     HASHTAG_NOT_FOUND(httpStatusCode = 404, stateCode = "HASHTAG_NOT_FOUND", message = "해시태그가 존재하지 않습니다."),
     AUTHOR_NOT_MATCH(httpStatusCode = 403, stateCode = "AUTHOR_NOT_MATCH", message = "작성자가 일치하지 않습니다."),
 
+    //스크랩
+    SCRAP_NOT_FOUND(httpStatusCode = 404, stateCode = "SCRAP_NOT_FOUND", message = "스크랩한 게시글이 존재하지 않습니다."),
+    SCRAP_ALREADY_EXIST(httpStatusCode = 409, stateCode = "SCRAP_ALREADY_EXIST", message = "이미 스크랩한 게시글입니다."),
+
     //커스텀 필터
     FILTER_NOT_EXIST(httpStatusCode = 404, stateCode = "NOT_EXIST_FILTER", message = "요청하신 커스텀 필터를 찾을 수 없습니다."),
 

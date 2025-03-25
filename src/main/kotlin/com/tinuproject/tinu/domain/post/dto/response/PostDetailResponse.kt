@@ -18,6 +18,7 @@ data class PostDetailResponse(
         val paymentMethod: Set<PaymentMethod>,
         val isSell: Boolean,
         val isLike: Boolean,
+        val likeCount: Long,
         val isWriter: Boolean,
         val images: List<String>,
         val postHashTagMap: List<HashTag>

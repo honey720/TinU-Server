@@ -39,4 +39,14 @@ interface PostService {
             userId: UUID,
             postDeleteRequest: PostDeleteRequest
     )
+
+    fun createPostScrap(
+            userId: UUID,
+            postId: Long
+    )
+
+    fun deletePostScrap(
+            userId: UUID,
+            postId: Long
+    )
 }

@@ -15,6 +15,7 @@ data class PostsListResponse (
             val price: Int,
             val thumbnail: String?,
             val isLike: Boolean,
+            val likeCount: Long,
             val isSell: Boolean
     )
 }
