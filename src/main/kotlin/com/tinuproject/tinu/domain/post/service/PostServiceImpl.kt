@@ -159,7 +159,7 @@ class PostServiceImpl(
             throw UploadSizeOutOfRangeException()
 
         val urlList = runBlocking {
-            s3Service.verifyImage(postCreateRequest.images)
+            s3Service.verifyImages(postCreateRequest.images)
         }
 
         val newPost = Post(
@@ -221,11 +221,11 @@ class PostServiceImpl(
 
         var urlList = emptyList<String>()
         if (postUpdateRequest.images.isNotEmpty())
-            urlList = runBlocking { s3Service.verifyImage(postUpdateRequest.images) }
+            urlList = runBlocking { s3Service.verifyImages(postUpdateRequest.images) }
 
         log.info("이미지 삭제")
         if (post.multimedia.isNotEmpty())
-            s3Service.removeImage(post.multimedia.map { it.url })
+            s3Service.removeImages(post.multimedia.map { it.url })
 
         multimediaRepository.deleteAllByPostId(postId)
 
@@ -263,7 +263,7 @@ class PostServiceImpl(
 
         log.info("이미지 삭제")
         if (post.multimedia.isNotEmpty())
-            s3Service.removeImage(post.multimedia.map { it.url })
+            s3Service.removeImages(post.multimedia.map { it.url })
 
         postRepository.deleteById(postDeleteRequest.postId)
 
