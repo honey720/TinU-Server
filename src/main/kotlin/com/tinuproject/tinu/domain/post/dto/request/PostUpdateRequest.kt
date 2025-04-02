@@ -9,8 +9,8 @@ data class PostUpdateRequest(
         val body: String,
         val categoryId: Long,
         val price: Int,
-        val sellMethod: SellMethod,
-        val paymentMethod: PaymentMethod,
+        val sellMethod: Set<SellMethod> = setOf(),
+        val paymentMethod: Set<PaymentMethod> = setOf(),
         val images: List<S3VerifiableRequest>,
         val hashTag: List<String>
 )
