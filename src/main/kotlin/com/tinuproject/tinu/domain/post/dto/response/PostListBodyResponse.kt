@@ -2,7 +2,7 @@ package com.tinuproject.tinu.domain.post.dto.response
 
 import java.time.LocalDateTime
 
-data class PostResponse(
+data class PostListBodyResponse(
         val id: Long?,
         val createdAt: LocalDateTime?,
         val title: String,

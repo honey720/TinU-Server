@@ -76,7 +76,7 @@ class PostServiceImpl(
         }
 
         val posts = rawPosts.map { post ->
-            PostResponse(
+            PostListBodyResponse(
                     id = post.id!!,
                     createdAt = post.createdAt!!,
                     title = post.title,
