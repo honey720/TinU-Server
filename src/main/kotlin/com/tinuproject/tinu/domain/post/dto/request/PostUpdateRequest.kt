@@ -2,7 +2,7 @@ package com.tinuproject.tinu.domain.post.dto.request
 
 import com.tinuproject.tinu.domain.enums.PaymentMethod
 import com.tinuproject.tinu.domain.enums.SellMethod
-import com.tinuproject.tinu.s3.dto.S3Verifiable
+import com.tinuproject.tinu.s3.dto.request.S3VerifiableRequest
 
 data class PostUpdateRequest(
         val title: String,
@@ -11,11 +11,6 @@ data class PostUpdateRequest(
         val price: Int,
         val sellMethod: SellMethod,
         val paymentMethod: PaymentMethod,
-        val images: List<Image>,
+        val images: List<S3VerifiableRequest>,
         val hashTag: List<String>
-) {
-    data class Image(
-            override val key: String,
-            override val ETag: String
-    ): S3Verifiable
-}
+)
