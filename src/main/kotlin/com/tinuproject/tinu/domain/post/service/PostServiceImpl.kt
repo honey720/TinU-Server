@@ -13,9 +13,7 @@ import com.tinuproject.tinu.domain.multimedia.repository.MultimediaRepository
 import com.tinuproject.tinu.domain.post.dto.request.PostCreateRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostDeleteRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostUpdateRequest
-import com.tinuproject.tinu.domain.post.dto.response.PostCreateResponse
-import com.tinuproject.tinu.domain.post.dto.response.PostDetailResponse
-import com.tinuproject.tinu.domain.post.dto.response.PostsListResponse
+import com.tinuproject.tinu.domain.post.dto.response.*
 import com.tinuproject.tinu.domain.post.repository.*
 import com.tinuproject.tinu.domain.postHashTagMap.repository.PostHashTagMapRepository
 import com.tinuproject.tinu.domain.scrap.repository.ScrapRepository
@@ -78,8 +76,8 @@ class PostServiceImpl(
         }
 
         val posts = rawPosts.map { post ->
-            PostsListResponse.PostResponse(
-                    postId = post.id!!,
+            PostResponse(
+                    id = post.id!!,
                     createdAt = post.createdAt!!,
                     title = post.title,
                     price = post.price,
@@ -130,10 +128,10 @@ class PostServiceImpl(
                 likeCount = post.scrapCount,
                 isWriter = member == post.author,
                 images = post.multimedia.map { it.url },
-                postHashTagMap = post.postHashTagMap.map {
-                    PostDetailResponse.HashTag(
-                            hashTagId = it.hashTag.id!!,
-                            hashTagName = it.hashTag.tagName
+                hashTags = post.postHashTagMap.map {
+                    PostHashTagResponse(
+                            id = it.hashTag.id!!,
+                            name = it.hashTag.tagName
                     )
                 }
         )
