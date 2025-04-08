@@ -1,7 +1,6 @@
 package com.tinuproject.tinu.domain.member.dto.controller_service.input
 
 import com.tinuproject.tinu.domain.member.dto.client_controller.request.UpdateUserInfoRequestDTO
-import com.tinuproject.tinu.domain.member.dto.client_controller.request.UpdateUserInfoRequestDTO.Image
 import io.swagger.v3.oas.annotations.media.Schema
 
 class UpdateUserInputDTO(){
