@@ -2,7 +2,7 @@ package com.tinuproject.tinu.s3.service
 
 import com.tinuproject.tinu.domain.exception.s3.*
 import com.tinuproject.tinu.domain.exception.s3.NoSuchKeyException
-import com.tinuproject.tinu.s3.dto.S3Verifiable
+import com.tinuproject.tinu.s3.dto.request.S3VerifiableRequest
 import com.tinuproject.tinu.s3.dto.request.*
 import com.tinuproject.tinu.s3.dto.response.S3PresignedUrlResponse
 import kotlinx.coroutines.Dispatchers
@@ -86,7 +86,7 @@ class S3ServiceImpl(
         private val ALLOWED_EXTENSIONS = listOf("image/jpg", "image/jpeg", "image/png", "image/webp")
     }
 
-    override suspend fun verifyImages(objects: List<S3Verifiable>): List<String> = withContext(Dispatchers.IO) {
+    override suspend fun verifyImages(objects: List<S3VerifiableRequest>): List<String> = withContext(Dispatchers.IO) {
         val urls = objects.map { obj ->
             async {
                 val response: HeadObjectResponse
@@ -111,7 +111,7 @@ class S3ServiceImpl(
         urls
     }
 
-    override fun verifyImage(obj: S3Verifiable): String {
+    override fun verifyImage(obj: S3VerifiableRequest): String {
         val response: HeadObjectResponse
         try {
             response = s3Client.headObject(HeadObjectRequest.builder()

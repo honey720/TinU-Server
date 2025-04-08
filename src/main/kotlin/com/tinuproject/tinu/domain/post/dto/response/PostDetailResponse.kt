@@ -21,10 +21,5 @@ data class PostDetailResponse(
         val likeCount: Long,
         val isWriter: Boolean,
         val images: List<String>,
-        val postHashTagMap: List<HashTag>
-) {
-    data class HashTag(
-            val hashTagId: Long,
-            val hashTagName: String
-    )
-}
+        val hashTags: List<PostHashTagResponse>
+)
