@@ -20,5 +20,5 @@ data class PostCreateRequest(
         val paymentMethod: Set<PaymentMethod> = setOf(),
         val images: List<S3VerifiableRequest>,
         @Schema(description = "해시태그", defaultValue = "[\"아이폰\", \"미니\"]")
-        val hashTag: List<String>
+        val hashTags: List<String>
 )
