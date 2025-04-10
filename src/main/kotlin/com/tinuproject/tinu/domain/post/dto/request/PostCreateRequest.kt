@@ -5,6 +5,7 @@ import com.tinuproject.tinu.domain.enums.SellMethod
 import com.tinuproject.tinu.s3.dto.request.S3VerifiableRequest
 import io.swagger.v3.oas.annotations.media.Schema
 
+@Schema(description = "게시글 생성 요청")
 data class PostCreateRequest(
         @Schema(description = "게시글 제목", defaultValue = "아이폰 13 미니 판매합니다")
         val title: String,

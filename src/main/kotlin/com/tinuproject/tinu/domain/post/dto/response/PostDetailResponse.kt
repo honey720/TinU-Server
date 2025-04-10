@@ -5,6 +5,7 @@ import com.tinuproject.tinu.domain.enums.SellMethod
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 
+@Schema(description = "판매글 상세 조회 응답")
 data class PostDetailResponse(
         @Schema(description = "판매글 ID", defaultValue = "21")
         val postId: Long,

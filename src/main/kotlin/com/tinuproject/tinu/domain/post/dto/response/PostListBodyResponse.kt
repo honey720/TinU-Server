@@ -3,6 +3,7 @@ package com.tinuproject.tinu.domain.post.dto.response
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 
+@Schema(description = "게시글 응답")
 data class PostListBodyResponse(
         @Schema(description = "게시글 ID", defaultValue = "1")
         val id: Long?,
