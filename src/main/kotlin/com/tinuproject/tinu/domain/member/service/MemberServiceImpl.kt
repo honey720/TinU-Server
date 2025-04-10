@@ -120,7 +120,7 @@ class MemberServiceImpl(
 
         usableMemberByNickname(userId = userId, nickName = updateUserInfoRequestDTO.nickname)
 
-        var url = member.profileImageURL;
+        var url = member.profileImageURL
 
         updateUserInfoRequestDTO.profile?.let { url = s3Service.verifyImage(it) }
 
