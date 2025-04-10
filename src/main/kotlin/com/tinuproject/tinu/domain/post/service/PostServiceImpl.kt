@@ -181,7 +181,7 @@ class PostServiceImpl(
         mappingMultimedia(newPost, urlList.toMutableList())
 
         log.info("해시태그맵 추가")
-        mappingPostHashTagMap(newPost, postCreateRequest.hashTag.toMutableList())
+        mappingPostHashTagMap(newPost, postCreateRequest.hashTags.toMutableList())
 
         return PostCreateResponse(postId = newPost.id!!)
     }
@@ -219,7 +219,7 @@ class PostServiceImpl(
 
         log.info("해시태그맵 추가")
         postHashTagMapRepository.deleteAllByPostId(postId)
-        mappingPostHashTagMap(post, postUpdateRequest.hashTag.toMutableList())
+        mappingPostHashTagMap(post, postUpdateRequest.hashTags.toMutableList())
 
         log.info("게시글 업데이트")
         post.updatePost(postUpdateRequest, category, urlList.firstOrNull())

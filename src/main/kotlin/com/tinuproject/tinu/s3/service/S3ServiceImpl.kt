@@ -4,6 +4,7 @@ import com.tinuproject.tinu.domain.exception.s3.*
 import com.tinuproject.tinu.domain.exception.s3.NoSuchKeyException
 import com.tinuproject.tinu.s3.dto.request.S3VerifiableRequest
 import com.tinuproject.tinu.s3.dto.request.*
+import com.tinuproject.tinu.s3.dto.response.S3PresignedUrlObjectResponse
 import com.tinuproject.tinu.s3.dto.response.S3PresignedUrlResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -45,7 +46,7 @@ class S3ServiceImpl(
             if (content.contentType !in ALLOWED_EXTENSIONS)
                 throw NotAllowedExtensionException()
             if (content.contentLength !in 1..(1024 * 1024 * 10))
-                throw FileLengthOutOfRange()
+                throw FileLengthOutOfRangeException()
         }
 
         val currentTimeMillis = System.currentTimeMillis()
@@ -68,7 +69,7 @@ class S3ServiceImpl(
                         .build()
                 )
 
-                S3PresignedUrlResponse.Object(
+                S3PresignedUrlObjectResponse(
                         presignedUrl = presignedPutObjectRequest.url().toString(),
                         key = key
                 )
