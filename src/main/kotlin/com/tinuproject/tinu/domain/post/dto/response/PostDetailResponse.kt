@@ -39,5 +39,6 @@ data class PostDetailResponse(
         val isWriter: Boolean,
         @Schema(description = "판매글 이미지 URL", defaultValue = "[\"https://d3sbb3b89xu3eb.cloudfront.net/original/1740896957331_c30cc9a7-4715-44fc-9049-62ad118943e7_0.png\"]")
         val images: List<String>,
+        @Schema(description = "판매글 해시태그", defaultValue = "[{\"id\": 1, \"name\": \"아이폰\"}, {\"id\": 2, \"name\": \"미니\"}]")
         val hashTags: List<PostHashTagResponse>
 )
