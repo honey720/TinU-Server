@@ -10,9 +10,11 @@ import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
 import com.tinuproject.tinu.domain.member.dto.client_controller.request.RegisterRequestDTO
 import com.tinuproject.tinu.domain.member.dto.client_controller.request.UpdateUserInfoRequestDTO
 import com.tinuproject.tinu.domain.member.dto.client_controller.response.MemberSearchResponseDTO
+import com.tinuproject.tinu.domain.member.dto.controller_service.input.UpdateUserInputDTO
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
 import com.tinuproject.tinu.domain.university.repository.UniversityRepository
+import com.tinuproject.tinu.s3.service.S3Service
 import com.tinuproject.tinu.web.email.entity.EmailAuth
 import com.tinuproject.tinu.web.email.repository.EmailRepository
 import org.slf4j.Logger
@@ -26,7 +28,8 @@ class MemberServiceImpl(
     val memberRepository: MemberRepository,
     val universityRepository: UniversityRepository,
     val emailAuthRepository: EmailRepository,
-    val socialMemberRepository: SocialMemberRepository
+    val socialMemberRepository: SocialMemberRepository,
+    val s3Service: S3Service
 ):MemberService {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
@@ -45,6 +48,15 @@ class MemberServiceImpl(
 
         university ?: throw NotExistDomainException()
 
+        
+        //회원 가입시 기본 url은 Null로
+        var url : String? = null
+        
+        //만약 이미지 입력이 있다면 해당 url을 입력
+        registerRequestDTO.profile?.let { url = s3Service.verifyImage(it) }
+
+
+
         val socialMember = socialMemberRepository.findByUserId(userId)
         val newMember = Member(
             userId = userId,
@@ -52,7 +64,7 @@ class MemberServiceImpl(
             nickname = registerRequestDTO.nickName,
             major = registerRequestDTO.major,
             grade = registerRequestDTO.grade,
-            profileImageURL = registerRequestDTO.profileImageURL,
+            profileImageURL = url,
             introduction = registerRequestDTO.introduction,
             email = registerRequestDTO.email,
             mark = 0.0,
@@ -108,7 +120,11 @@ class MemberServiceImpl(
 
         usableMemberByNickname(userId = userId, nickName = updateUserInfoRequestDTO.nickname)
 
-        member.updateMemberInfo(updateUserInfoRequestDTO)
+        var url = member.profileImageURL
+
+        updateUserInfoRequestDTO.profile?.let { url = s3Service.verifyImage(it) }
+
+        member.updateMemberInfo(UpdateUserInputDTO(updateUserInfoRequestDTO, url))
 
         memberRepository.save(member)
 
