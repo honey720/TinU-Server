@@ -24,6 +24,17 @@ enum class ErrorCode(
     NOT_MATCH_CODE(httpStatusCode = 400, stateCode = "NOT_MATCH_CODE", message = "인증 코드가 일치하지 않습니다."),
     NEED_EMAIL_AUTH(httpStatusCode = 400, stateCode = "NEED_EMAIL_AUTH", message = "이메일 인증이 필요합니다."),
 
+    //판매글
+    POST_NOT_FOUND(httpStatusCode = 404, stateCode = "POST_NOT_FOUND", message = "게시글이 존재하지 않습니다."),
+    POST_HIDDEN(httpStatusCode = 403, stateCode = "POST_HIDDEN", message = "숨김 처리된 게시글입니다."),
+    CATEGORY_NOT_FOUND(httpStatusCode = 404, stateCode = "CATEGORY_NOT_FOUND", message = "카테고리가 존재하지 않습니다."),
+    HASHTAG_NOT_FOUND(httpStatusCode = 404, stateCode = "HASHTAG_NOT_FOUND", message = "해시태그가 존재하지 않습니다."),
+    AUTHOR_NOT_MATCH(httpStatusCode = 403, stateCode = "AUTHOR_NOT_MATCH", message = "작성자가 일치하지 않습니다."),
+
+    //스크랩
+    SCRAP_NOT_FOUND(httpStatusCode = 404, stateCode = "SCRAP_NOT_FOUND", message = "스크랩한 게시글이 존재하지 않습니다."),
+    SCRAP_ALREADY_EXIST(httpStatusCode = 409, stateCode = "SCRAP_ALREADY_EXIST", message = "이미 스크랩한 게시글입니다."),
+
     //커스텀 필터
     FILTER_NOT_EXIST(httpStatusCode = 404, stateCode = "NOT_EXIST_FILTER", message = "요청하신 커스텀 필터를 찾을 수 없습니다."),
 
@@ -35,6 +46,7 @@ enum class ErrorCode(
     INVALID_ETAG(httpStatusCode = 400, stateCode = "INVALID_ETAG", message = "ETag가 일치하지 않습니다."),
 
     //전역적 사용
+    UNIVERSITY_NOT_MATCH(httpStatusCode = 403, stateCode = "UNIVERSITY_NOT_MATCH", message = "대학이 일치하지 않습니다."),
     NOT_FOUND(httpStatusCode = 404, stateCode = "NOT_FOUND", message = "없는 페이지입니다."),
     UNAUTHORIZED_ACCESS(httpStatusCode = 403, stateCode = "FORBIDDEN", message = "요청에 대한 권한이 없습니다.");
 }
