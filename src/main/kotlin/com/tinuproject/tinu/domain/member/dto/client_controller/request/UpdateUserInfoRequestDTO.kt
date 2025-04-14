@@ -7,8 +7,6 @@ data class UpdateUserInfoRequestDTO(
     val nickname : String,
     val introduction : String?,
     val major : String?,
-    val grade : Int,
+    val grade : Int?,
     val profile : S3VerifiableRequest?
-) {
-
-}
+)
