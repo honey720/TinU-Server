@@ -1,5 +1,8 @@
 package com.tinuproject.tinu.domain.customfilter.dto.client_controller.response
 
+
+
+
 data class SelectCustomFilter(
     val filterId : Long,
     val filterName: String,

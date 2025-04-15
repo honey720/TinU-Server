@@ -1,6 +1,7 @@
 package com.tinuproject.tinu.domain.exception.base
 
 import io.swagger.v3.oas.annotations.media.Schema
+import org.springframework.http.HttpStatus
 
 enum class ErrorCode(
     val httpStatusCode : Int,
@@ -17,6 +18,7 @@ enum class ErrorCode(
     MEMBER_EXIST_NICKNAME(httpStatusCode = 409, stateCode = "ALREADY_EXIST_NICKNAME", message = "이미 사용중인 닉네임입니다."),
     MEMBER_NOT_EXIST(httpStatusCode = 404, stateCode = "NOT_FOUND_MEMBER", message = "요청하신 이용자는 없는 이용자입니다."),
     MEMBER_EXIST(httpStatusCode = 409, stateCode = "ALREADY_EXIST_MEMBER", message = "이미 회원가입이 진행된 계정입니다."),
+    MEMBER_NEED_REGIST(httpStatusCode = HttpStatus.UNAUTHORIZED.value(), stateCode = "MEMBER_NEED_REGIST", message = "회원가입이 완료되지 않은 사용자입니다."),
 
     //회원가입 - 이메일 인증
     UNIVERSITY_NOT_EXIST_DOMAIN(httpStatusCode = 400, stateCode = "NOT_EXIST_DOMAIN", message = "현재 서비스를 지원하는 학교가 아닌 것 같습니다."),
