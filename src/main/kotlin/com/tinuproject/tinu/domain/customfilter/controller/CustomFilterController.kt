@@ -46,7 +46,6 @@ class CustomFilterController(
                     responseCode = "200",
                     content = [
                         Content(
-                            mediaType = "application/json",
                             examples = [
                                 ExampleObject(value = SelectCustomFilterExam.EXAMPLE_CUSTOM_FILTER_RESPONSE)
                             ]
