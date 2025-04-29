@@ -4,6 +4,7 @@ import com.tinuproject.tinu.domain.entity.RefreshToken
 import com.tinuproject.tinu.domain.exception.token.ExpiredTokenException
 import com.tinuproject.tinu.domain.exception.token.InvalidedTokenException
 import com.tinuproject.tinu.domain.exception.token.NotFoundTokenException
+import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.token.Tokens
 import com.tinuproject.tinu.domain.token.refreshtoken.repository.RefreshTokenRepository
 import com.tinuproject.tinu.security.jwt.JwtUtil
@@ -25,6 +26,7 @@ class RefreshTokenServiceImpl(
 
     private val refreshTokenRepository: RefreshTokenRepository,
     private val jwtUtil : JwtUtil,
+    private val memberRepository: MemberRepository
 ):RefreshTokenService {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
@@ -49,7 +51,7 @@ class RefreshTokenServiceImpl(
         refreshTokenRepository.save(newRefreshToken)
 
         //AccesToken 재발행.
-        val accessToken : String = jwtUtil.generateAccessToken(userId, ACCESS_TOKEN_EXPIRATION_TIME)
+        val accessToken : String = jwtUtil.generateAccessToken(userId, ACCESS_TOKEN_EXPIRATION_TIME,memberRepository.existsByUserId(userId = userId))
 
         return Tokens(accessToken=accessToken, refreshToken = refreshToken)
     }
