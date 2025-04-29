@@ -9,7 +9,7 @@ class UniversityDomain(
     var id : Long? = null,
 
     @Column
-    var domain:String,
+    var domain : String,
 
     @ManyToOne(fetch = FetchType.LAZY)
     var university : University
