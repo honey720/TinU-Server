@@ -38,8 +38,8 @@ class JwtUtil {
     fun generateAccessToken(uuid: UUID, expirationMillis: Long, isSign : Boolean): String {
         log.info("액세스 토큰 발행.")
         return Jwts.builder()
-            .claim("userId", uuid.toString())
-            .claim("isSign", isSign)// 클레임에 userId 추가
+            .claim("userId", uuid.toString())// 클레임에 userId 추가
+            .claim("isSign", isSign)// 클레임에 회원가입 여부 추가.
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + expirationMillis))
             .signWith(getSigningKey())
