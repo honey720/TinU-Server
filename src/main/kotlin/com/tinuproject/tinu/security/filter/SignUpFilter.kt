@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.web.filter.OncePerRequestFilter
 
 class SignUpFilter(
-    private val memberRepository: MemberRepository,
+
     private val jwtUtil :JwtUtil,
 
     //토큰이 없어도 되는 api
@@ -25,9 +25,8 @@ class SignUpFilter(
     ) {
 
         var httpServeletRequest : HttpServletRequest = request
-        var accessToken : String
 
-        accessToken = jwtUtil.getTokenFromHeader(httpServeletRequest)
+        var accessToken : String = jwtUtil.getTokenFromHeader(httpServeletRequest)
 
         if(!jwtUtil.signCheck(accessToken)){
             throw NeedRegistException()

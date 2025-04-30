@@ -105,7 +105,7 @@ class SecurityConfig(
             httpSecurity
                 .addFilterBefore(JwtTokenFilter(jwtUtil = jwtUtil, excludeUrls =allowedPaths), UsernamePasswordAuthenticationFilter::class.java)
                 .addFilterBefore(ExceptionHandlerFilter(objectMapper), JwtTokenFilter::class.java)
-                .addFilterAfter(SignUpFilter(jwtUtil=jwtUtil, excludeUrls =  allowedPaths, memberRepository = memberRepository), JwtTokenFilter::class.java)
+                .addFilterAfter(SignUpFilter(jwtUtil=jwtUtil, excludeUrls =  allowedPaths), JwtTokenFilter::class.java)
 
 
         return httpSecurity.build()
