@@ -6,7 +6,7 @@ import com.tinuproject.tinu.domain.exception.mail.NotMatchCodeException
 import com.tinuproject.tinu.domain.exception.member.ExistMemberException
 import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
-import com.tinuproject.tinu.domain.university.repository.UniversityRepository
+import com.tinuproject.tinu.domain.universitydomain.repository.UniversityDomainRepository
 import com.tinuproject.tinu.web.email.dto.client_controller.EmailAuthRequestDTO
 import com.tinuproject.tinu.web.email.dto.client_controller.EmailCodeCheckRequestDTO
 import com.tinuproject.tinu.web.email.repository.EmailRepository
@@ -23,7 +23,7 @@ class RegisterServiceImpl(
     val mailSender: MailManager,
     val emailRepository: EmailRepository,
     val memberRepository : MemberRepository,
-    val universityRepository: UniversityRepository
+    val universityDomainRepository: UniversityDomainRepository
 ):RegisterService {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
@@ -34,7 +34,7 @@ class RegisterServiceImpl(
         val domain = email.split("@")[1]
 
         //해당 도메인이 우리 서비스에서 관리하는 대학 도메인인지 확인
-        val university = universityRepository.findByDomain(domain)
+        val university = universityDomainRepository.findByDomain(domain)
 
         //없는 대학이라면 관리하지 않는 도메인 예외 발생
         university?: throw NotExistDomainException()

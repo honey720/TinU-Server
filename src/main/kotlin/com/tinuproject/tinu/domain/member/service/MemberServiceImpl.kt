@@ -13,7 +13,7 @@ import com.tinuproject.tinu.domain.member.dto.client_controller.response.MemberS
 import com.tinuproject.tinu.domain.member.dto.controller_service.input.UpdateUserInputDTO
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
-import com.tinuproject.tinu.domain.university.repository.UniversityRepository
+import com.tinuproject.tinu.domain.universitydomain.repository.UniversityDomainRepository
 import com.tinuproject.tinu.s3.service.S3Service
 import com.tinuproject.tinu.web.email.entity.EmailAuth
 import com.tinuproject.tinu.web.email.repository.EmailRepository
@@ -26,7 +26,7 @@ import java.util.*
 @Service
 class MemberServiceImpl(
     val memberRepository: MemberRepository,
-    val universityRepository: UniversityRepository,
+    val universityDomainRepository: UniversityDomainRepository,
     val emailAuthRepository: EmailRepository,
     val socialMemberRepository: SocialMemberRepository,
     val s3Service: S3Service
@@ -43,10 +43,11 @@ class MemberServiceImpl(
 
         //이메일 인증 체크
         val emailAuth = emailAuthCheck(userId, registerRequestDTO.email)
-        
-        val university = universityRepository.findByDomain(registerRequestDTO.email.split("@")[1])
 
-        university ?: throw NotExistDomainException()
+        //사용가능한 도메인인지 확인
+        val existUniversityDomain = universityDomainRepository.findByDomain(registerRequestDTO.email.split("@")[1])
+
+        existUniversityDomain ?: throw NotExistDomainException()
 
         
         //회원 가입시 기본 url은 Null로
@@ -63,7 +64,7 @@ class MemberServiceImpl(
         val socialMember = socialMemberRepository.findByUserId(userId)
         val newMember = Member(
             userId = userId,
-            university = university,
+            university = existUniversityDomain.university,
             nickname = registerRequestDTO.nickName,
             major = major,
             grade = registerRequestDTO.grade,
