@@ -1,8 +1,10 @@
 package com.tinuproject.tinu.security.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.security.filter.ExceptionHandlerFilter
 import com.tinuproject.tinu.security.filter.JwtTokenFilter
+import com.tinuproject.tinu.security.filter.SignUpFilter
 import com.tinuproject.tinu.security.jwt.JwtUtil
 import com.tinuproject.tinu.security.oauth2.handler.OAuthLoginFailureHandler
 import com.tinuproject.tinu.security.oauth2.handler.OAuthLoginSuccessHandler
@@ -34,7 +36,7 @@ class SecurityConfig(
     private val oauth2LoginSuccessHandler: OAuthLoginSuccessHandler,
     private val oAuthLoginFailureHandler: OAuthLoginFailureHandler,
     private val customOAuth2UserService: CustomOAuth2UserService,
-
+    private val memberRepository: MemberRepository,
     @Value("\${web.allowed-path}")
     private val allowedPaths : List<String>,
     private val objectMapper: ObjectMapper
@@ -64,7 +66,7 @@ class SecurityConfig(
 
     @Bean
     @Throws(Exception::class)
-    fun filterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
+    fun filterChain(httpSecurity: HttpSecurity, memberRepository: MemberRepository): SecurityFilterChain {
         val sessionManagement = httpSecurity.httpBasic { obj: HttpBasicConfigurer<HttpSecurity> -> obj.disable() }
             //cors 설정
             .cors { corsConfigurer: CorsConfigurer<HttpSecurity?> ->
@@ -103,7 +105,7 @@ class SecurityConfig(
             httpSecurity
                 .addFilterBefore(JwtTokenFilter(jwtUtil = jwtUtil, excludeUrls =allowedPaths), UsernamePasswordAuthenticationFilter::class.java)
                 .addFilterBefore(ExceptionHandlerFilter(objectMapper), JwtTokenFilter::class.java)
-
+                .addFilterAfter(SignUpFilter(jwtUtil=jwtUtil, excludeUrls =  allowedPaths, memberRepository = memberRepository), JwtTokenFilter::class.java)
 
 
         return httpSecurity.build()
