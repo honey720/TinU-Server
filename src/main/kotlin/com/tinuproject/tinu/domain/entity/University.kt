@@ -10,9 +10,10 @@ class University (
     @OneToMany(mappedBy = "university")
     var members : MutableList<Member> ?= mutableListOf(),
 
-    @Column
-    var domain : String,
+    @OneToMany(mappedBy = "university")
+    var domain : MutableList<UniversityDomain>?= mutableListOf(),
 
     @Column
-    var name : String
-) : BaseEntity()
+    var name : String,
+
+    ) : BaseEntity()
