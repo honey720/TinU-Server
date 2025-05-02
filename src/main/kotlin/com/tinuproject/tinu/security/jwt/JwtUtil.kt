@@ -35,10 +35,11 @@ class JwtUtil {
     }
 
     // 액세스 토큰을 발급하는 메서드
-    fun generateAccessToken(uuid: UUID, expirationMillis: Long): String {
+    fun generateAccessToken(uuid: UUID, expirationMillis: Long, isSign : Boolean): String {
         log.info("액세스 토큰 발행.")
         return Jwts.builder()
-            .claim("userId", uuid.toString()) // 클레임에 userId 추가
+            .claim("userId", uuid.toString())// 클레임에 userId 추가
+            .claim("isSign", isSign)// 클레임에 회원가입 여부 추가.
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + expirationMillis))
             .signWith(getSigningKey())
@@ -124,16 +125,21 @@ class JwtUtil {
         }
     }
 
-    //토큰 속 유저와 실제 기대하는 user의 비교 검증
-    //ex : 글 수정 요청이 들어왔을때 실제 글쓴이와, 요구하는 Token 속 유저의 정보 비교
-    fun validateUserFromToken(token :String, expectedUserId : UUID){
-        validateToken(token);
-        if(!getUserIdFromToken(token).equals(expectedUserId.toString())){
-            //TODO(요청이 들어왔는데 해당 요청이 가능한 유저와 실제 요청 유저가 다를때 반환하는 에러로 처리)
-            //권한 없음
-            throw Exception()
+    fun signCheck(token : String) :Boolean{
+        return try {
+            getClaimsFromToken(token).get("isSign", Boolean::class.java)
+        } catch (e: JwtException) {
+            // 토큰이 유효하지 않은 경우
+            log.warn("유효하지 않은 토큰입니다.")
+            //(토큰이 유효하지 않는 경우 반환하는 Exception을 만들어 처리)
+            throw InvalidedTokenException()
+        } catch (e: IllegalArgumentException) {
+            log.warn("유효하지 않은 토큰입니다.")
+            //(토큰이 유효하지 않는 경우 반환하는 Exception을 만들어 처리)
+            throw InvalidedTokenException()
         }
     }
+
 
 
 }

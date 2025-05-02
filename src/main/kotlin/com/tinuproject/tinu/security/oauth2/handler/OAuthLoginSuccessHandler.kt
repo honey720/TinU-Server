@@ -72,7 +72,8 @@ class OAuthLoginSuccessHandler(
         refreshTokenRepository.save(newRefreshToken)
 
         // 액세스 토큰 발급
-        val accessToken: String = jwtUtil.generateAccessToken(userId, ACCESS_TOKEN_EXPIRATION_TIME)
+        //Todo(이후 삭제 예정 - 로그인 진행 이후 별도의 재발급 요청으로 A.T를 받아올 수 밖에 없어서 안쓰는 로직이지만 테스트 간 A.T를 쉽게 구하기 위해 남겨둠.)
+        val accessToken: String = jwtUtil.generateAccessToken(userId, ACCESS_TOKEN_EXPIRATION_TIME,true)
 
         val redirectUri = if(memberRepository.existsByUserId(userId)){
             String.format(REDIRECT_URL)
