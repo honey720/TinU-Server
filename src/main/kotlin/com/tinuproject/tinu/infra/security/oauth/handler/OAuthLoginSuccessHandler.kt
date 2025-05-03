@@ -5,7 +5,7 @@ import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.member.refreshtoken.repository.RefreshTokenRepository
 import com.tinuproject.tinu.infra.security.jwt.JwtUtil
 import com.tinuproject.tinu.infra.security.oauth.dto.CustomOAuth2User
-import com.tinuproject.tinu.domain.common.web.CookieGenerator
+import com.tinuproject.tinu.global.web.CookieGenerator
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory

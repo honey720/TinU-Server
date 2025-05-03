@@ -8,7 +8,7 @@ import com.tinuproject.tinu.infra.s3.exception.UploadSizeOutOfRangeException
 import com.tinuproject.tinu.infra.s3.dto.response.S3PresignedUrlResponse
 import com.tinuproject.tinu.infra.s3.service.S3Service
 import com.tinuproject.tinu.infra.swagger.annotation.SwaggerExceptionResponses
-import com.tinuproject.tinu.domain.common.response.ResponseEntityGenerator
+import com.tinuproject.tinu.global.web.ResponseEntityGenerator
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity

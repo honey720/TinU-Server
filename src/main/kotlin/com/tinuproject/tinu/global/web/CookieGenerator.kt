@@ -1,4 +1,4 @@
-package com.tinuproject.tinu.domain.common.web
+package com.tinuproject.tinu.global.web
 
 
 import org.springframework.http.ResponseCookie

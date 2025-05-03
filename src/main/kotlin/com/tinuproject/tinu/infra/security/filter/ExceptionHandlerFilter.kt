@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.tinuproject.tinu.domain.common.response.ErrorResponse
 import com.tinuproject.tinu.domain.common.response.ResponseDTO
 import com.tinuproject.tinu.domain.common.exception.base.BaseException
-import com.tinuproject.tinu.domain.common.response.ResponseEntityGenerator
+import com.tinuproject.tinu.global.web.ResponseEntityGenerator
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
