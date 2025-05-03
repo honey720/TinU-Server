@@ -1,7 +1,6 @@
 package com.tinuproject.tinu.security.filter
 
 import com.tinuproject.tinu.domain.exception.member.NeedRegistException
-import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.security.jwt.JwtUtil
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest

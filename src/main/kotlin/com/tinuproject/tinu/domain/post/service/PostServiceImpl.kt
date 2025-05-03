@@ -1,23 +1,27 @@
 package com.tinuproject.tinu.domain.post.service
 
-import com.tinuproject.tinu.domain.category.repository.CategoryRepository
-import com.tinuproject.tinu.domain.entity.*
+import com.tinuproject.tinu.tempdomain.post.category.repository.CategoryRepository
 import com.tinuproject.tinu.domain.exception.mail.NotExistMemberException
 import com.tinuproject.tinu.domain.exception.post.*
 import com.tinuproject.tinu.domain.exception.s3.UploadSizeOutOfRangeException
 import com.tinuproject.tinu.domain.exception.scrap.ScrapAlreadyExistException
 import com.tinuproject.tinu.domain.exception.scrap.ScrapNotFoundException
-import com.tinuproject.tinu.domain.hashTagRepository.repository.HashTagRepository
-import com.tinuproject.tinu.domain.member.repository.MemberRepository
-import com.tinuproject.tinu.domain.multimedia.repository.MultimediaRepository
+import com.tinuproject.tinu.tempdomain.post.hashtag.repository.HashTagRepository
+import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
+import com.tinuproject.tinu.tempdomain.common.multimedia.repository.MultimediaRepository
 import com.tinuproject.tinu.domain.post.dto.request.PostCreateRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostDeleteRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostUpdateRequest
 import com.tinuproject.tinu.domain.post.dto.response.*
 import com.tinuproject.tinu.domain.post.repository.*
-import com.tinuproject.tinu.domain.postHashTagMap.repository.PostHashTagMapRepository
+import com.tinuproject.tinu.tempdomain.post.hashtag.posthashtagmap.repository.PostHashTagMapRepository
 import com.tinuproject.tinu.domain.scrap.repository.ScrapRepository
 import com.tinuproject.tinu.s3.service.S3Service
+import com.tinuproject.tinu.tempdomain.common.multimedia.entity.Multimedia
+import com.tinuproject.tinu.tempdomain.post.entity.Post
+import com.tinuproject.tinu.tempdomain.post.hashtag.entity.HashTag
+import com.tinuproject.tinu.tempdomain.post.hashtag.posthashtagmap.entity.PostHashTagMap
+import com.tinuproject.tinu.tempdomain.post.scrap.entity.Scrap
 import kotlinx.coroutines.runBlocking
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -28,15 +32,15 @@ import java.util.*
 const val SIZE = 20
 @Service
 class PostServiceImpl(
-        private val memberRepository: MemberRepository,
-        private val postRepository: PostRepository,
-        private val postQueryRepository: PostQueryRepository,
-        private val categoryRepository: CategoryRepository,
-        private val hashTagRepository: HashTagRepository,
-        private val multimediaRepository: MultimediaRepository,
-        private val postHashTagMapRepository: PostHashTagMapRepository,
-        private val scrapRepository: ScrapRepository,
-        private val s3Service: S3Service,
+    private val memberRepository: MemberRepository,
+    private val postRepository: PostRepository,
+    private val postQueryRepository: PostQueryRepository,
+    private val categoryRepository: CategoryRepository,
+    private val hashTagRepository: HashTagRepository,
+    private val multimediaRepository: MultimediaRepository,
+    private val postHashTagMapRepository: PostHashTagMapRepository,
+    private val scrapRepository: ScrapRepository,
+    private val s3Service: S3Service,
 ): PostService {
     val log : Logger = LoggerFactory.getLogger(this::class.java)
 

@@ -1,6 +1,6 @@
 package com.tinuproject.tinu.domain.post.controller
 
-import com.tinuproject.tinu.DTO.ResponseDTO
+import com.tinuproject.tinu.tempdomain.common.response.ResponseDTO
 import com.tinuproject.tinu.domain.exception.mail.NotExistMemberException
 import com.tinuproject.tinu.domain.exception.post.*
 import com.tinuproject.tinu.domain.exception.s3.*
@@ -14,8 +14,8 @@ import com.tinuproject.tinu.domain.post.dto.response.PostDetailResponse
 import com.tinuproject.tinu.domain.post.dto.response.PostsListResponse
 import com.tinuproject.tinu.domain.post.service.PostService
 import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponses
-import com.tinuproject.tinu.web.NullResponse
-import com.tinuproject.tinu.web.ResponseEntityGenerator
+import com.tinuproject.tinu.tempdomain.common.response.NullResponse
+import com.tinuproject.tinu.tempdomain.common.response.ResponseEntityGenerator
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity

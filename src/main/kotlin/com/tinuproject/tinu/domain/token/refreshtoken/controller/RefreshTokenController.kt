@@ -1,6 +1,6 @@
 package com.tinuproject.tinu.domain.token.refreshtoken.controller
 
-import com.tinuproject.tinu.DTO.ResponseDTO
+import com.tinuproject.tinu.tempdomain.common.response.ResponseDTO
 import com.tinuproject.tinu.domain.exception.token.ExpiredTokenException
 import com.tinuproject.tinu.domain.exception.token.InvalidedTokenException
 import com.tinuproject.tinu.domain.exception.token.NotFoundTokenException
@@ -8,8 +8,8 @@ import com.tinuproject.tinu.domain.token.Tokens
 import com.tinuproject.tinu.domain.token.refreshtoken.service.RefreshTokenService
 import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponses
 import com.tinuproject.tinu.web.CookieGenerator
-import com.tinuproject.tinu.web.NullResponse
-import com.tinuproject.tinu.web.ResponseEntityGenerator
+import com.tinuproject.tinu.tempdomain.common.response.NullResponse
+import com.tinuproject.tinu.tempdomain.common.response.ResponseEntityGenerator
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.Logger

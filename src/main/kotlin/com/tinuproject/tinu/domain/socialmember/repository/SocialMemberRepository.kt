@@ -1,6 +1,6 @@
 package com.tinuproject.tinu.domain.socialmember.repository
 
-import com.tinuproject.tinu.domain.entity.SocialMember
+import com.tinuproject.tinu.tempdomain.member.socialmember.entity.SocialMember
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import java.util.*

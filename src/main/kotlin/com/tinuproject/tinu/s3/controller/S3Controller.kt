@@ -1,6 +1,6 @@
 package com.tinuproject.tinu.s3.controller
 
-import com.tinuproject.tinu.DTO.ResponseDTO
+import com.tinuproject.tinu.tempdomain.common.response.ResponseDTO
 import com.tinuproject.tinu.domain.exception.s3.FileLengthOutOfRangeException
 import com.tinuproject.tinu.domain.exception.s3.NotAllowedExtensionException
 import com.tinuproject.tinu.domain.exception.s3.UploadSizeOutOfRangeException
@@ -8,7 +8,7 @@ import com.tinuproject.tinu.s3.dto.request.*
 import com.tinuproject.tinu.s3.dto.response.S3PresignedUrlResponse
 import com.tinuproject.tinu.s3.service.S3Service
 import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponses
-import com.tinuproject.tinu.web.ResponseEntityGenerator
+import com.tinuproject.tinu.tempdomain.common.response.ResponseEntityGenerator
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity

@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.domain.exception.base
 
-import com.tinuproject.tinu.DTO.ErrorResponse
-import com.tinuproject.tinu.DTO.ResponseDTO
+import com.tinuproject.tinu.tempdomain.common.response.ErrorResponse
+import com.tinuproject.tinu.tempdomain.common.response.ResponseDTO
 import java.lang.RuntimeException
 
 open class BaseException(

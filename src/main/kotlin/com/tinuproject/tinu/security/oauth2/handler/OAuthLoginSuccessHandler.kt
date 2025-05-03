@@ -1,31 +1,21 @@
 package com.tinuproject.tinu.security.oauth2.handler
 
-import com.tinuproject.tinu.domain.entity.RefreshToken
-import com.tinuproject.tinu.domain.entity.SocialMember
-import com.tinuproject.tinu.domain.enums.Social
-import com.tinuproject.tinu.domain.member.repository.MemberRepository
-import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.entity.RefreshToken
+import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.token.refreshtoken.repository.RefreshTokenRepository
 import com.tinuproject.tinu.security.jwt.JwtUtil
 import com.tinuproject.tinu.security.oauth2.dto.CustomOAuth2User
-import com.tinuproject.tinu.security.oauth2.dto.KakaoUserInfo
-import com.tinuproject.tinu.security.oauth2.dto.NaverUserInfo
-import com.tinuproject.tinu.security.oauth2.dto.OAuth2UserInfoDto
 import com.tinuproject.tinu.web.CookieGenerator
-import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.PropertySource
 import org.springframework.http.HttpHeaders
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.stereotype.Component
 
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
-import java.net.URLEncoder
 import java.util.*
 
 

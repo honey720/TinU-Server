@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.security.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.tinuproject.tinu.domain.member.repository.MemberRepository
+import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
 import com.tinuproject.tinu.security.filter.ExceptionHandlerFilter
 import com.tinuproject.tinu.security.filter.JwtTokenFilter
 import com.tinuproject.tinu.security.filter.SignUpFilter

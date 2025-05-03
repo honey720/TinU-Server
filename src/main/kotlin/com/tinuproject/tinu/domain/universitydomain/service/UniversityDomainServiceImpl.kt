@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.domain.universitydomain.service
 
 
-import com.tinuproject.tinu.domain.entity.UniversityDomain
+import com.tinuproject.tinu.tempdomain.common.university.universitydomain.entity.UniversityDomain
 import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
 import com.tinuproject.tinu.domain.universitydomain.repository.UniversityDomainRepository
 import org.springframework.stereotype.Service

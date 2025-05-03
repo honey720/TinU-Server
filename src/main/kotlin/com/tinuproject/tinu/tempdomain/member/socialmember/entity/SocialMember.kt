@@ -1,0 +1,24 @@
+package com.tinuproject.tinu.tempdomain.member.socialmember.entity
+
+import com.tinuproject.tinu.tempdomain.common.entity.BaseEntity
+import com.tinuproject.tinu.domain.enums.Social
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import java.util.UUID
+
+
+@Entity
+class SocialMember(
+    @Column(columnDefinition = "BINARY(16)", unique = true)
+    var userId : UUID,
+
+    @Column
+    var providerId : String,
+
+    @Column
+    @Enumerated(EnumType.ORDINAL)
+    var provider : Social,
+
+): BaseEntity()

@@ -1,12 +1,10 @@
 package com.tinuproject.tinu.domain.post.repository
 
-import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
-import com.querydsl.core.types.dsl.StringExpressions
 import com.querydsl.jpa.impl.JPAQueryFactory
-import com.tinuproject.tinu.domain.entity.Post
+import com.tinuproject.tinu.tempdomain.post.entity.Post
 import com.tinuproject.tinu.domain.entity.QPost
-import com.tinuproject.tinu.domain.entity.University
+import com.tinuproject.tinu.tempdomain.common.university.entity.University
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -16,14 +14,14 @@ class PostQueryRepositoryImpl(
     val post: QPost = QPost.post
 
     override fun findPosts(
-            university: University,
-            cursorId: String?,
-            size: Long,
-            keyword: String?,
-            category: List<Long>?,
-            minPrice: Int?,
-            maxPrice: Int?,
-            onlySell: Boolean
+        university: University,
+        cursorId: String?,
+        size: Long,
+        keyword: String?,
+        category: List<Long>?,
+        minPrice: Int?,
+        maxPrice: Int?,
+        onlySell: Boolean
     ): List<Post> {
         return queryFactory
                 .selectFrom(post)

@@ -1,19 +1,15 @@
 package com.tinuproject.tinu.domain.token.refreshtoken.service
 
-import com.tinuproject.tinu.domain.entity.RefreshToken
-import com.tinuproject.tinu.domain.exception.token.ExpiredTokenException
-import com.tinuproject.tinu.domain.exception.token.InvalidedTokenException
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.entity.RefreshToken
 import com.tinuproject.tinu.domain.exception.token.NotFoundTokenException
-import com.tinuproject.tinu.domain.member.repository.MemberRepository
+import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.token.Tokens
 import com.tinuproject.tinu.domain.token.refreshtoken.repository.RefreshTokenRepository
 import com.tinuproject.tinu.security.jwt.JwtUtil
-import io.jsonwebtoken.ExpiredJwtException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import java.security.SignatureException
 import java.util.*
 
 @Service
