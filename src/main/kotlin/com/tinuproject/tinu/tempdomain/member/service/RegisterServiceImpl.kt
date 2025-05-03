@@ -7,11 +7,11 @@ import com.tinuproject.tinu.tempdomain.member.exception.ExistMemberException
 import com.tinuproject.tinu.tempdomain.common.university.exception.NotExistDomainException
 import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
 import com.tinuproject.tinu.tempdomain.common.university.universitydomain.repository.UniversityDomainRepository
-import com.tinuproject.tinu.web.email.dto.client_controller.EmailAuthRequestDTO
-import com.tinuproject.tinu.web.email.dto.client_controller.EmailCodeCheckRequestDTO
-import com.tinuproject.tinu.web.email.repository.EmailRepository
-import com.tinuproject.tinu.web.email.entity.EmailAuth
-import com.tinuproject.tinu.web.email.util.MailManager
+import com.tinuproject.tinu.tempdomain.member.emailauth.dto.request.EmailAuthRequestDTO
+import com.tinuproject.tinu.tempdomain.member.emailauth.dto.request.EmailCodeCheckRequestDTO
+import com.tinuproject.tinu.tempdomain.member.emailauth.repository.EmailRepository
+import com.tinuproject.tinu.tempdomain.member.emailauth.entity.EmailAuth
+import com.tinuproject.tinu.infra.emailauth.util.MailManager
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service

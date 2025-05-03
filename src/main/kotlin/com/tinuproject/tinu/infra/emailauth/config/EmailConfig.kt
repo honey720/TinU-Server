@@ -1,4 +1,4 @@
-package com.tinuproject.tinu.web.email.config
+package com.tinuproject.tinu.infra.emailauth.config
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean

@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.tempdomain.member.service
 
-import com.tinuproject.tinu.web.email.dto.client_controller.EmailAuthRequestDTO
-import com.tinuproject.tinu.web.email.dto.client_controller.EmailCodeCheckRequestDTO
+import com.tinuproject.tinu.tempdomain.member.emailauth.dto.request.EmailAuthRequestDTO
+import com.tinuproject.tinu.tempdomain.member.emailauth.dto.request.EmailCodeCheckRequestDTO
 import java.util.UUID
 
 interface RegisterService {

@@ -1,6 +1,6 @@
-package com.tinuproject.tinu.web.email.repository
+package com.tinuproject.tinu.tempdomain.member.emailauth.repository
 
-import com.tinuproject.tinu.web.email.entity.EmailAuth
+import com.tinuproject.tinu.tempdomain.member.emailauth.entity.EmailAuth
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 

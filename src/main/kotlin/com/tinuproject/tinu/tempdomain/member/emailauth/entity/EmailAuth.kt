@@ -1,4 +1,4 @@
-package com.tinuproject.tinu.web.email.entity
+package com.tinuproject.tinu.tempdomain.member.emailauth.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

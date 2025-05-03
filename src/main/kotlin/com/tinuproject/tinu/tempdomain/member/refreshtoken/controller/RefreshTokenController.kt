@@ -7,7 +7,7 @@ import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.NotFoundTok
 import com.tinuproject.tinu.tempdomain.member.refreshtoken.dto.output.Tokens
 import com.tinuproject.tinu.tempdomain.member.refreshtoken.service.RefreshTokenService
 import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponses
-import com.tinuproject.tinu.web.CookieGenerator
+import com.tinuproject.tinu.tempdomain.common.web.CookieGenerator
 import com.tinuproject.tinu.tempdomain.common.response.NullResponse
 import com.tinuproject.tinu.tempdomain.common.response.ResponseEntityGenerator
 import io.swagger.v3.oas.annotations.Operation
@@ -44,7 +44,7 @@ class RefreshTokenController(
         val tokens : Tokens = refreshTokenService.reissueAccessTokenByRefreshToken(refreshToken)
 
         httpServletResponse.addHeader(HttpHeaders.AUTHORIZATION,"Bearer "+ tokens.accessToken)
-        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE,CookieGenerator.createCookies(refreshTokenkey, tokens.refreshToken))
+        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, CookieGenerator.createCookies(refreshTokenkey, tokens.refreshToken))
 
         return ResponseEntityGenerator.onSuccess()
     }

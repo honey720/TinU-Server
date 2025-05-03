@@ -5,7 +5,7 @@ import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
 import com.tinuproject.tinu.tempdomain.member.refreshtoken.repository.RefreshTokenRepository
 import com.tinuproject.tinu.security.jwt.JwtUtil
 import com.tinuproject.tinu.security.oauth2.dto.CustomOAuth2User
-import com.tinuproject.tinu.web.CookieGenerator
+import com.tinuproject.tinu.tempdomain.common.web.CookieGenerator
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
@@ -72,7 +72,7 @@ class OAuthLoginSuccessHandler(
         }
 
         response?.addHeader(HttpHeaders.AUTHORIZATION,("Bearer $accessToken").toString())
-        response?.addHeader(HttpHeaders.SET_COOKIE,CookieGenerator.createCookies("RefreshToken", refreshToken))
+        response?.addHeader(HttpHeaders.SET_COOKIE, CookieGenerator.createCookies("RefreshToken", refreshToken))
         response?.sendRedirect(redirectUri)
     }
 

@@ -15,8 +15,8 @@ import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
 import com.tinuproject.tinu.tempdomain.member.socialmember.repository.SocialMemberRepository
 import com.tinuproject.tinu.tempdomain.common.university.universitydomain.repository.UniversityDomainRepository
 import com.tinuproject.tinu.s3.service.S3Service
-import com.tinuproject.tinu.web.email.entity.EmailAuth
-import com.tinuproject.tinu.web.email.repository.EmailRepository
+import com.tinuproject.tinu.tempdomain.member.emailauth.entity.EmailAuth
+import com.tinuproject.tinu.tempdomain.member.emailauth.repository.EmailRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -141,7 +141,7 @@ class MemberServiceImpl(
 
     }
 
-    private fun emailAuthCheck(userId :UUID, email : String) : EmailAuth{
+    private fun emailAuthCheck(userId :UUID, email : String) : EmailAuth {
         val emailAuth = emailAuthRepository.findByUserId(userId)
 
         //이메일 인증이 진행되지 않은 유저

@@ -11,8 +11,8 @@ import com.tinuproject.tinu.infra.s3.exception.InvalidETagException
 import com.tinuproject.tinu.infra.s3.exception.NoSuchKeyException
 import com.tinuproject.tinu.tempdomain.common.university.exception.NotExistDomainException
 import com.tinuproject.tinu.tempdomain.member.dto.request.RegisterRequestDTO
-import com.tinuproject.tinu.web.email.dto.client_controller.EmailAuthRequestDTO
-import com.tinuproject.tinu.web.email.dto.client_controller.EmailCodeCheckRequestDTO
+import com.tinuproject.tinu.tempdomain.member.emailauth.dto.request.EmailAuthRequestDTO
+import com.tinuproject.tinu.tempdomain.member.emailauth.dto.request.EmailCodeCheckRequestDTO
 import com.tinuproject.tinu.tempdomain.member.service.MemberService
 import com.tinuproject.tinu.tempdomain.member.service.RegisterService
 import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponses

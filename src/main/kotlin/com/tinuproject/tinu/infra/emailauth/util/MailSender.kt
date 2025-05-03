@@ -1,4 +1,4 @@
-package com.tinuproject.tinu.web.email.util
+package com.tinuproject.tinu.infra.emailauth.util
 
 import jakarta.mail.internet.MimeMessage
 

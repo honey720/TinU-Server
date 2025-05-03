@@ -1,4 +1,4 @@
-package com.tinuproject.tinu.web.email.util
+package com.tinuproject.tinu.infra.emailauth.util
 
 import jakarta.mail.internet.MimeMessage
 import org.springframework.beans.factory.annotation.Value
@@ -13,7 +13,7 @@ class MailManager(
 
     @Value("\${spring.mail.username}")
     private val account : String
-) : MailSender{
+) : MailSender {
     lateinit var code : String
 
     //이메일 전송과 관련한 부분.
