@@ -1,4 +1,4 @@
-package com.tinuproject.tinu.s3.config
+package com.tinuproject.tinu.infra.s3.config
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean

@@ -1,8 +1,8 @@
-package com.tinuproject.tinu.s3.service
+package com.tinuproject.tinu.infra.s3.service
 
-import com.tinuproject.tinu.s3.dto.request.S3VerifiableRequest
-import com.tinuproject.tinu.s3.dto.request.*
-import com.tinuproject.tinu.s3.dto.response.S3PresignedUrlResponse
+import com.tinuproject.tinu.infra.s3.dto.request.S3PresignedUrlRequest
+import com.tinuproject.tinu.infra.s3.dto.request.S3VerifiableRequest
+import com.tinuproject.tinu.infra.s3.dto.response.S3PresignedUrlResponse
 
 interface S3Service {
     suspend fun getPreSignedUrl(s3PresignedUrlRequest: S3PresignedUrlRequest): S3PresignedUrlResponse

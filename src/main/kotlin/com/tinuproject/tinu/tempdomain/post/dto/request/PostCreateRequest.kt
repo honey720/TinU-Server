@@ -2,7 +2,7 @@ package com.tinuproject.tinu.tempdomain.post.dto.request
 
 import com.tinuproject.tinu.tempdomain.post.enums.PaymentMethod
 import com.tinuproject.tinu.tempdomain.post.enums.SellMethod
-import com.tinuproject.tinu.s3.dto.request.S3VerifiableRequest
+import com.tinuproject.tinu.infra.s3.dto.request.S3VerifiableRequest
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "게시글 생성 요청")

@@ -14,7 +14,7 @@ import com.tinuproject.tinu.tempdomain.member.dto.input.UpdateUserInputDTO
 import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
 import com.tinuproject.tinu.tempdomain.member.socialmember.repository.SocialMemberRepository
 import com.tinuproject.tinu.tempdomain.common.university.universitydomain.repository.UniversityDomainRepository
-import com.tinuproject.tinu.s3.service.S3Service
+import com.tinuproject.tinu.infra.s3.service.S3Service
 import com.tinuproject.tinu.tempdomain.member.emailauth.entity.EmailAuth
 import com.tinuproject.tinu.tempdomain.member.emailauth.repository.EmailRepository
 import org.slf4j.Logger

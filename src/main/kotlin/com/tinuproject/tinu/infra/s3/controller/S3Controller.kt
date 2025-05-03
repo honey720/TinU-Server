@@ -1,12 +1,12 @@
-package com.tinuproject.tinu.s3.controller
+package com.tinuproject.tinu.infra.s3.controller
 
+import com.tinuproject.tinu.infra.s3.dto.request.S3PresignedUrlRequest
 import com.tinuproject.tinu.tempdomain.common.response.ResponseDTO
 import com.tinuproject.tinu.infra.s3.exception.FileLengthOutOfRangeException
 import com.tinuproject.tinu.infra.s3.exception.NotAllowedExtensionException
 import com.tinuproject.tinu.infra.s3.exception.UploadSizeOutOfRangeException
-import com.tinuproject.tinu.s3.dto.request.*
-import com.tinuproject.tinu.s3.dto.response.S3PresignedUrlResponse
-import com.tinuproject.tinu.s3.service.S3Service
+import com.tinuproject.tinu.infra.s3.dto.response.S3PresignedUrlResponse
+import com.tinuproject.tinu.infra.s3.service.S3Service
 import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponses
 import com.tinuproject.tinu.tempdomain.common.response.ResponseEntityGenerator
 import io.swagger.v3.oas.annotations.Operation
@@ -20,7 +20,7 @@ import java.util.UUID
 @RequestMapping("api/image")
 @Tag(name = "S3 API", description = "S3 API")
 class S3Controller(
-        private val s3Service: S3Service,
+    private val s3Service: S3Service,
 ) {
     @PostMapping("/presigned-url")
     @Operation(summary = "Presigned URL 생성", description = "Presigned URL을 생성합니다.")

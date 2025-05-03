@@ -13,7 +13,7 @@ import com.tinuproject.tinu.tempdomain.post.dto.request.PostDeleteRequest
 import com.tinuproject.tinu.tempdomain.post.dto.request.PostUpdateRequest
 import com.tinuproject.tinu.tempdomain.post.hashtag.posthashtagmap.repository.PostHashTagMapRepository
 import com.tinuproject.tinu.tempdomain.post.scrap.repository.ScrapRepository
-import com.tinuproject.tinu.s3.service.S3Service
+import com.tinuproject.tinu.infra.s3.service.S3Service
 import com.tinuproject.tinu.tempdomain.common.multimedia.entity.Multimedia
 import com.tinuproject.tinu.tempdomain.post.dto.response.*
 import com.tinuproject.tinu.tempdomain.post.entity.Post
