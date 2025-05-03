@@ -1,15 +1,15 @@
 package com.tinuproject.tinu.tempdomain.member.controller
 
 import com.tinuproject.tinu.tempdomain.common.response.ResponseDTO
-import com.tinuproject.tinu.domain.exception.mail.NeedEmailAuthException
-import com.tinuproject.tinu.domain.exception.mail.NotExistCodeException
-import com.tinuproject.tinu.domain.exception.mail.NotMatchCodeException
-import com.tinuproject.tinu.domain.exception.member.ExistEmailException
-import com.tinuproject.tinu.domain.exception.member.ExistMemberException
-import com.tinuproject.tinu.domain.exception.member.ExistNameException
-import com.tinuproject.tinu.domain.exception.s3.InvalidETagException
-import com.tinuproject.tinu.domain.exception.s3.NoSuchKeyException
-import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
+import com.tinuproject.tinu.tempdomain.member.emailauth.exception.NeedEmailAuthException
+import com.tinuproject.tinu.tempdomain.member.emailauth.exception.NotExistCodeException
+import com.tinuproject.tinu.tempdomain.member.emailauth.exception.NotMatchCodeException
+import com.tinuproject.tinu.tempdomain.member.exception.ExistEmailException
+import com.tinuproject.tinu.tempdomain.member.exception.ExistMemberException
+import com.tinuproject.tinu.tempdomain.member.exception.ExistNameException
+import com.tinuproject.tinu.infra.s3.exception.InvalidETagException
+import com.tinuproject.tinu.infra.s3.exception.NoSuchKeyException
+import com.tinuproject.tinu.tempdomain.common.university.exception.NotExistDomainException
 import com.tinuproject.tinu.tempdomain.member.dto.request.RegisterRequestDTO
 import com.tinuproject.tinu.web.email.dto.client_controller.EmailAuthRequestDTO
 import com.tinuproject.tinu.web.email.dto.client_controller.EmailCodeCheckRequestDTO

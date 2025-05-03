@@ -1,10 +1,10 @@
 package com.tinuproject.tinu.tempdomain.member.service
 
-import com.tinuproject.tinu.domain.exception.member.ExistEmailException
-import com.tinuproject.tinu.domain.exception.mail.NotExistCodeException
-import com.tinuproject.tinu.domain.exception.mail.NotMatchCodeException
-import com.tinuproject.tinu.domain.exception.member.ExistMemberException
-import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
+import com.tinuproject.tinu.tempdomain.member.exception.ExistEmailException
+import com.tinuproject.tinu.tempdomain.member.emailauth.exception.NotExistCodeException
+import com.tinuproject.tinu.tempdomain.member.emailauth.exception.NotMatchCodeException
+import com.tinuproject.tinu.tempdomain.member.exception.ExistMemberException
+import com.tinuproject.tinu.tempdomain.common.university.exception.NotExistDomainException
 import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
 import com.tinuproject.tinu.tempdomain.common.university.universitydomain.repository.UniversityDomainRepository
 import com.tinuproject.tinu.web.email.dto.client_controller.EmailAuthRequestDTO
@@ -43,13 +43,15 @@ class RegisterServiceImpl(
         var member = memberRepository.findMemberByUserId(userId)
 
         //조회된 유저가 있다면 이미 회원가입을 완료한 회원임을 알리는 예외 발생
-        if(member!=null){ throw ExistMemberException()}
+        if(member!=null){ throw ExistMemberException()
+        }
 
         //TINU-151 추가 로직(이메일 사용 가능 여부 확인 시 해당 이메일로 인증을 받은 사람이 있는지 검증하지 않았었어서 이를 추가.
         member = memberRepository.findMemberByEmail(email)
 
         //TINU-151 사용 중인 이메일이라면 이미 사용중인 이메일임을 알리는 예외 발생
-        if(member!=null){ throw ExistEmailException()}
+        if(member!=null){ throw ExistEmailException()
+        }
 
         return true
     }

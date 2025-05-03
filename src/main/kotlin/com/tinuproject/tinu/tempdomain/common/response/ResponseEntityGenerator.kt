@@ -1,6 +1,6 @@
 package com.tinuproject.tinu.tempdomain.common.response
 
-import com.tinuproject.tinu.domain.exception.base.BaseErrorCode
+import com.tinuproject.tinu.tempdomain.common.exception.base.BaseErrorCode
 import org.springframework.http.ResponseEntity
 
 class ResponseEntityGenerator {

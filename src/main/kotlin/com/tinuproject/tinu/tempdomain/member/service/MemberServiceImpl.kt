@@ -1,12 +1,12 @@
 package com.tinuproject.tinu.tempdomain.member.service
 
 import com.tinuproject.tinu.tempdomain.member.entity.Member
-import com.tinuproject.tinu.domain.exception.mail.NeedEmailAuthException
-import com.tinuproject.tinu.domain.exception.mail.NotExistMemberException
-import com.tinuproject.tinu.domain.exception.member.ExistEmailException
-import com.tinuproject.tinu.domain.exception.member.ExistNameException
-import com.tinuproject.tinu.domain.exception.member.ExistMemberException
-import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
+import com.tinuproject.tinu.tempdomain.member.emailauth.exception.NeedEmailAuthException
+import com.tinuproject.tinu.tempdomain.member.emailauth.exception.NotExistMemberException
+import com.tinuproject.tinu.tempdomain.member.exception.ExistEmailException
+import com.tinuproject.tinu.tempdomain.member.exception.ExistNameException
+import com.tinuproject.tinu.tempdomain.member.exception.ExistMemberException
+import com.tinuproject.tinu.tempdomain.common.university.exception.NotExistDomainException
 import com.tinuproject.tinu.tempdomain.member.dto.request.RegisterRequestDTO
 import com.tinuproject.tinu.tempdomain.member.dto.request.UpdateUserInfoRequestDTO
 import com.tinuproject.tinu.tempdomain.member.dto.response.MemberSearchResponseDTO
@@ -110,7 +110,7 @@ class MemberServiceImpl(
     override fun findMemberByUserId(userId: UUID): MemberSearchResponseDTO {
         val member = memberRepository.findMemberByUserId(userId)
 
-        member?:NotExistMemberException()
+        member?: NotExistMemberException()
 
         return MemberSearchResponseDTO(member!!)
 

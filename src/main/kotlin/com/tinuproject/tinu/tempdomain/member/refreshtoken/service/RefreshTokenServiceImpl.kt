@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.tempdomain.member.refreshtoken.service
 
 import com.tinuproject.tinu.tempdomain.member.refreshtoken.entity.RefreshToken
-import com.tinuproject.tinu.domain.exception.token.NotFoundTokenException
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.NotFoundTokenException
 import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
 import com.tinuproject.tinu.tempdomain.member.refreshtoken.dto.output.Tokens
 import com.tinuproject.tinu.tempdomain.member.refreshtoken.repository.RefreshTokenRepository

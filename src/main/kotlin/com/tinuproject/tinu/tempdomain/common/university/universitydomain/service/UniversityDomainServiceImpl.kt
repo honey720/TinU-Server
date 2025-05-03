@@ -2,7 +2,7 @@ package com.tinuproject.tinu.tempdomain.common.university.universitydomain.servi
 
 
 import com.tinuproject.tinu.tempdomain.common.university.universitydomain.entity.UniversityDomain
-import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
+import com.tinuproject.tinu.tempdomain.common.university.exception.NotExistDomainException
 import com.tinuproject.tinu.tempdomain.common.university.universitydomain.repository.UniversityDomainRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

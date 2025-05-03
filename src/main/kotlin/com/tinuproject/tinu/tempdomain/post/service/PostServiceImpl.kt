@@ -1,11 +1,10 @@
 package com.tinuproject.tinu.tempdomain.post.service
 
 import com.tinuproject.tinu.tempdomain.post.category.repository.CategoryRepository
-import com.tinuproject.tinu.domain.exception.mail.NotExistMemberException
-import com.tinuproject.tinu.domain.exception.post.*
-import com.tinuproject.tinu.domain.exception.s3.UploadSizeOutOfRangeException
-import com.tinuproject.tinu.domain.exception.scrap.ScrapAlreadyExistException
-import com.tinuproject.tinu.domain.exception.scrap.ScrapNotFoundException
+import com.tinuproject.tinu.tempdomain.member.emailauth.exception.NotExistMemberException
+import com.tinuproject.tinu.infra.s3.exception.UploadSizeOutOfRangeException
+import com.tinuproject.tinu.tempdomain.post.scrap.exception.ScrapAlreadyExistException
+import com.tinuproject.tinu.tempdomain.post.scrap.exception.ScrapNotFoundException
 import com.tinuproject.tinu.tempdomain.post.hashtag.repository.HashTagRepository
 import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
 import com.tinuproject.tinu.tempdomain.common.multimedia.repository.MultimediaRepository
@@ -18,6 +17,7 @@ import com.tinuproject.tinu.s3.service.S3Service
 import com.tinuproject.tinu.tempdomain.common.multimedia.entity.Multimedia
 import com.tinuproject.tinu.tempdomain.post.dto.response.*
 import com.tinuproject.tinu.tempdomain.post.entity.Post
+import com.tinuproject.tinu.tempdomain.post.exception.*
 import com.tinuproject.tinu.tempdomain.post.hashtag.entity.HashTag
 import com.tinuproject.tinu.tempdomain.post.hashtag.posthashtagmap.entity.PostHashTagMap
 import com.tinuproject.tinu.tempdomain.post.repository.PostQueryRepository

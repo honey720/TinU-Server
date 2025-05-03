@@ -9,9 +9,9 @@ import com.tinuproject.tinu.tempdomain.member.customfilter.dto.response.SelectCu
 import com.tinuproject.tinu.tempdomain.member.customfilter.repository.CustomFilterRepository
 import com.tinuproject.tinu.tempdomain.member.customfilter.customcategory.entity.CustomCategory
 import com.tinuproject.tinu.tempdomain.member.customfilter.entity.CustomFilter
-import com.tinuproject.tinu.domain.exception.common.UnauthorizedAccessException
-import com.tinuproject.tinu.domain.exception.customfilter.NotExistCustomFilter
-import com.tinuproject.tinu.domain.exception.mail.NotExistMemberException
+import com.tinuproject.tinu.tempdomain.common.exception.UnauthorizedAccessException
+import com.tinuproject.tinu.tempdomain.member.customfilter.exception.NotExistCustomFilter
+import com.tinuproject.tinu.tempdomain.member.emailauth.exception.NotExistMemberException
 import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

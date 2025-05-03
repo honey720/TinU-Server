@@ -1,12 +1,11 @@
 package com.tinuproject.tinu.security.jwt
 
-import com.tinuproject.tinu.domain.exception.token.ExpiredTokenException
-import com.tinuproject.tinu.domain.exception.token.InvalidedTokenException
-import com.tinuproject.tinu.domain.exception.token.NotFoundTokenException
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.ExpiredTokenException
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.InvalidedTokenException
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.NotFoundTokenException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.PropertySource
 import org.springframework.stereotype.Component
 import org.springframework.util.StringUtils
 import java.security.SignatureException
@@ -20,7 +19,6 @@ import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpHeaders
-import java.time.Clock
 
 
 @Component

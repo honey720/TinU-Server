@@ -1,8 +1,8 @@
 package com.tinuproject.tinu.security.filter
 
-import com.tinuproject.tinu.domain.exception.token.ExpiredTokenException
-import com.tinuproject.tinu.domain.exception.token.InvalidedTokenException
-import com.tinuproject.tinu.domain.exception.token.NotFoundTokenException
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.ExpiredTokenException
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.InvalidedTokenException
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.NotFoundTokenException
 import com.tinuproject.tinu.security.jwt.JwtUtil
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest

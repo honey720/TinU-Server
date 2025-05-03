@@ -6,9 +6,9 @@ import com.tinuproject.tinu.tempdomain.member.customfilter.dto.request.DeleteCus
 import com.tinuproject.tinu.tempdomain.member.customfilter.dto.request.UpdateCustomFilter
 import com.tinuproject.tinu.tempdomain.member.customfilter.dto.response.SelectCustomFilter
 import com.tinuproject.tinu.tempdomain.member.customfilter.service.CustomFilterService
-import com.tinuproject.tinu.domain.exception.common.UnauthorizedAccessException
-import com.tinuproject.tinu.domain.exception.customfilter.NotExistCustomFilter
-import com.tinuproject.tinu.domain.exception.mail.NotExistMemberException
+import com.tinuproject.tinu.tempdomain.common.exception.UnauthorizedAccessException
+import com.tinuproject.tinu.tempdomain.member.customfilter.exception.NotExistCustomFilter
+import com.tinuproject.tinu.tempdomain.member.emailauth.exception.NotExistMemberException
 import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponses
 import com.tinuproject.tinu.swagger.example.SelectCustomFilterExam
 import com.tinuproject.tinu.tempdomain.common.response.NullResponse
@@ -69,7 +69,7 @@ class CustomFilterController(
     }
 
     @PutMapping("/{filterId}")
-    @SwaggerExceptionResponses(exceptions = [NotExistCustomFilter::class,UnauthorizedAccessException::class])
+    @SwaggerExceptionResponses(exceptions = [NotExistCustomFilter::class, UnauthorizedAccessException::class])
     @Operation(summary = "커스텀 필터 업데이트 API", description = "기존 생성되어 있던 커스텀 필터를 갱신하는 API입니다." +
             "<br>필수 파라미터 : filterId(pathVariable), filterName, category, onlySell" +
             "<br>선택 파라미터 : maxPrice, minPrice")
@@ -82,7 +82,7 @@ class CustomFilterController(
     }
 
     @DeleteMapping("/{filterId}")
-    @SwaggerExceptionResponses(exceptions = [NotExistCustomFilter::class,UnauthorizedAccessException::class])
+    @SwaggerExceptionResponses(exceptions = [NotExistCustomFilter::class, UnauthorizedAccessException::class])
     @Operation(summary = "커스텀 필터 삭제 API", description = "커스텀 필터 삭제하는 API입니다." +
             "<br>필수 파라미터 : filterId")
     fun deleteCustomFilter(@AuthenticationPrincipal userId : UUID, @PathVariable(name = "filterId") filterId: Long) : ResponseEntity<ResponseDTO<NullResponse?>>{

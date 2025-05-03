@@ -1,14 +1,14 @@
 package com.tinuproject.tinu.tempdomain.member.controller
 
 import com.tinuproject.tinu.tempdomain.common.response.ResponseDTO
-import com.tinuproject.tinu.domain.exception.mail.NotExistMemberException
-import com.tinuproject.tinu.domain.exception.member.ExistNameException
-import com.tinuproject.tinu.domain.exception.member.NeedRegistException
-import com.tinuproject.tinu.domain.exception.s3.InvalidETagException
-import com.tinuproject.tinu.domain.exception.s3.NoSuchKeyException
-import com.tinuproject.tinu.domain.exception.token.ExpiredTokenException
-import com.tinuproject.tinu.domain.exception.token.InvalidedTokenException
-import com.tinuproject.tinu.domain.exception.token.NotFoundTokenException
+import com.tinuproject.tinu.tempdomain.member.emailauth.exception.NotExistMemberException
+import com.tinuproject.tinu.tempdomain.member.exception.ExistNameException
+import com.tinuproject.tinu.tempdomain.member.exception.NeedRegistException
+import com.tinuproject.tinu.infra.s3.exception.InvalidETagException
+import com.tinuproject.tinu.infra.s3.exception.NoSuchKeyException
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.ExpiredTokenException
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.InvalidedTokenException
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.NotFoundTokenException
 import com.tinuproject.tinu.tempdomain.member.dto.request.UpdateUserInfoRequestDTO
 import com.tinuproject.tinu.tempdomain.member.dto.response.MemberSearchResponseDTO
 import com.tinuproject.tinu.tempdomain.member.service.MemberService

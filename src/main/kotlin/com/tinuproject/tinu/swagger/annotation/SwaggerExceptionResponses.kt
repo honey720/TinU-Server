@@ -1,6 +1,6 @@
 package com.tinuproject.tinu.swagger.annotation
 
-import com.tinuproject.tinu.domain.exception.base.BaseException
+import com.tinuproject.tinu.tempdomain.common.exception.base.BaseException
 import kotlin.reflect.KClass
 
 @Target(AnnotationTarget.FUNCTION)

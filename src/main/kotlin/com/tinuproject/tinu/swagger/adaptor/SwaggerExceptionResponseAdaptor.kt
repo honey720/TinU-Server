@@ -2,7 +2,7 @@ package com.tinuproject.tinu.swagger.adaptor
 
 import com.tinuproject.tinu.tempdomain.common.response.ErrorResponse
 import com.tinuproject.tinu.tempdomain.common.response.ResponseDTO
-import com.tinuproject.tinu.domain.exception.base.BaseException
+import com.tinuproject.tinu.tempdomain.common.exception.base.BaseException
 import com.tinuproject.tinu.swagger.annotation.ExampleHolder
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.examples.Example

@@ -1,9 +1,9 @@
 package com.tinuproject.tinu.tempdomain.member.refreshtoken.controller
 
 import com.tinuproject.tinu.tempdomain.common.response.ResponseDTO
-import com.tinuproject.tinu.domain.exception.token.ExpiredTokenException
-import com.tinuproject.tinu.domain.exception.token.InvalidedTokenException
-import com.tinuproject.tinu.domain.exception.token.NotFoundTokenException
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.ExpiredTokenException
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.InvalidedTokenException
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.NotFoundTokenException
 import com.tinuproject.tinu.tempdomain.member.refreshtoken.dto.output.Tokens
 import com.tinuproject.tinu.tempdomain.member.refreshtoken.service.RefreshTokenService
 import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponses

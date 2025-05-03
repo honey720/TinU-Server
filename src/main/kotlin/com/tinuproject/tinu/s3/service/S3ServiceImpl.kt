@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.s3.service
 
-import com.tinuproject.tinu.domain.exception.s3.*
-import com.tinuproject.tinu.domain.exception.s3.NoSuchKeyException
+import com.tinuproject.tinu.infra.s3.exception.*
+import com.tinuproject.tinu.infra.s3.exception.NoSuchKeyException
 import com.tinuproject.tinu.s3.dto.request.S3VerifiableRequest
 import com.tinuproject.tinu.s3.dto.request.*
 import com.tinuproject.tinu.s3.dto.response.S3PresignedUrlObjectResponse

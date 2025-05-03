@@ -1,11 +1,12 @@
 package com.tinuproject.tinu.tempdomain.post.controller
 
 import com.tinuproject.tinu.tempdomain.common.response.ResponseDTO
-import com.tinuproject.tinu.domain.exception.mail.NotExistMemberException
-import com.tinuproject.tinu.domain.exception.post.*
-import com.tinuproject.tinu.domain.exception.s3.*
-import com.tinuproject.tinu.domain.exception.scrap.ScrapAlreadyExistException
-import com.tinuproject.tinu.domain.exception.scrap.ScrapNotFoundException
+import com.tinuproject.tinu.tempdomain.member.emailauth.exception.NotExistMemberException
+import com.tinuproject.tinu.infra.s3.exception.InvalidETagException
+import com.tinuproject.tinu.infra.s3.exception.NoSuchKeyException
+import com.tinuproject.tinu.infra.s3.exception.UploadSizeOutOfRangeException
+import com.tinuproject.tinu.tempdomain.post.scrap.exception.ScrapAlreadyExistException
+import com.tinuproject.tinu.tempdomain.post.scrap.exception.ScrapNotFoundException
 import com.tinuproject.tinu.tempdomain.post.dto.request.PostCreateRequest
 import com.tinuproject.tinu.tempdomain.post.dto.request.PostDeleteRequest
 import com.tinuproject.tinu.tempdomain.post.dto.request.PostUpdateRequest
@@ -16,6 +17,7 @@ import com.tinuproject.tinu.tempdomain.post.service.PostService
 import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponses
 import com.tinuproject.tinu.tempdomain.common.response.NullResponse
 import com.tinuproject.tinu.tempdomain.common.response.ResponseEntityGenerator
+import com.tinuproject.tinu.tempdomain.post.exception.*
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
