@@ -2,7 +2,7 @@ package com.tinuproject.tinu.tempdomain.common.report.entity
 
 import com.tinuproject.tinu.tempdomain.post.entity.Post
 import com.tinuproject.tinu.tempdomain.common.entity.BaseEntity
-import com.tinuproject.tinu.domain.enums.ReportCategory
+import com.tinuproject.tinu.tempdomain.common.report.enums.ReportCategory
 import com.tinuproject.tinu.tempdomain.member.entity.Member
 import jakarta.persistence.*
 

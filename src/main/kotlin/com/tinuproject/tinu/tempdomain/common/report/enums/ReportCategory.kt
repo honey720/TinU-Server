@@ -1,4 +1,4 @@
-package com.tinuproject.tinu.domain.enums
+package com.tinuproject.tinu.tempdomain.common.report.enums
 
 enum class ReportCategory (var code : Int, var text : String, var isUser : Int){
     POST_SPAM(0,"스팸홍보/도배글입니다.",0),

@@ -1,4 +1,4 @@
-package com.tinuproject.tinu.domain.enums
+package com.tinuproject.tinu.tempdomain.member.socialmember.enums
 
 enum class Social(var code:Int, var company : String) {
     KAKAO(0, "카카오"),
@@ -7,7 +7,7 @@ enum class Social(var code:Int, var company : String) {
 
 
     companion object{
-        fun getSocial(provider : String) : Social{
+        fun getSocial(provider : String) : Social {
             if(provider == "Kakao") return KAKAO
             else  return NAVER
         }

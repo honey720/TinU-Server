@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.tempdomain.member.entity
 
 import com.tinuproject.tinu.tempdomain.common.entity.BaseEntity
-import com.tinuproject.tinu.domain.enums.Social
+import com.tinuproject.tinu.tempdomain.member.socialmember.enums.Social
 import com.tinuproject.tinu.tempdomain.member.dto.input.UpdateUserInputDTO
 import com.tinuproject.tinu.tempdomain.common.university.entity.University
 import com.tinuproject.tinu.tempdomain.member.customfilter.entity.CustomFilter

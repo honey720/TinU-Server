@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.tempdomain.member.socialmember.entity
 
 import com.tinuproject.tinu.tempdomain.common.entity.BaseEntity
-import com.tinuproject.tinu.domain.enums.Social
+import com.tinuproject.tinu.tempdomain.member.socialmember.enums.Social
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -21,4 +21,4 @@ class SocialMember(
     @Enumerated(EnumType.ORDINAL)
     var provider : Social,
 
-): BaseEntity()
+    ): BaseEntity()
