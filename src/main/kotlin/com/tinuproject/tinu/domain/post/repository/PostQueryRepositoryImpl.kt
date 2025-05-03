@@ -3,8 +3,8 @@ package com.tinuproject.tinu.domain.post.repository
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import com.tinuproject.tinu.domain.post.entity.Post
-import com.tinuproject.tinu.domain.entity.QPost
 import com.tinuproject.tinu.domain.common.university.entity.University
+import com.tinuproject.tinu.domain.post.entity.QPost
 import org.springframework.stereotype.Repository
 
 @Repository
