@@ -15,7 +15,7 @@ import com.tinuproject.tinu.tempdomain.member.emailauth.dto.request.EmailAuthReq
 import com.tinuproject.tinu.tempdomain.member.emailauth.dto.request.EmailCodeCheckRequestDTO
 import com.tinuproject.tinu.tempdomain.member.service.MemberService
 import com.tinuproject.tinu.tempdomain.member.service.RegisterService
-import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponses
+import com.tinuproject.tinu.infra.swagger.annotation.SwaggerExceptionResponses
 import com.tinuproject.tinu.tempdomain.common.response.NullResponse
 import com.tinuproject.tinu.tempdomain.common.response.ResponseEntityGenerator
 import io.swagger.v3.oas.annotations.Operation

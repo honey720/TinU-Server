@@ -14,7 +14,7 @@ import com.tinuproject.tinu.tempdomain.post.dto.response.PostCreateResponse
 import com.tinuproject.tinu.tempdomain.post.dto.response.PostDetailResponse
 import com.tinuproject.tinu.tempdomain.post.dto.response.PostsListResponse
 import com.tinuproject.tinu.tempdomain.post.service.PostService
-import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponses
+import com.tinuproject.tinu.infra.swagger.annotation.SwaggerExceptionResponses
 import com.tinuproject.tinu.tempdomain.common.response.NullResponse
 import com.tinuproject.tinu.tempdomain.common.response.ResponseEntityGenerator
 import com.tinuproject.tinu.tempdomain.post.exception.*

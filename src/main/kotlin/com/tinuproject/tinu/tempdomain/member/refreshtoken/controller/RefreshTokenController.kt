@@ -6,7 +6,7 @@ import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.InvalidedTo
 import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.NotFoundTokenException
 import com.tinuproject.tinu.tempdomain.member.refreshtoken.dto.output.Tokens
 import com.tinuproject.tinu.tempdomain.member.refreshtoken.service.RefreshTokenService
-import com.tinuproject.tinu.swagger.annotation.SwaggerExceptionResponses
+import com.tinuproject.tinu.infra.swagger.annotation.SwaggerExceptionResponses
 import com.tinuproject.tinu.tempdomain.common.web.CookieGenerator
 import com.tinuproject.tinu.tempdomain.common.response.NullResponse
 import com.tinuproject.tinu.tempdomain.common.response.ResponseEntityGenerator

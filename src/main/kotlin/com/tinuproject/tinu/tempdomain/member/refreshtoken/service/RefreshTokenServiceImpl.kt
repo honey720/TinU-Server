@@ -5,7 +5,7 @@ import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.NotFoundTok
 import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
 import com.tinuproject.tinu.tempdomain.member.refreshtoken.dto.output.Tokens
 import com.tinuproject.tinu.tempdomain.member.refreshtoken.repository.RefreshTokenRepository
-import com.tinuproject.tinu.security.jwt.JwtUtil
+import com.tinuproject.tinu.infra.security.jwt.JwtUtil
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
