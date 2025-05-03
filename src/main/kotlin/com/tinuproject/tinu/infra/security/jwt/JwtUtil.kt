@@ -1,8 +1,8 @@
 package com.tinuproject.tinu.infra.security.jwt
 
-import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.ExpiredTokenException
-import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.InvalidedTokenException
-import com.tinuproject.tinu.tempdomain.member.refreshtoken.exception.NotFoundTokenException
+import com.tinuproject.tinu.domain.member.refreshtoken.exception.ExpiredTokenException
+import com.tinuproject.tinu.domain.member.refreshtoken.exception.InvalidedTokenException
+import com.tinuproject.tinu.domain.member.refreshtoken.exception.NotFoundTokenException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value

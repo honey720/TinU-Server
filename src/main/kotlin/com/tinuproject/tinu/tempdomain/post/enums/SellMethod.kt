@@ -1,6 +1,0 @@
-package com.tinuproject.tinu.tempdomain.post.enums
-
-enum class SellMethod(var code :Int, var text : String) {
-    DIRECT(0,"직거래"),
-    DELIVERY(1, "택배거래")
-}
