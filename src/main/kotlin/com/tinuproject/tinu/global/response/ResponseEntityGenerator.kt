@@ -1,4 +1,4 @@
-package com.tinuproject.tinu.global.web
+package com.tinuproject.tinu.global.response
 
 import com.tinuproject.tinu.domain.common.exception.base.BaseErrorCode
 import com.tinuproject.tinu.domain.common.response.ErrorResponse

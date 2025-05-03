@@ -9,7 +9,7 @@ import com.tinuproject.tinu.domain.member.refreshtoken.service.RefreshTokenServi
 import com.tinuproject.tinu.infra.swagger.annotation.SwaggerExceptionResponses
 import com.tinuproject.tinu.global.web.CookieGenerator
 import com.tinuproject.tinu.domain.common.response.NullResponse
-import com.tinuproject.tinu.global.web.ResponseEntityGenerator
+import com.tinuproject.tinu.global.response.ResponseEntityGenerator
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.Logger
