@@ -2,7 +2,7 @@ package com.tinuproject.tinu.security.oauth2.handler
 
 import com.tinuproject.tinu.tempdomain.member.refreshtoken.entity.RefreshToken
 import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
-import com.tinuproject.tinu.domain.token.refreshtoken.repository.RefreshTokenRepository
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.repository.RefreshTokenRepository
 import com.tinuproject.tinu.security.jwt.JwtUtil
 import com.tinuproject.tinu.security.oauth2.dto.CustomOAuth2User
 import com.tinuproject.tinu.web.CookieGenerator

@@ -12,8 +12,8 @@ import com.tinuproject.tinu.tempdomain.member.dto.request.UpdateUserInfoRequestD
 import com.tinuproject.tinu.tempdomain.member.dto.response.MemberSearchResponseDTO
 import com.tinuproject.tinu.tempdomain.member.dto.input.UpdateUserInputDTO
 import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
-import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
-import com.tinuproject.tinu.domain.universitydomain.repository.UniversityDomainRepository
+import com.tinuproject.tinu.tempdomain.member.socialmember.repository.SocialMemberRepository
+import com.tinuproject.tinu.tempdomain.common.university.universitydomain.repository.UniversityDomainRepository
 import com.tinuproject.tinu.s3.service.S3Service
 import com.tinuproject.tinu.web.email.entity.EmailAuth
 import com.tinuproject.tinu.web.email.repository.EmailRepository

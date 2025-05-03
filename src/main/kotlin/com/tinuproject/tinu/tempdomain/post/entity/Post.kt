@@ -3,9 +3,9 @@ package com.tinuproject.tinu.tempdomain.post.entity
 import com.tinuproject.tinu.tempdomain.post.hashtag.posthashtagmap.entity.PostHashTagMap
 import com.tinuproject.tinu.tempdomain.post.scrap.entity.Scrap
 import com.tinuproject.tinu.tempdomain.common.entity.BaseEntity
-import com.tinuproject.tinu.domain.enums.PaymentMethod
-import com.tinuproject.tinu.domain.enums.SellMethod
-import com.tinuproject.tinu.domain.post.dto.request.PostUpdateRequest
+import com.tinuproject.tinu.tempdomain.post.enums.PaymentMethod
+import com.tinuproject.tinu.tempdomain.post.enums.SellMethod
+import com.tinuproject.tinu.tempdomain.post.dto.request.PostUpdateRequest
 import com.tinuproject.tinu.tempdomain.common.multimedia.entity.Multimedia
 import com.tinuproject.tinu.tempdomain.common.university.entity.University
 import com.tinuproject.tinu.tempdomain.member.entity.Member

@@ -2,8 +2,8 @@ package com.tinuproject.tinu.security.oauth2.service
 
 import com.tinuproject.tinu.tempdomain.member.socialmember.entity.SocialMember
 import com.tinuproject.tinu.domain.enums.Social
-import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
-import com.tinuproject.tinu.domain.token.refreshtoken.repository.RefreshTokenRepository
+import com.tinuproject.tinu.tempdomain.member.socialmember.repository.SocialMemberRepository
+import com.tinuproject.tinu.tempdomain.member.refreshtoken.repository.RefreshTokenRepository
 import com.tinuproject.tinu.security.oauth2.dto.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
