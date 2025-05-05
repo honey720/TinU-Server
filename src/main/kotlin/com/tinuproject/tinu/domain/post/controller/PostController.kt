@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.domain.post.controller
 
 import com.tinuproject.tinu.domain.common.response.ResponseDTO
-import com.tinuproject.tinu.domain.member.emailauth.exception.NotExistMemberException
+import com.tinuproject.tinu.tempdomain.member.exception.NotExistMemberException
 import com.tinuproject.tinu.infra.s3.exception.InvalidETagException
 import com.tinuproject.tinu.infra.s3.exception.NoSuchKeyException
 import com.tinuproject.tinu.infra.s3.exception.UploadSizeOutOfRangeException

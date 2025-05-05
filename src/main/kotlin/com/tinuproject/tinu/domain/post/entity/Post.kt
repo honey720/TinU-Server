@@ -8,7 +8,7 @@ import com.tinuproject.tinu.domain.post.enums.SellMethod
 import com.tinuproject.tinu.domain.post.dto.request.PostUpdateRequest
 import com.tinuproject.tinu.domain.common.multimedia.entity.Multimedia
 import com.tinuproject.tinu.domain.common.university.entity.University
-import com.tinuproject.tinu.domain.member.entity.Member
+import com.tinuproject.tinu.tempdomain.member.entity.Member
 import com.tinuproject.tinu.domain.post.category.entity.Category
 import jakarta.persistence.*
 

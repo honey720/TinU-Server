@@ -1,12 +1,12 @@
 package com.tinuproject.tinu.domain.post.service
 
 import com.tinuproject.tinu.domain.post.category.repository.CategoryRepository
-import com.tinuproject.tinu.domain.member.emailauth.exception.NotExistMemberException
+import com.tinuproject.tinu.tempdomain.member.exception.NotExistMemberException
 import com.tinuproject.tinu.infra.s3.exception.UploadSizeOutOfRangeException
 import com.tinuproject.tinu.domain.post.scrap.exception.ScrapAlreadyExistException
 import com.tinuproject.tinu.domain.post.scrap.exception.ScrapNotFoundException
 import com.tinuproject.tinu.domain.post.hashtag.repository.HashTagRepository
-import com.tinuproject.tinu.domain.member.repository.MemberRepository
+import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.common.multimedia.repository.MultimediaRepository
 import com.tinuproject.tinu.domain.post.dto.request.PostCreateRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostDeleteRequest

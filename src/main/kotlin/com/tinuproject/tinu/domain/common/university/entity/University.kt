@@ -1,6 +1,6 @@
 package com.tinuproject.tinu.domain.common.university.entity
 
-import com.tinuproject.tinu.domain.member.entity.Member
+import com.tinuproject.tinu.tempdomain.member.entity.Member
 import com.tinuproject.tinu.domain.common.university.universitydomain.entity.UniversityDomain
 import com.tinuproject.tinu.domain.common.entity.BaseEntity
 import jakarta.persistence.*
