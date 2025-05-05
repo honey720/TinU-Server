@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.infra.s3.controller
 
 import com.tinuproject.tinu.infra.s3.dto.request.S3PresignedUrlRequest
-import com.tinuproject.tinu.global.response.ResponseDTO
+import com.tinuproject.tinu.global.response.dto.ResponseDTO
 import com.tinuproject.tinu.infra.s3.exception.FileLengthOutOfRangeException
 import com.tinuproject.tinu.infra.s3.exception.NotAllowedExtensionException
 import com.tinuproject.tinu.infra.s3.exception.UploadSizeOutOfRangeException

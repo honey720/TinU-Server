@@ -1,6 +1,8 @@
 package com.tinuproject.tinu.global.response
 
 import com.tinuproject.tinu.global.exception.base.BaseErrorCode
+import com.tinuproject.tinu.global.response.dto.ErrorResponse
+import com.tinuproject.tinu.global.response.dto.ResponseDTO
 import org.springframework.http.ResponseEntity
 
 class ResponseEntityGenerator {

@@ -1,8 +1,8 @@
 package com.tinuproject.tinu.infra.security.jwt
 
-import com.tinuproject.tinu.tempdomain.member.exception.ExpiredTokenException
-import com.tinuproject.tinu.tempdomain.member.exception.InvalidedTokenException
-import com.tinuproject.tinu.tempdomain.member.exception.NotFoundTokenException
+import com.tinuproject.tinu.domain.member.exception.ExpiredTokenException
+import com.tinuproject.tinu.domain.member.exception.InvalidedTokenException
+import com.tinuproject.tinu.domain.member.exception.NotFoundTokenException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
