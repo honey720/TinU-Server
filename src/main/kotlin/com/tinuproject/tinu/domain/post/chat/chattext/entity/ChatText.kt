@@ -1,6 +1,6 @@
 package com.tinuproject.tinu.domain.post.chat.chattext.entity
 
-import com.tinuproject.tinu.domain.common.entity.BaseEntity
+import com.tinuproject.tinu.global.entity.BaseEntity
 import com.tinuproject.tinu.domain.post.chat.enums.ChatType
 import com.tinuproject.tinu.tempdomain.member.entity.Member
 import com.tinuproject.tinu.domain.post.chat.entity.Chat

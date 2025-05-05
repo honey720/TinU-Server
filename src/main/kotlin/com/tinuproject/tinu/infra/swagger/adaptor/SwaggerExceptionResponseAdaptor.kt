@@ -1,8 +1,8 @@
 package com.tinuproject.tinu.infra.swagger.adaptor
 
-import com.tinuproject.tinu.domain.common.response.ErrorResponse
-import com.tinuproject.tinu.domain.common.response.ResponseDTO
-import com.tinuproject.tinu.domain.common.exception.base.BaseException
+import com.tinuproject.tinu.global.response.ErrorResponse
+import com.tinuproject.tinu.global.response.ResponseDTO
+import com.tinuproject.tinu.global.exception.base.BaseException
 import com.tinuproject.tinu.infra.swagger.annotation.ExampleHolder
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.examples.Example

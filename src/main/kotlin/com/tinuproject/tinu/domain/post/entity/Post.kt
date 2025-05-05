@@ -2,12 +2,12 @@ package com.tinuproject.tinu.domain.post.entity
 
 import com.tinuproject.tinu.domain.post.hashtag.posthashtagmap.entity.PostHashTagMap
 import com.tinuproject.tinu.domain.post.scrap.entity.Scrap
-import com.tinuproject.tinu.domain.common.entity.BaseEntity
+import com.tinuproject.tinu.global.entity.BaseEntity
 import com.tinuproject.tinu.domain.post.enums.PaymentMethod
 import com.tinuproject.tinu.domain.post.enums.SellMethod
 import com.tinuproject.tinu.domain.post.dto.request.PostUpdateRequest
-import com.tinuproject.tinu.domain.common.multimedia.entity.Multimedia
-import com.tinuproject.tinu.domain.common.university.entity.University
+import com.tinuproject.tinu.tempdomain.post.entity.Multimedia
+import com.tinuproject.tinu.tempdomain.university.entity.University
 import com.tinuproject.tinu.tempdomain.member.entity.Member
 import com.tinuproject.tinu.domain.post.category.entity.Category
 import jakarta.persistence.*

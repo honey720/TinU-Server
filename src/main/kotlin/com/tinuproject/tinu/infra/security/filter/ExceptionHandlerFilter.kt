@@ -1,9 +1,9 @@
 package com.tinuproject.tinu.infra.security.filter
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.tinuproject.tinu.domain.common.response.ErrorResponse
-import com.tinuproject.tinu.domain.common.response.ResponseDTO
-import com.tinuproject.tinu.domain.common.exception.base.BaseException
+import com.tinuproject.tinu.global.response.ErrorResponse
+import com.tinuproject.tinu.global.response.ResponseDTO
+import com.tinuproject.tinu.global.exception.base.BaseException
 import com.tinuproject.tinu.global.response.ResponseEntityGenerator
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletResponse

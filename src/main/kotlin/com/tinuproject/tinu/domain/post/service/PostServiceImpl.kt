@@ -7,14 +7,14 @@ import com.tinuproject.tinu.domain.post.scrap.exception.ScrapAlreadyExistExcepti
 import com.tinuproject.tinu.domain.post.scrap.exception.ScrapNotFoundException
 import com.tinuproject.tinu.domain.post.hashtag.repository.HashTagRepository
 import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
-import com.tinuproject.tinu.domain.common.multimedia.repository.MultimediaRepository
+import com.tinuproject.tinu.tempdomain.post.service.MultimediaRepository
 import com.tinuproject.tinu.domain.post.dto.request.PostCreateRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostDeleteRequest
 import com.tinuproject.tinu.domain.post.dto.request.PostUpdateRequest
 import com.tinuproject.tinu.domain.post.hashtag.posthashtagmap.repository.PostHashTagMapRepository
 import com.tinuproject.tinu.domain.post.scrap.repository.ScrapRepository
 import com.tinuproject.tinu.infra.s3.service.S3Service
-import com.tinuproject.tinu.domain.common.multimedia.entity.Multimedia
+import com.tinuproject.tinu.tempdomain.post.entity.Multimedia
 import com.tinuproject.tinu.domain.post.dto.response.*
 import com.tinuproject.tinu.domain.post.entity.Post
 import com.tinuproject.tinu.domain.post.exception.*

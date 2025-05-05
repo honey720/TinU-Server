@@ -1,6 +1,6 @@
 package com.tinuproject.tinu.tempdomain.member.controller
 
-import com.tinuproject.tinu.domain.common.response.ResponseDTO
+import com.tinuproject.tinu.global.response.ResponseDTO
 import com.tinuproject.tinu.tempdomain.member.exception.NotExistMemberException
 import com.tinuproject.tinu.tempdomain.member.exception.ExistNameException
 import com.tinuproject.tinu.tempdomain.member.exception.NeedRegistException
@@ -13,7 +13,7 @@ import com.tinuproject.tinu.tempdomain.member.controller.dto.request.UpdateUserI
 import com.tinuproject.tinu.tempdomain.member.controller.dto.response.MemberSearchResponseDTO
 import com.tinuproject.tinu.tempdomain.member.service.MemberService
 import com.tinuproject.tinu.infra.swagger.annotation.SwaggerExceptionResponses
-import com.tinuproject.tinu.domain.common.response.NullResponse
+import com.tinuproject.tinu.global.response.NullResponse
 import com.tinuproject.tinu.global.response.ResponseEntityGenerator
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag

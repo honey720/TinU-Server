@@ -1,9 +1,9 @@
 package com.tinuproject.tinu.tempdomain.member.entity
 
-import com.tinuproject.tinu.domain.common.entity.BaseEntity
+import com.tinuproject.tinu.global.entity.BaseEntity
 import com.tinuproject.tinu.tempdomain.member.enums.Social
 import com.tinuproject.tinu.tempdomain.member.service.dto.input.UpdateUserInputDTO
-import com.tinuproject.tinu.domain.common.university.entity.University
+import com.tinuproject.tinu.tempdomain.university.entity.University
 import com.tinuproject.tinu.domain.post.chat.entity.Chat
 import com.tinuproject.tinu.domain.post.entity.Post
 import com.tinuproject.tinu.domain.post.scrap.entity.Scrap

@@ -1,6 +1,6 @@
 package com.tinuproject.tinu.tempdomain.member.controller
 
-import com.tinuproject.tinu.domain.common.response.ResponseDTO
+import com.tinuproject.tinu.global.response.ResponseDTO
 import com.tinuproject.tinu.tempdomain.member.exception.ExpiredTokenException
 import com.tinuproject.tinu.tempdomain.member.exception.InvalidedTokenException
 import com.tinuproject.tinu.tempdomain.member.exception.NotFoundTokenException
@@ -8,7 +8,7 @@ import com.tinuproject.tinu.tempdomain.member.service.dto.output.Tokens
 import com.tinuproject.tinu.tempdomain.member.service.RefreshTokenService
 import com.tinuproject.tinu.infra.swagger.annotation.SwaggerExceptionResponses
 import com.tinuproject.tinu.global.web.CookieGenerator
-import com.tinuproject.tinu.domain.common.response.NullResponse
+import com.tinuproject.tinu.global.response.NullResponse
 import com.tinuproject.tinu.global.response.ResponseEntityGenerator
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.servlet.http.HttpServletResponse

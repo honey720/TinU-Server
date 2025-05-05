@@ -2,7 +2,7 @@ package com.tinuproject.tinu.domain.post.category.entity
 
 import com.tinuproject.tinu.tempdomain.member.entity.CustomCategory
 import com.tinuproject.tinu.domain.post.entity.Post
-import com.tinuproject.tinu.domain.common.entity.BaseEntity
+import com.tinuproject.tinu.global.entity.BaseEntity
 import jakarta.persistence.*
 
 @Entity

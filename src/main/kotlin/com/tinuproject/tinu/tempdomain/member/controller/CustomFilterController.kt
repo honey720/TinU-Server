@@ -1,17 +1,17 @@
 package com.tinuproject.tinu.tempdomain.member.controller
 
-import com.tinuproject.tinu.domain.common.response.ResponseDTO
+import com.tinuproject.tinu.global.response.ResponseDTO
 import com.tinuproject.tinu.tempdomain.member.controller.dto.request.CreateCustomFilter
 import com.tinuproject.tinu.tempdomain.member.controller.dto.request.DeleteCustomFilter
 import com.tinuproject.tinu.tempdomain.member.controller.dto.request.UpdateCustomFilter
 import com.tinuproject.tinu.tempdomain.member.controller.dto.response.SelectCustomFilter
 import com.tinuproject.tinu.tempdomain.member.service.CustomFilterService
-import com.tinuproject.tinu.domain.common.exception.UnauthorizedAccessException
+import com.tinuproject.tinu.global.exception.UnauthorizedAccessException
 import com.tinuproject.tinu.tempdomain.member.exception.NotExistCustomFilter
 import com.tinuproject.tinu.tempdomain.member.exception.NotExistMemberException
 import com.tinuproject.tinu.infra.swagger.annotation.SwaggerExceptionResponses
 import com.tinuproject.tinu.infra.swagger.example.SelectCustomFilterExam
-import com.tinuproject.tinu.domain.common.response.NullResponse
+import com.tinuproject.tinu.global.response.NullResponse
 import com.tinuproject.tinu.global.response.ResponseEntityGenerator
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content

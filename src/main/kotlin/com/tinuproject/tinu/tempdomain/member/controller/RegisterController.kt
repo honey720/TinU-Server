@@ -1,6 +1,6 @@
 package com.tinuproject.tinu.tempdomain.member.controller
 
-import com.tinuproject.tinu.domain.common.response.ResponseDTO
+import com.tinuproject.tinu.global.response.ResponseDTO
 import com.tinuproject.tinu.tempdomain.member.exception.NeedEmailAuthException
 import com.tinuproject.tinu.tempdomain.member.exception.NotExistCodeException
 import com.tinuproject.tinu.tempdomain.member.exception.NotMatchCodeException
@@ -9,14 +9,14 @@ import com.tinuproject.tinu.tempdomain.member.exception.ExistMemberException
 import com.tinuproject.tinu.tempdomain.member.exception.ExistNameException
 import com.tinuproject.tinu.infra.s3.exception.InvalidETagException
 import com.tinuproject.tinu.infra.s3.exception.NoSuchKeyException
-import com.tinuproject.tinu.domain.common.university.exception.NotExistDomainException
+import com.tinuproject.tinu.tempdomain.university.exception.NotExistDomainException
 import com.tinuproject.tinu.tempdomain.member.controller.dto.request.RegisterRequestDTO
 import com.tinuproject.tinu.tempdomain.member.controller.dto.request.EmailAuthRequestDTO
 import com.tinuproject.tinu.tempdomain.member.controller.dto.request.EmailCodeCheckRequestDTO
 import com.tinuproject.tinu.tempdomain.member.service.MemberService
 import com.tinuproject.tinu.tempdomain.member.service.RegisterService
 import com.tinuproject.tinu.infra.swagger.annotation.SwaggerExceptionResponses
-import com.tinuproject.tinu.domain.common.response.NullResponse
+import com.tinuproject.tinu.global.response.NullResponse
 import com.tinuproject.tinu.global.response.ResponseEntityGenerator
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag

@@ -6,14 +6,14 @@ import com.tinuproject.tinu.tempdomain.member.exception.NotExistMemberException
 import com.tinuproject.tinu.tempdomain.member.exception.ExistEmailException
 import com.tinuproject.tinu.tempdomain.member.exception.ExistNameException
 import com.tinuproject.tinu.tempdomain.member.exception.ExistMemberException
-import com.tinuproject.tinu.domain.common.university.exception.NotExistDomainException
+import com.tinuproject.tinu.tempdomain.university.exception.NotExistDomainException
 import com.tinuproject.tinu.tempdomain.member.controller.dto.request.RegisterRequestDTO
 import com.tinuproject.tinu.tempdomain.member.controller.dto.request.UpdateUserInfoRequestDTO
 import com.tinuproject.tinu.tempdomain.member.controller.dto.response.MemberSearchResponseDTO
 import com.tinuproject.tinu.tempdomain.member.service.dto.input.UpdateUserInputDTO
 import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
 import com.tinuproject.tinu.tempdomain.member.repository.SocialMemberRepository
-import com.tinuproject.tinu.domain.common.university.universitydomain.repository.UniversityDomainRepository
+import com.tinuproject.tinu.tempdomain.university.repository.UniversityDomainRepository
 import com.tinuproject.tinu.infra.s3.service.S3Service
 import com.tinuproject.tinu.tempdomain.member.entity.EmailAuth
 import com.tinuproject.tinu.tempdomain.member.repository.EmailRepository

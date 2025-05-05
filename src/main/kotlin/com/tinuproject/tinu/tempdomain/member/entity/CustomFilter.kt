@@ -2,7 +2,7 @@ package com.tinuproject.tinu.tempdomain.member.entity
 
 
 import com.tinuproject.tinu.tempdomain.member.controller.dto.request.UpdateCustomFilter
-import com.tinuproject.tinu.domain.common.entity.BaseEntity
+import com.tinuproject.tinu.global.entity.BaseEntity
 import jakarta.persistence.*
 
 @Entity

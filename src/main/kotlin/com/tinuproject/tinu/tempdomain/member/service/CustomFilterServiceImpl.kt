@@ -9,7 +9,7 @@ import com.tinuproject.tinu.tempdomain.member.controller.dto.response.SelectCust
 import com.tinuproject.tinu.tempdomain.member.repository.CustomFilterRepository
 import com.tinuproject.tinu.tempdomain.member.entity.CustomCategory
 import com.tinuproject.tinu.tempdomain.member.entity.CustomFilter
-import com.tinuproject.tinu.domain.common.exception.UnauthorizedAccessException
+import com.tinuproject.tinu.global.exception.UnauthorizedAccessException
 import com.tinuproject.tinu.tempdomain.member.exception.NotExistCustomFilter
 import com.tinuproject.tinu.tempdomain.member.exception.NotExistMemberException
 import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository

@@ -4,9 +4,9 @@ import com.tinuproject.tinu.tempdomain.member.exception.ExistEmailException
 import com.tinuproject.tinu.tempdomain.member.exception.NotExistCodeException
 import com.tinuproject.tinu.tempdomain.member.exception.NotMatchCodeException
 import com.tinuproject.tinu.tempdomain.member.exception.ExistMemberException
-import com.tinuproject.tinu.domain.common.university.exception.NotExistDomainException
+import com.tinuproject.tinu.tempdomain.university.exception.NotExistDomainException
 import com.tinuproject.tinu.tempdomain.member.repository.MemberRepository
-import com.tinuproject.tinu.domain.common.university.universitydomain.repository.UniversityDomainRepository
+import com.tinuproject.tinu.tempdomain.university.repository.UniversityDomainRepository
 import com.tinuproject.tinu.tempdomain.member.controller.dto.request.EmailAuthRequestDTO
 import com.tinuproject.tinu.tempdomain.member.controller.dto.request.EmailCodeCheckRequestDTO
 import com.tinuproject.tinu.tempdomain.member.repository.EmailRepository

@@ -2,7 +2,7 @@ package com.tinuproject.tinu.domain.post.chat.entity
 
 import com.tinuproject.tinu.domain.post.chat.chattext.entity.ChatText
 import com.tinuproject.tinu.domain.post.entity.Post
-import com.tinuproject.tinu.domain.common.entity.BaseEntity
+import com.tinuproject.tinu.global.entity.BaseEntity
 import com.tinuproject.tinu.tempdomain.member.entity.Member
 import jakarta.persistence.*
 

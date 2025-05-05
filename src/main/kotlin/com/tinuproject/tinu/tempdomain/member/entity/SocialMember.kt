@@ -1,6 +1,6 @@
 package com.tinuproject.tinu.tempdomain.member.entity
 
-import com.tinuproject.tinu.domain.common.entity.BaseEntity
+import com.tinuproject.tinu.global.entity.BaseEntity
 import com.tinuproject.tinu.tempdomain.member.enums.Social
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

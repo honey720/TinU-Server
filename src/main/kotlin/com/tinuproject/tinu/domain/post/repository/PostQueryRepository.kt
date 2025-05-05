@@ -2,7 +2,7 @@ package com.tinuproject.tinu.domain.post.repository
 
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.tinuproject.tinu.domain.post.entity.Post
-import com.tinuproject.tinu.domain.common.university.entity.University
+import com.tinuproject.tinu.tempdomain.university.entity.University
 
 interface PostQueryRepository {
     fun findPosts(

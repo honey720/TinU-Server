@@ -1,6 +1,6 @@
 package com.tinuproject.tinu.tempdomain.member.entity
 
-import com.tinuproject.tinu.domain.common.entity.BaseEntity
+import com.tinuproject.tinu.global.entity.BaseEntity
 import com.tinuproject.tinu.domain.post.category.entity.Category
 import jakarta.persistence.*
 

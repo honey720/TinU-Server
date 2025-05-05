@@ -1,6 +1,6 @@
 package com.tinuproject.tinu.domain.post.controller
 
-import com.tinuproject.tinu.domain.common.response.ResponseDTO
+import com.tinuproject.tinu.global.response.ResponseDTO
 import com.tinuproject.tinu.tempdomain.member.exception.NotExistMemberException
 import com.tinuproject.tinu.infra.s3.exception.InvalidETagException
 import com.tinuproject.tinu.infra.s3.exception.NoSuchKeyException
@@ -15,7 +15,7 @@ import com.tinuproject.tinu.domain.post.dto.response.PostDetailResponse
 import com.tinuproject.tinu.domain.post.dto.response.PostsListResponse
 import com.tinuproject.tinu.domain.post.service.PostService
 import com.tinuproject.tinu.infra.swagger.annotation.SwaggerExceptionResponses
-import com.tinuproject.tinu.domain.common.response.NullResponse
+import com.tinuproject.tinu.global.response.NullResponse
 import com.tinuproject.tinu.global.response.ResponseEntityGenerator
 import com.tinuproject.tinu.domain.post.exception.*
 import io.swagger.v3.oas.annotations.Operation
