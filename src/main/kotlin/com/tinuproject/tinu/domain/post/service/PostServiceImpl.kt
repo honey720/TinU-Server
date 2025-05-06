@@ -1,23 +1,27 @@
 package com.tinuproject.tinu.domain.post.service
 
-import com.tinuproject.tinu.domain.category.repository.CategoryRepository
-import com.tinuproject.tinu.domain.entity.*
-import com.tinuproject.tinu.domain.exception.mail.NotExistMemberException
-import com.tinuproject.tinu.domain.exception.post.*
-import com.tinuproject.tinu.domain.exception.s3.UploadSizeOutOfRangeException
-import com.tinuproject.tinu.domain.exception.scrap.ScrapAlreadyExistException
-import com.tinuproject.tinu.domain.exception.scrap.ScrapNotFoundException
-import com.tinuproject.tinu.domain.hashTagRepository.repository.HashTagRepository
+import com.tinuproject.tinu.domain.post.repository.CategoryRepository
+import com.tinuproject.tinu.domain.member.exception.NotExistMemberException
+import com.tinuproject.tinu.infra.s3.exception.UploadSizeOutOfRangeException
+import com.tinuproject.tinu.domain.post.exception.ScrapAlreadyExistException
+import com.tinuproject.tinu.domain.post.exception.ScrapNotFoundException
+import com.tinuproject.tinu.domain.post.repository.HashTagRepository
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
-import com.tinuproject.tinu.domain.multimedia.repository.MultimediaRepository
-import com.tinuproject.tinu.domain.post.dto.request.PostCreateRequest
-import com.tinuproject.tinu.domain.post.dto.request.PostDeleteRequest
-import com.tinuproject.tinu.domain.post.dto.request.PostUpdateRequest
-import com.tinuproject.tinu.domain.post.dto.response.*
-import com.tinuproject.tinu.domain.post.repository.*
-import com.tinuproject.tinu.domain.postHashTagMap.repository.PostHashTagMapRepository
-import com.tinuproject.tinu.domain.scrap.repository.ScrapRepository
-import com.tinuproject.tinu.s3.service.S3Service
+import com.tinuproject.tinu.domain.post.controller.dto.request.PostCreateRequest
+import com.tinuproject.tinu.domain.post.controller.dto.request.PostDeleteRequest
+import com.tinuproject.tinu.domain.post.controller.dto.request.PostUpdateRequest
+import com.tinuproject.tinu.domain.post.repository.PostHashTagMapRepository
+import com.tinuproject.tinu.domain.post.repository.ScrapRepository
+import com.tinuproject.tinu.infra.s3.service.S3Service
+import com.tinuproject.tinu.domain.post.entity.Multimedia
+import com.tinuproject.tinu.domain.post.controller.dto.response.*
+import com.tinuproject.tinu.domain.post.entity.Post
+import com.tinuproject.tinu.domain.post.entity.HashTag
+import com.tinuproject.tinu.domain.post.entity.PostHashTagMap
+import com.tinuproject.tinu.domain.post.repository.PostQueryRepository
+import com.tinuproject.tinu.domain.post.repository.PostRepository
+import com.tinuproject.tinu.domain.post.entity.Scrap
+import com.tinuproject.tinu.domain.post.exception.*
 import kotlinx.coroutines.runBlocking
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -28,15 +32,15 @@ import java.util.*
 const val SIZE = 20
 @Service
 class PostServiceImpl(
-        private val memberRepository: MemberRepository,
-        private val postRepository: PostRepository,
-        private val postQueryRepository: PostQueryRepository,
-        private val categoryRepository: CategoryRepository,
-        private val hashTagRepository: HashTagRepository,
-        private val multimediaRepository: MultimediaRepository,
-        private val postHashTagMapRepository: PostHashTagMapRepository,
-        private val scrapRepository: ScrapRepository,
-        private val s3Service: S3Service,
+    private val memberRepository: MemberRepository,
+    private val postRepository: PostRepository,
+    private val postQueryRepository: PostQueryRepository,
+    private val categoryRepository: CategoryRepository,
+    private val hashTagRepository: HashTagRepository,
+    private val multimediaRepository: MultimediaRepository,
+    private val postHashTagMapRepository: PostHashTagMapRepository,
+    private val scrapRepository: ScrapRepository,
+    private val s3Service: S3Service,
 ): PostService {
     val log : Logger = LoggerFactory.getLogger(this::class.java)
 

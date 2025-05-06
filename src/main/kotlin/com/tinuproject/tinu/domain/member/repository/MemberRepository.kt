@@ -1,6 +1,6 @@
 package com.tinuproject.tinu.domain.member.repository
 
-import com.tinuproject.tinu.domain.entity.Member
+import com.tinuproject.tinu.domain.member.entity.Member
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID
 

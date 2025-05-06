@@ -1,22 +1,22 @@
 package com.tinuproject.tinu.domain.member.service
 
-import com.tinuproject.tinu.domain.entity.Member
-import com.tinuproject.tinu.domain.exception.mail.NeedEmailAuthException
-import com.tinuproject.tinu.domain.exception.mail.NotExistMemberException
-import com.tinuproject.tinu.domain.exception.member.ExistEmailException
-import com.tinuproject.tinu.domain.exception.member.ExistNameException
-import com.tinuproject.tinu.domain.exception.member.ExistMemberException
-import com.tinuproject.tinu.domain.exception.university.NotExistDomainException
-import com.tinuproject.tinu.domain.member.dto.client_controller.request.RegisterRequestDTO
-import com.tinuproject.tinu.domain.member.dto.client_controller.request.UpdateUserInfoRequestDTO
-import com.tinuproject.tinu.domain.member.dto.client_controller.response.MemberSearchResponseDTO
-import com.tinuproject.tinu.domain.member.dto.controller_service.input.UpdateUserInputDTO
+import com.tinuproject.tinu.domain.member.entity.Member
+import com.tinuproject.tinu.domain.member.exception.NeedEmailAuthException
+import com.tinuproject.tinu.domain.member.exception.NotExistMemberException
+import com.tinuproject.tinu.domain.member.exception.ExistEmailException
+import com.tinuproject.tinu.domain.member.exception.ExistNameException
+import com.tinuproject.tinu.domain.member.exception.ExistMemberException
+import com.tinuproject.tinu.domain.university.exception.NotExistDomainException
+import com.tinuproject.tinu.domain.member.controller.dto.request.RegisterRequestDTO
+import com.tinuproject.tinu.domain.member.controller.dto.request.UpdateUserInfoRequestDTO
+import com.tinuproject.tinu.domain.member.controller.dto.response.MemberSearchResponseDTO
+import com.tinuproject.tinu.domain.member.service.dto.input.UpdateUserInputDTO
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
-import com.tinuproject.tinu.domain.socialmember.repository.SocialMemberRepository
-import com.tinuproject.tinu.domain.universitydomain.repository.UniversityDomainRepository
-import com.tinuproject.tinu.s3.service.S3Service
-import com.tinuproject.tinu.web.email.entity.EmailAuth
-import com.tinuproject.tinu.web.email.repository.EmailRepository
+import com.tinuproject.tinu.domain.member.repository.SocialMemberRepository
+import com.tinuproject.tinu.domain.university.repository.UniversityDomainRepository
+import com.tinuproject.tinu.infra.s3.service.S3Service
+import com.tinuproject.tinu.domain.member.entity.EmailAuth
+import com.tinuproject.tinu.domain.member.repository.EmailRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -30,7 +30,7 @@ class MemberServiceImpl(
     val emailAuthRepository: EmailRepository,
     val socialMemberRepository: SocialMemberRepository,
     val s3Service: S3Service
-):MemberService {
+): MemberService {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
     @Transactional
@@ -110,7 +110,7 @@ class MemberServiceImpl(
     override fun findMemberByUserId(userId: UUID): MemberSearchResponseDTO {
         val member = memberRepository.findMemberByUserId(userId)
 
-        member?:NotExistMemberException()
+        member?: NotExistMemberException()
 
         return MemberSearchResponseDTO(member!!)
 
@@ -141,7 +141,7 @@ class MemberServiceImpl(
 
     }
 
-    private fun emailAuthCheck(userId :UUID, email : String) : EmailAuth{
+    private fun emailAuthCheck(userId :UUID, email : String) : EmailAuth {
         val emailAuth = emailAuthRepository.findByUserId(userId)
 
         //이메일 인증이 진행되지 않은 유저

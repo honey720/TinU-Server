@@ -1,10 +1,10 @@
 package com.tinuproject.tinu
 
-import com.tinuproject.tinu.DTO.ErrorResponse
-import com.tinuproject.tinu.DTO.ResponseDTO
-import com.tinuproject.tinu.domain.exception.base.BaseException
-import com.tinuproject.tinu.domain.exception.common.NotFoundException
-import com.tinuproject.tinu.web.ResponseEntityGenerator
+import com.tinuproject.tinu.global.response.dto.ErrorResponse
+import com.tinuproject.tinu.global.response.dto.ResponseDTO
+import com.tinuproject.tinu.global.exception.base.BaseException
+import com.tinuproject.tinu.global.exception.NotFoundException
+import com.tinuproject.tinu.global.response.ResponseEntityGenerator
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice

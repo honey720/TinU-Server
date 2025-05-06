@@ -1,8 +1,8 @@
 package com.tinuproject.tinu.domain.member.service
 
-import com.tinuproject.tinu.domain.member.dto.client_controller.response.MemberSearchResponseDTO
-import com.tinuproject.tinu.domain.member.dto.client_controller.request.RegisterRequestDTO
-import com.tinuproject.tinu.domain.member.dto.client_controller.request.UpdateUserInfoRequestDTO
+import com.tinuproject.tinu.domain.member.controller.dto.response.MemberSearchResponseDTO
+import com.tinuproject.tinu.domain.member.controller.dto.request.RegisterRequestDTO
+import com.tinuproject.tinu.domain.member.controller.dto.request.UpdateUserInfoRequestDTO
 import org.springframework.stereotype.Service
 import java.util.*
 
