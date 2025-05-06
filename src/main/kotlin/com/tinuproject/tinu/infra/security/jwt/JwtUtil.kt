@@ -125,7 +125,10 @@ class JwtUtil {
 
     fun signCheck(token : String) :Boolean{
         return try {
-            getClaimsFromToken(token).get("isSign", Boolean::class.java)
+            val isSign : Boolean = getClaimsFromToken(token)["isSign"].toString().toBoolean()
+
+
+            isSign
         } catch (e: JwtException) {
             // 토큰이 유효하지 않은 경우
             log.warn("유효하지 않은 토큰입니다.")
