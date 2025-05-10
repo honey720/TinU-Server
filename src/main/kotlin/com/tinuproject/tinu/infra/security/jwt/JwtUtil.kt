@@ -126,8 +126,6 @@ class JwtUtil {
     fun signCheck(token : String) :Boolean{
         return try {
             val isSign : Boolean = getClaimsFromToken(token)["isSign"].toString().toBoolean()
-
-
             isSign
         } catch (e: JwtException) {
             // 토큰이 유효하지 않은 경우
