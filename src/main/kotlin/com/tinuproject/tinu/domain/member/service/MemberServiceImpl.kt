@@ -110,9 +110,9 @@ class MemberServiceImpl(
     override fun findMemberByUserId(userId: UUID): MemberSearchResponseDTO {
         val member = memberRepository.findMemberByUserId(userId)
 
-        member?: NotExistMemberException()
+        member?: throw NotExistMemberException()
 
-        return MemberSearchResponseDTO(member!!)
+        return MemberSearchResponseDTO(member)
 
     }
 
