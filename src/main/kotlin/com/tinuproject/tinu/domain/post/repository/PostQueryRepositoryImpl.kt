@@ -49,15 +49,15 @@ class PostQueryRepositoryImpl(
 
     override fun containsTitle(keyword: String?): BooleanExpression? {
         return when {
-            keyword.isNullOrBlank() -> post.title.contains(keyword)
-            else -> null
+            keyword.isNullOrBlank() -> null
+            else -> post.title.contains(keyword)
         }
     }
 
     override fun containsBody(keyword: String?): BooleanExpression? {
         return when {
-            keyword.isNullOrBlank() -> post.body.contains(keyword)
-            else -> null
+            keyword.isNullOrBlank() -> null
+            else -> post.body.contains(keyword)
         }
     }
 
