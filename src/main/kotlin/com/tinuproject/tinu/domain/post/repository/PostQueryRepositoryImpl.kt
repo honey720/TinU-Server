@@ -25,6 +25,9 @@ class PostQueryRepositoryImpl(
     ): List<Post> {
         return queryFactory
                 .selectFrom(post)
+                .join(post.category).fetchJoin()
+                .join(post.author).fetchJoin()
+                .distinct()
                 .where(
                         post.university.eq(university),
                         post.isHide.eq(false),
