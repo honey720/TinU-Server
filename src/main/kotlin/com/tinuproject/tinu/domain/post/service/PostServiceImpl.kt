@@ -1,7 +1,6 @@
 package com.tinuproject.tinu.domain.post.service
 
 import com.tinuproject.tinu.domain.post.repository.CategoryRepository
-import com.tinuproject.tinu.domain.member.exception.NotExistMemberException
 import com.tinuproject.tinu.infra.s3.exception.UploadSizeOutOfRangeException
 import com.tinuproject.tinu.domain.post.exception.ScrapAlreadyExistException
 import com.tinuproject.tinu.domain.post.exception.ScrapNotFoundException
@@ -54,8 +53,7 @@ class PostServiceImpl(
             maxPrice: Int?,
             onlySell: Boolean
     ): PostsListResponse {
-        val member = memberRepository.findMemberByUserId(userId)
-                ?: throw NotExistMemberException()
+        val member = memberRepository.findMemberByUserId(userId)!!
 
         val university = member.university!!
 
@@ -103,8 +101,7 @@ class PostServiceImpl(
 
     @Transactional(readOnly = true)
     override fun getPostDetail(userId: UUID, postId: Long): PostDetailResponse {
-        val member = memberRepository.findMemberByUserId(userId)
-                ?: throw NotExistMemberException()
+        val member = memberRepository.findMemberByUserId(userId)!!
 
         val post = postRepository.findPostById(postId)
                 ?: throw PostNotFoundException()
@@ -145,8 +142,7 @@ class PostServiceImpl(
 
     @Transactional
     override fun createPost(userId: UUID, postCreateRequest: PostCreateRequest): PostCreateResponse {
-        val member = memberRepository.findMemberByUserId(userId)
-                ?: throw NotExistMemberException()
+        val member = memberRepository.findMemberByUserId(userId)!!
 
         val category = categoryRepository.findCategoryById(postCreateRequest.categoryId)
                 ?: throw CategoryNotFoundException()
@@ -287,8 +283,7 @@ class PostServiceImpl(
 
     @Transactional
     override fun createPostScrap(userId: UUID, postId: Long) {
-        val member = memberRepository.findMemberByUserId(userId)
-                ?: throw NotExistMemberException()
+        val member = memberRepository.findMemberByUserId(userId)!!
 
         val post = postRepository.findPostById(postId)
                 ?: throw PostNotFoundException()
@@ -308,8 +303,7 @@ class PostServiceImpl(
 
     @Transactional
     override fun deletePostScrap(userId: UUID, postId: Long) {
-        val member = memberRepository.findMemberByUserId(userId)
-                ?: throw NotExistMemberException()
+        val member = memberRepository.findMemberByUserId(userId)!!
 
         val scrap = scrapRepository.findScrapByMemberIdAndPostId(member.id!!, postId)
                 ?: throw ScrapNotFoundException()
