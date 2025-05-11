@@ -79,16 +79,18 @@ class PostServiceImpl(
             nextCursorId = rawPosts.last().id.toString()
         }
 
+        val scrapPostIds = scrapRepository.findPostIdsByMemberId(member.id!!)
+
         val posts = rawPosts.map { post ->
             PostListBodyResponse(
-                    id = post.id!!,
-                    createdAt = post.createdAt!!,
-                    title = post.title,
-                    price = post.price,
-                    thumbnail = post.thumbnail,
-                    isLike = member.scrap.any { it.post == post },
-                    likeCount = post.scrapCount,
-                    isSell = post.isSell
+                id = post.id!!,
+                createdAt = post.createdAt!!,
+                title = post.title,
+                price = post.price,
+                thumbnail = post.thumbnail,
+                isLike = post.id in scrapPostIds,
+                likeCount = post.likeCount,
+                isSell = post.isSell
             )
         }
 
@@ -295,7 +297,8 @@ class PostServiceImpl(
             throw UniversityNotMatchException()
         }
 
-        if (member.scrap.any { it.post == post })
+        val scrap = scrapRepository.findScrapByMemberIdAndPostId(member.id!!, postId)
+        if (scrap != null)
             throw ScrapAlreadyExistException()
 
         scrapRepository.save(Scrap(member = member, post = post))

@@ -1,8 +1,10 @@
 package com.tinuproject.tinu.domain.post.repository
 
+import com.querydsl.core.types.ConstantImpl
+import com.querydsl.core.types.Projections
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
-import com.tinuproject.tinu.domain.post.entity.Post
+import com.tinuproject.tinu.domain.post.controller.dto.response.PostListBodyResponse
 import com.tinuproject.tinu.domain.university.entity.University
 import com.tinuproject.tinu.domain.post.entity.QPost
 import org.springframework.stereotype.Repository
@@ -22,12 +24,20 @@ class PostQueryRepositoryImpl(
         minPrice: Int?,
         maxPrice: Int?,
         onlySell: Boolean
-    ): List<Post> {
+    ): List<PostListBodyResponse> {
         return queryFactory
-                .selectFrom(post)
-                .join(post.category).fetchJoin()
-                .join(post.author).fetchJoin()
-                .distinct()
+                .select(
+                    Projections.constructor(PostListBodyResponse::class.java,
+                        post.id,
+                        post.createdAt,
+                        post.title,
+                        post.price,
+                        post.thumbnail,
+                        ConstantImpl.create(false),
+                        post.scrapCount,
+                        post.isSell)
+                )
+                .from(post)
                 .where(
                         post.university.eq(university),
                         post.isHide.eq(false),
