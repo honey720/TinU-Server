@@ -35,7 +35,8 @@ class PostQueryRepositoryImpl(
                         post.thumbnail,
                         ConstantImpl.create(false),
                         post.scrapCount,
-                        post.isSell)
+                        post.isSell
+                    )
                 )
                 .from(post)
                 .where(
@@ -54,10 +55,10 @@ class PostQueryRepositoryImpl(
     }
 
     override fun customCursor(cursorId: String?): BooleanExpression? {
-        if (cursorId.isNullOrBlank()) {
-            return null
+        return when {
+            cursorId.isNullOrBlank() -> null
+            else -> post.id.lt(cursorId.toLong())
         }
-        return post.id.lt(cursorId.toLong())
     }
 
     override fun containsTitle(keyword: String?): BooleanExpression? {
