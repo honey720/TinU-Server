@@ -1,8 +1,10 @@
 package com.tinuproject.tinu.domain.post.repository
 
+import com.querydsl.core.types.ConstantImpl
+import com.querydsl.core.types.Projections
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
-import com.tinuproject.tinu.domain.post.entity.Post
+import com.tinuproject.tinu.domain.post.controller.dto.response.PostListBodyResponse
 import com.tinuproject.tinu.domain.university.entity.University
 import com.tinuproject.tinu.domain.post.entity.QPost
 import org.springframework.stereotype.Repository
@@ -22,9 +24,21 @@ class PostQueryRepositoryImpl(
         minPrice: Int?,
         maxPrice: Int?,
         onlySell: Boolean
-    ): List<Post> {
+    ): List<PostListBodyResponse> {
         return queryFactory
-                .selectFrom(post)
+                .select(
+                    Projections.constructor(PostListBodyResponse::class.java,
+                        post.id,
+                        post.createdAt,
+                        post.title,
+                        post.price,
+                        post.thumbnail,
+                        ConstantImpl.create(false),
+                        post.scrapCount,
+                        post.isSell
+                    )
+                )
+                .from(post)
                 .where(
                         post.university.eq(university),
                         post.isHide.eq(false),
@@ -41,23 +55,23 @@ class PostQueryRepositoryImpl(
     }
 
     override fun customCursor(cursorId: String?): BooleanExpression? {
-        if (cursorId.isNullOrBlank()) {
-            return null
+        return when {
+            cursorId.isNullOrBlank() -> null
+            else -> post.id.lt(cursorId.toLong())
         }
-        return post.id.lt(cursorId.toLong())
     }
 
     override fun containsTitle(keyword: String?): BooleanExpression? {
         return when {
-            keyword.isNullOrBlank() -> post.title.contains(keyword)
-            else -> null
+            keyword.isNullOrBlank() -> null
+            else -> post.title.contains(keyword)
         }
     }
 
     override fun containsBody(keyword: String?): BooleanExpression? {
         return when {
-            keyword.isNullOrBlank() -> post.body.contains(keyword)
-            else -> null
+            keyword.isNullOrBlank() -> null
+            else -> post.body.contains(keyword)
         }
     }
 

@@ -1,7 +1,6 @@
 package com.tinuproject.tinu.domain.post.controller
 
 import com.tinuproject.tinu.global.response.dto.ResponseDTO
-import com.tinuproject.tinu.domain.member.exception.NotExistMemberException
 import com.tinuproject.tinu.infra.s3.exception.InvalidETagException
 import com.tinuproject.tinu.infra.s3.exception.NoSuchKeyException
 import com.tinuproject.tinu.infra.s3.exception.UploadSizeOutOfRangeException
@@ -33,11 +32,6 @@ class PostController(
 ) {
     @GetMapping
     @Operation(summary = "게시글 목록 조회", description = "게시글 목록을 조회합니다.")
-    @SwaggerExceptionResponses(
-            exceptions = [
-                NotExistMemberException::class
-            ]
-    )
     fun getPosts(
             @AuthenticationPrincipal userId: UUID,
             @RequestParam(required = false) cursorId: String?,
@@ -62,7 +56,6 @@ class PostController(
     @Operation(summary = "게시글 상세 조회", description = "게시글 상세 정보를 조회합니다.")
     @SwaggerExceptionResponses(
             exceptions = [
-                NotExistMemberException::class,
                 PostNotFoundException::class,
                 UniversityNotMatchException::class,
                 PostHiddenException::class
@@ -79,8 +72,8 @@ class PostController(
     @Operation(summary = "게시글 생성", description = "게시글을 생성합니다.")
     @SwaggerExceptionResponses(
             exceptions = [
-                NotExistMemberException::class,
                 CategoryNotFoundException::class,
+                UploadSizeOutOfRangeException::class,
                 NoSuchKeyException::class,
                 InvalidETagException::class
             ]
@@ -133,7 +126,6 @@ class PostController(
     @Operation(summary = "게시글 스크랩", description = "게시글을 스크랩합니다.")
     @SwaggerExceptionResponses(
             exceptions = [
-                NotExistMemberException::class,
                 PostNotFoundException::class,
                 UniversityNotMatchException::class,
                 ScrapAlreadyExistException::class
@@ -151,7 +143,6 @@ class PostController(
     @Operation(summary = "게시글 스크랩 해제", description = "게시글 스크랩을 해제합니다.")
     @SwaggerExceptionResponses(
             exceptions = [
-                NotExistMemberException::class,
                 ScrapNotFoundException::class
             ]
     )

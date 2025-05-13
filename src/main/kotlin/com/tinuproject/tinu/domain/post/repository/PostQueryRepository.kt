@@ -1,7 +1,7 @@
 package com.tinuproject.tinu.domain.post.repository
 
 import com.querydsl.core.types.dsl.BooleanExpression
-import com.tinuproject.tinu.domain.post.entity.Post
+import com.tinuproject.tinu.domain.post.controller.dto.response.PostListBodyResponse
 import com.tinuproject.tinu.domain.university.entity.University
 
 interface PostQueryRepository {
@@ -14,7 +14,7 @@ interface PostQueryRepository {
         minPrice: Int?,
         maxPrice: Int?,
         onlySell: Boolean
-    ): List<Post>
+    ): List<PostListBodyResponse>
 
     fun customCursor(cursorId: String?): BooleanExpression?
 
