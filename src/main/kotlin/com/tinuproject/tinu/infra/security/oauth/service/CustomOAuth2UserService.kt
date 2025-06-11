@@ -42,6 +42,11 @@ class CustomOAuth2UserService(
                 oAuth2UserInfo =
                     NaverUserInfo(oauth2User.attributes["response"] as Map<String, Any>)
             }
+
+            "Google" -> {
+                log.info("구글 로그인 요청")
+                oAuth2UserInfo = GoogleUserInfo(oauth2User.attributes)
+            }
         }
 
         val providerId = oAuth2UserInfo!!.getProviderId()

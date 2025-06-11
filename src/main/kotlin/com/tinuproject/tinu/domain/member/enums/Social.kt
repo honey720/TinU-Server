@@ -9,6 +9,7 @@ enum class Social(var code:Int, var company : String) {
     companion object{
         fun getSocial(provider : String) : Social {
             if(provider == "Kakao") return KAKAO
+            else if(provider == "Google") return GOOGLE
             else  return NAVER
         }
     }
