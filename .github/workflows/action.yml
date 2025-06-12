@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - TINU-159/oauth-add-apple-google
 
 jobs:
   backend-deploy:
