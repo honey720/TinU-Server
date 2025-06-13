@@ -5,6 +5,10 @@ on:
     branches:
       - develop
       - TINU-159/oauth-add-apple-google
+  pull_request:
+    branches:
+      - TINU-159/oauth-add-apple-google
+    types: [opened, synchronize, reopened]
 
 jobs:
   backend-deploy:
