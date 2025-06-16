@@ -35,5 +35,8 @@ data class AppleProperties(
     val teamId : String,
 
     @Value("\${apple.login_key}")
-    val serviceKey : String
+    val serviceKey : String,
+
+    @Value("\${apple.jwk-key-uri}")
+    val jwkUrl : String
 )
