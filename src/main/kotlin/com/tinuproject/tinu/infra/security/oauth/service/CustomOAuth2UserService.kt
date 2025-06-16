@@ -51,6 +51,11 @@ class CustomOAuth2UserService(
                 log.info("구글 로그인 요청")
                 oAuth2UserInfo = GoogleUserInfo(oauth2User.attributes)
             }
+
+            "Apple" -> {
+                log.info("애플 로그인 요청")
+                oAuth2UserInfo = AppleUserInfo(oauth2User.attributes)
+            }
         }
 
         val providerId = oAuth2UserInfo!!.getProviderId()
