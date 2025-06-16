@@ -9,10 +9,14 @@ enum class Social(var code:Int, var company : String) {
 
     companion object{
         fun getSocial(provider : String) : Social {
-            if(provider == "Kakao") return KAKAO
-            else if(provider == "Google") return GOOGLE
-            else if(provider == "Apple") return APPLE
-            else if(provider == "Naver") return NAVER
+            val social : Social
+
+            if(provider == "Kakao") social = KAKAO
+            else if(provider == "Google") social = GOOGLE
+            else if(provider == "Apple") social = APPLE
+            else social = NAVER
+
+            return social
         }
     }
 
