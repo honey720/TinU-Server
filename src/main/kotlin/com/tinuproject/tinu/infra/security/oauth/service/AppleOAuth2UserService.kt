@@ -1,6 +1,7 @@
 package com.tinuproject.tinu.infra.security.oauth.service
 
 import com.tinuproject.tinu.infra.security.config.AppleProperties
+import io.jsonwebtoken.Jwts
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User
@@ -37,6 +38,14 @@ class AppleOAuth2UserService(
         )
     }
 
+    private fun parseIdToken(idToken:String) : Map<String, Any>{
+
+        val parser = Jwts.parserBuilder().setSigningKey(getApplePublicKey(idToken)).build()
+
+        val jwt = parser.parseClaimsJwt(idToken)
+
+        return jwt.body
+    }
 
     private fun getApplePublicKey(idToken:String) : PublicKey{
         val parts = idToken.split(".")
