@@ -28,7 +28,7 @@ class AppleOAuth2UserService(
         val claims = parseIdToken(idToken)
 
         val attributes = mapOf(
-          appleProperties.userNameAttribute to claims["sub"]
+          appleProperties.userNameAttribute to claims[appleProperties.userNameAttribute]
         )
 
         return DefaultOAuth2User(
