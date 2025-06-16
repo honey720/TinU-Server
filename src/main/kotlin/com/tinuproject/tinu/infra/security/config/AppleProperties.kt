@@ -1,10 +1,11 @@
 package com.tinuproject.tinu.infra.security.config
 
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Component
 
 
-@Component
+@Configuration
 data class AppleProperties(
     @Value("\${spring.security.oauth2.client.registration.apple.client-id}")
     val clientId : String,
