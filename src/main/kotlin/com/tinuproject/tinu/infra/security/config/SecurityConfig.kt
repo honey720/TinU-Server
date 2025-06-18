@@ -30,6 +30,7 @@ import org.springframework.security.config.annotation.web.configurers.HttpBasicC
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer
 import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
@@ -45,7 +46,6 @@ class SecurityConfig(
     @Value("\${web.allowed-path}")
     private val allowedPaths : List<String>,
     private val objectMapper: ObjectMapper,
-    private val customTokenResponseClient: CustomTokenResponseClient
 ) {
 
     @Bean
@@ -102,7 +102,7 @@ class SecurityConfig(
                         userInfo.userService(customOAuth2UserService) // CustomOAuth2UserService 등록
                     }
                     .tokenEndpoint{ token ->
-                        token.accessTokenResponseClient(customTokenResponseClient)
+                        token.accessTokenResponseClient(CustomTokenResponseClient(appleTokenResponseClient = AppleTokenResponseClient{appleJwtGenerator.generate()}, defaultClient = DefaultAuthorizationCodeTokenResponseClient()))
                     }
                     //TODO(로그인이 필요한데 안된 부분이 있으면 넘길 수 있는 것.)- 기본은 (백엔드 도메인)/login
                     //.loginPage("http://localhost:8080/loginpage.html").permitAll()

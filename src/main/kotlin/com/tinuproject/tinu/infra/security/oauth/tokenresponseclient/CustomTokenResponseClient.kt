@@ -5,7 +5,7 @@ import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCo
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse
 import org.springframework.stereotype.Component
 
-@Component
+
 class CustomTokenResponseClient(
     private val appleTokenResponseClient: OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest>,
     private val defaultClient : OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest>

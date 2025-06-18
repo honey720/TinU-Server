@@ -19,9 +19,9 @@ import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.exchange
 
 
-@Component
+
 class AppleTokenResponseClient(
-    private val appleJwtGenerator: AppleJwtGenerator
+    private val generator : () -> String
 ) : OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest>{
 
     private val restTemplate = RestTemplate()
@@ -32,7 +32,7 @@ class AppleTokenResponseClient(
         val redirectUri = request.authorizationExchange.authorizationRequest.redirectUri
         val code = request.authorizationExchange.authorizationResponse.code
 
-        val jwtToken = appleJwtGenerator.generate()
+        val jwtToken = generator()
 
         val formData = LinkedMultiValueMap<String, String>().apply {
             add("client_id", clientRegistration.clientId)
