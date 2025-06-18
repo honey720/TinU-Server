@@ -3,6 +3,7 @@ package com.tinuproject.tinu.infra.security.jwt
 import com.tinuproject.tinu.infra.security.config.AppleProperties
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
 import java.security.KeyFactory
 import java.security.PrivateKey
@@ -16,6 +17,7 @@ import java.util.Date.*
 class AppleJwtGenerator(
     val appleProperties: AppleProperties
 ) {
+    @Bean
     fun generate(): String{
         val now = Instant.now()
 

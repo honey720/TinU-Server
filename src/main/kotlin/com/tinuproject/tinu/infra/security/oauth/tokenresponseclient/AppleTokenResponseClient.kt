@@ -1,6 +1,7 @@
 package com.tinuproject.tinu.infra.security.oauth.tokenresponseclient
 
 import com.tinuproject.tinu.global.response.ResponseEntityGenerator
+import com.tinuproject.tinu.infra.security.jwt.AppleJwtGenerator
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.core.ParameterizedTypeReference
@@ -12,13 +13,15 @@ import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResp
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest
 import org.springframework.security.oauth2.core.OAuth2AccessToken
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse
+import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.exchange
 
 
+@Component
 class AppleTokenResponseClient(
-    private val jwtGenerator: () -> String
+    private val appleJwtGenerator: AppleJwtGenerator
 ) : OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest>{
 
     private val restTemplate = RestTemplate()
@@ -29,7 +32,7 @@ class AppleTokenResponseClient(
         val redirectUri = request.authorizationExchange.authorizationRequest.redirectUri
         val code = request.authorizationExchange.authorizationResponse.code
 
-        val jwtToken = jwtGenerator()
+        val jwtToken = appleJwtGenerator.generate()
 
         val formData = LinkedMultiValueMap<String, String>().apply {
             add("client_id", clientRegistration.clientId)
