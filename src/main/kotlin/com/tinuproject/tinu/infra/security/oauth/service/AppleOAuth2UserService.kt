@@ -42,7 +42,7 @@ class AppleOAuth2UserService(
 
         val parser = Jwts.parserBuilder().setSigningKey(getApplePublicKey(idToken)).build()
 
-        val jwt = parser.parseClaimsJwt(idToken)
+        val jwt = parser.parseClaimsJws(idToken)
 
         return jwt.body
     }
