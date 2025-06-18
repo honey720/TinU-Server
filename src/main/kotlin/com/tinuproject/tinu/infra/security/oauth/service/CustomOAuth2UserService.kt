@@ -16,7 +16,8 @@ import java.util.*
 @Service
 class CustomOAuth2UserService(
     private val userRepository: SocialMemberRepository,
-    private val refreshTokenRepository : RefreshTokenRepository
+    private val refreshTokenRepository : RefreshTokenRepository,
+    private val appleOAuth2UserService: AppleOAuth2UserService
 ): DefaultOAuth2UserService() {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
@@ -26,8 +27,11 @@ class CustomOAuth2UserService(
     override fun loadUser(userRequest: OAuth2UserRequest?): OAuth2User {
 
         val provider :String = userRequest!!.clientRegistration.clientName
-
-        val oauth2User : OAuth2User = super.loadUser(userRequest)
+        val oauth2User : OAuth2User = if(provider == "Apple"){
+            appleOAuth2UserService.appleLoadUser(userRequest)
+        }else{
+            super.loadUser(userRequest)
+        }
 
 
         when (provider) {
@@ -46,6 +50,11 @@ class CustomOAuth2UserService(
             "Google" -> {
                 log.info("구글 로그인 요청")
                 oAuth2UserInfo = GoogleUserInfo(oauth2User.attributes)
+            }
+
+            "Apple" -> {
+                log.info("애플 로그인 요청")
+                oAuth2UserInfo = AppleUserInfo(oauth2User.attributes)
             }
         }
 
