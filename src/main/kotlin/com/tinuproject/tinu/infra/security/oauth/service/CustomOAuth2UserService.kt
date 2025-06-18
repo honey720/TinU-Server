@@ -27,6 +27,8 @@ class CustomOAuth2UserService(
     override fun loadUser(userRequest: OAuth2UserRequest?): OAuth2User {
 
         val provider :String = userRequest!!.clientRegistration.clientName
+        //Apple은 사용자 정보를 id_token 안에 JWT 형태로만 제공해서 Security에서 기본으로 loadUser
+        // 기능으로 처리가 불가능하여 별도로 구현 및 분기처리를 해줘야함
         val oauth2User : OAuth2User = if(provider == "Apple"){
             appleOAuth2UserService.appleLoadUser(userRequest)
         }else{

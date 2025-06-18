@@ -21,6 +21,7 @@ import org.springframework.web.client.exchange
 
 
 class AppleTokenResponseClient(
+    //Kotlin은 자바와 달리 함수형 매개변수를 Class에서도 사용 가능.
     private val generator : () -> String
 ) : OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest>{
 
@@ -67,6 +68,7 @@ class AppleTokenResponseClient(
             .expiresIn(expiresIn)
             .refreshToken(refreshToken)
             .scopes(clientRegistration.scopes)
+            //해당 response에 id_Token이 저장되어 있음.
             .additionalParameters(response)
             .build()
     }

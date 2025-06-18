@@ -34,15 +34,19 @@ data class AppleProperties(
     @Value("\${spring.security.oauth2.client.provider.apple.token-uri}")
     val tokenUrl : String,
 
+    //token(Json 형태)에서 user 정보가 담겨있는 key
     @Value("\${spring.security.oauth2.client.provider.apple.user-name-attribute}")
     val userNameAttribute : String,
 
+    //AD에서 teamId
     @Value("\${apple.team_id}")
     val teamId : String,
 
+    //AD에서 Service에 대한 Key
     @Value("\${apple.login_key}")
     val serviceKey : String,
 
+    //Apple은 공개 키 방식으로 토큰을 생성
     @Value("\${apple.jwk-key-uri}")
     val jwkUrl : String
 )

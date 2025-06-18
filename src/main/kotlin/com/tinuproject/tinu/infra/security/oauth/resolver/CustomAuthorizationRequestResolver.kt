@@ -8,6 +8,8 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequest
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest
 import org.springframework.stereotype.Component
 
+//apple에서 scope가 있는 경우 요청의 response_mode가 form_post여야함.
+//하지만 security의 기본값은 query이기때문에 apple 일 때의 분기처리가 필요하여 이를 처리하는 클래스
 @Component
 class CustomAuthorizationRequestResolver(
     clientRegisterRepository: ClientRegistrationRepository
