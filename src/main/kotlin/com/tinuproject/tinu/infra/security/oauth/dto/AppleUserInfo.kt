@@ -12,6 +12,6 @@ class AppleUserInfo(
     }
 
     override fun getName(): String {
-        return attributes["name"] as String
+        return "DELETABLE"
     }
 }
