@@ -259,4 +259,4 @@ jobs:
 
       # 테스트 실행
       - name: Run Tests
-        run: ./gradlew test --info
+        run: ./gradlew test --quiet
