@@ -1,6 +1,10 @@
 name: TinU Backend CI/CD
 
 on:
+  pull_request:
+    branches:
+      - develop
+    types: [opened, synchronize, reopened]
   push:
     branches:
       - develop
@@ -8,6 +12,7 @@ on:
 
 jobs:
   backend-deploy:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       # Java 17 설정
@@ -135,3 +140,108 @@ jobs:
             docker-compose down
             docker-compose pull ${{ secrets.DOCKERHUB_IMAGENAME }}
             docker-compose up --build -d
+
+  backend-ci :
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      # Java 17 설정
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      # SOURCE 단계 - 저장소 Checkout
+      - name: Checkout-source code
+        uses: actions/checkout@v3
+
+      # application.properties 생성
+      - name: create application.properties
+        run: |
+          mkdir -p src/main/resources
+          cat <<EOF > src/main/resources/application.properties
+          spring.datasource.driver-class-name=${{ secrets.DRIVER_CLASS_NAME }}
+          spring.datasource.url=${{ secrets.DATASOURCE_URL }}
+          spring.datasource.username=${{ secrets.DATASOURCE_USERNAME }}
+          spring.datasource.password=${{ secrets.DATASOURCE_PASSWORD }}
+          spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+          spring.jackson.time-zone=Asia/Seoul
+          spring.jpa.hibernate.ddl-auto= ${{ secrets.DATASOURCE_DDL_SETTING }}
+          spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+          management.server.port=${{ secrets.SPRING_ACTUATOR_PORT }}
+          management.endpoints.web.exposure.include=${{ secrets.ENABLE_ACTUATOR_ENDPOINTS }}
+          management.endpoints.web.base-path=${{ secrets.ACTUATOR_BASE_PATH }}
+          spring.cloud.aws.credentials.access-key=${{ secrets.S3_ACCESS_KEY }}
+          spring.cloud.aws.credentials.secret-key=${{ secrets.S3_SECRET_KEY }}
+          spring.cloud.aws.region.static=ap-northeast-2
+          aws.s3.bucket=${{ secrets.S3_BUCKET }}
+          aws.s3.file.max-size=10485760
+          cloudfront.domain=${{ secrets.CDN_DOMAIN }}
+          spring.security.oauth2.client.registration.kakao.client-id=${{ secrets.KAKAO_CLIENT_ID}}
+          spring.security.oauth2.client.registration.kakao.client-secret=${{ secrets.KAKAO_CLIENT_SECRET }}
+          spring.security.oauth2.client.registration.kakao.scope=${{ secrets.KAKAO_SCOPE }}
+          spring.security.oauth2.client.registration.kakao.authorization-grant-type=${{ secrets.KAKAO_AUTHORIZATION_GRANT_TYPE }}
+          spring.security.oauth2.client.registration.kakao.redirect-uri=${{ secrets.KAKAO_REDIRECT_URI }}
+          spring.security.oauth2.client.registration.kakao.client-name=${{ secrets.KAKAO_CLIENT_NAME }}
+          spring.security.oauth2.client.registration.kakao.client-authentication-method=${{ secrets.KAKAO_AUTHENTICATION_METHOD }}
+          spring.security.oauth2.client.registration.naver.client-id=${{ secrets.NAVER_CLIENT_ID }}
+          spring.security.oauth2.client.registration.naver.client-secret=${{ secrets.NAVER_CLIENT_SECRET }}
+          spring.security.oauth2.client.registration.naver.scope=${{ secrets.NAVER_SCOPE }}
+          spring.security.oauth2.client.registration.naver.client-name=${{ secrets.NAVER_CLIENT_NAME }}
+          spring.security.oauth2.client.registration.naver.authorization-grant-type=${{ secrets.NAVER_AUTHORIZATION_GRANT_TYPE }}
+          spring.security.oauth2.client.registration.naver.redirect-uri=${{ secrets.NAVER_REDIRECT_URI }}
+          spring.security.oauth2.client.provider.kakao.authorization-uri=${{ secrets.KAKAO_AUTHORIZATION_URI }}
+          spring.security.oauth2.client.provider.kakao.token-uri=${{ secrets.KAKAO_TOKEN_URI }}
+          spring.security.oauth2.client.provider.kakao.user-info-uri=${{ secrets.KAKAO_USER_INFO_URI }}
+          spring.security.oauth2.client.provider.kakao.user-name-attribute=${{ secrets.KAKAO_USER_NAME_ATTRIBUTE }}
+          spring.security.oauth2.client.provider.naver.authorization-uri=${{ secrets.NAVER_AUTHORIZATION_URI }}
+          spring.security.oauth2.client.provider.naver.token-uri=${{ secrets.NAVER_TOKEN_URI }}
+          spring.security.oauth2.client.provider.naver.user-info-uri=${{ secrets.NAVER_USER_INFO_URI }}
+          spring.security.oauth2.client.provider.naver.user-name-attribute=${{ secrets.NAVER_USER_NAME_ATTRIBUTE }}
+          jwt.secret=${{ secrets.JWT_SECRET }}
+          jwt.redirect=${{ secrets.JWT_REDIRECT_URI }}
+          jwt.access-token.expiration-time=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION_TIME }}
+          jwt.refresh-token.expiration-time=${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION_TIME }}
+          cookie.max-age=${{ secrets.COOKIE_MAX_AGE }}
+          cookie.token.access-token=${{ secrets.COOKIE_ACCESS_TOKEN }}
+          cookie.token.refresh-token=${{ secrets.COOKIE_REFRESH_TOKEN }}
+          web.allowed-path=${{ secrets.ALLOWED_PATH }}
+          spring.web.resources.add-mappings=false
+          spring.mail.host=smtp.gmail.com
+          spring.mail.port=587
+          spring.mail.properties.mail.smtp.auth=true
+          spring.mail.properties.mail.smtp.starttls.enable=true
+          spring.mail.properties.mail.smtp.starttls.required=true
+          spring.mail.properties.mail.smtp.connectiontimeout=5000
+          spring.mail.properties.mail.smtp.timeout=5000
+          spring.mail.properties.mail.smtp.writetimeout=5000
+          spring.auth-code-expiration-millis=1800000
+          spring.mail.username=${{ secrets.MAIL_USERNAME }}
+          spring.mail.password=${{ secrets.MAIL_PASSWORD }}
+          jwt.redirect.sign = ${{ secrets.JWT_REDIRECT_SIGN_URI }}
+          springdoc.default-produces-media-type=application/json
+          springdoc.default-consumes-media-type=application/json
+          spring.security.oauth2.client.registration.google.client-id=${{ secrets.GOOGLE_CLIENT_ID }}
+          spring.security.oauth2.client.registration.google.client-secret=${{ secrets.GOOGLE_CLIENT_SECRET }}
+          spring.security.oauth2.client.registration.google.scope=${{ secrets.GOOGLE_SCOPE }}
+          spring.security.oauth2.client.registration.google.redirect-uri=${{ secrets.GOOGLE_REDIRECT_URI }}
+          spring.security.oauth2.client.registration.google.client-name=${{ secrets.GOOGLE_CLIENT_NAME }}
+          spring.security.oauth2.client.registration.apple.client-name=${{ secrets.APPLE_CLIENT_NAME}}
+          spring.security.oauth2.client.registration.apple.client-id=${{ secrets.APPLE_CLIENT_ID }}
+          spring.security.oauth2.client.registration.apple.client-secret=${{ secrets.APPLE_CLIENT_SECRET}}
+          spring.security.oauth2.client.registration.apple.scope=${{ secrets.APPLE_SCOPE}}
+          spring.security.oauth2.client.registration.apple.redirect-uri=${{ secrets.APPLE_REDIRECT_URI }}
+          spring.security.oauth2.client.registration.apple.authorization-grant-type=${{ secrets.APPLE_GRANT_TYPE }}
+          spring.security.oauth2.client.provider.apple.authorization-uri=${{ secrets.APPLE_AUTH_URI }}
+          spring.security.oauth2.client.provider.apple.token-uri=${{ secrets.APPLE_TOKEN_URI }}
+          spring.security.oauth2.client.provider.apple.user-info-uri=${{ secrets.APPLE_USER_INFO_URI}}
+          spring.security.oauth2.client.provider.apple.user-name-attribute=${{ secrets.APPLE_USER_NAME }}
+          apple.team_id= ${{ secrets.APPLE_TEAM_ID }}
+          apple.login_key = ${{ secrets.APPLE_LOGIN_KEY }}
+          apple.jwk-key-uri = ${{ secrets.APPLE_PUBLIC_KEY_URI }}
+          EOF
+
+      # 테스트 실행
+      - name: Run Tests
+        run: ./gradlew test --info
