@@ -246,6 +246,16 @@ jobs:
       - name: Grant execute permission to Gradle Wrapper
         run: chmod +x ./gradlew
 
+      # Gradle 캐시
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
 
       # 테스트 실행
       - name: Run Tests
