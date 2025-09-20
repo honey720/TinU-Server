@@ -1,6 +1,5 @@
 package com.tinuproject.tinu.annotation
 
-import com.tinuproject.tinu.domain.member.controller.CustomFilterController
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.core.annotation.AliasFor
 import org.springframework.test.context.ActiveProfiles
