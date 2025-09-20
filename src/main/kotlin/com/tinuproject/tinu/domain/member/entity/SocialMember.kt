@@ -18,7 +18,7 @@ class SocialMember(
     var providerId : String,
 
     @Column
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     var provider : Social,
 
     ): BaseEntity()

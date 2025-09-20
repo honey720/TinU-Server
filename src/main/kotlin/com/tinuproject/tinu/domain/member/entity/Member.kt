@@ -45,7 +45,7 @@ class Member (
     var mark : Double?,
 
     @Column
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     var social : Social,
 
     @OneToMany(fetch = FetchType.LAZY,
