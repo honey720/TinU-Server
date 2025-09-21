@@ -149,7 +149,7 @@ jobs:
             docker-compose pull ${{ secrets.DOCKERHUB_IMAGENAME }}
             docker-compose up --build -d
 
-  backend-ci :
+  backend-build :
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
