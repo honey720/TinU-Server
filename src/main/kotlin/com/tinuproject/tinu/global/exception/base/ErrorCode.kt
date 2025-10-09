@@ -46,8 +46,13 @@ enum class ErrorCode(
     NO_SUCH_KEY(httpStatusCode = 400, stateCode = "NO_SUCH_KEY", message = "키가 존재하지 않습니다."),
     INVALID_ETAG(httpStatusCode = 400, stateCode = "INVALID_ETAG", message = "ETag가 일치하지 않습니다."),
 
+
+    //리뷰 관련
+    REVIEW_ALEADTY_EXIST(httpStatusCode = 409, stateCode = "REVIEW_ALREADY_EXIST", message = "이미 리뷰를 작성하셨습니다."),
+
     //전역적 사용
     UNIVERSITY_NOT_MATCH(httpStatusCode = 403, stateCode = "UNIVERSITY_NOT_MATCH", message = "대학이 일치하지 않습니다."),
     NOT_FOUND(httpStatusCode = 404, stateCode = "NOT_FOUND", message = "없는 페이지입니다."),
     UNAUTHORIZED_ACCESS(httpStatusCode = 403, stateCode = "FORBIDDEN", message = "요청에 대한 권한이 없습니다.");
+
 }

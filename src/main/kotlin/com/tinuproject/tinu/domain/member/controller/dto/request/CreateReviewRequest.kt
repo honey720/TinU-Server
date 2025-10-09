@@ -7,6 +7,9 @@ import java.util.*
 class CreateReviewRequest(
     //피평가자 Id
     val revieweeId : UUID,
+    //게시글 Id
+    val postId : Long,
+
     //메인평가 ( 좋았어요, 보통이에요,별로였어요 )
     val mainEvaluation: Evaluation,
 
@@ -21,6 +24,7 @@ class CreateReviewRequest(
         return CreateReviewInput(
             reviewerId = reviewerId,
             revieweeId = this.revieweeId,
+            postId = postId,
             mainEvaluation = this.mainEvaluation,
             isFriendly = this.isFriendly,
             wasLate = this.wasLate,
