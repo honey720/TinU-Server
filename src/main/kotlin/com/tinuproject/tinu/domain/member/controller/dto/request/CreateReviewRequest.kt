@@ -28,7 +28,7 @@ class CreateReviewRequest(
             postId = postId,
             mainEvaluation = this.mainEvaluation,
             isFriendly = this.subEvaluation[0],
-            wasLate = this.subEvaluation[1],
+            notLate = this.subEvaluation[1],
             respondedQuickly = this.subEvaluation[2]
         )
     }

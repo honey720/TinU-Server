@@ -1,7 +1,6 @@
 package com.tinuproject.tinu.domain.member.service.dto.input
 
 import com.tinuproject.tinu.domain.member.enums.Evaluation
-import jakarta.persistence.Column
 import java.util.*
 
 class CreateReviewInput(
@@ -17,7 +16,7 @@ class CreateReviewInput(
 
     val isFriendly: Boolean,
 
-    val wasLate: Boolean,
+    val notLate: Boolean,
 
     val respondedQuickly: Boolean
 ) {

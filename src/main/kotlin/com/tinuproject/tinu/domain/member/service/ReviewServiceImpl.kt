@@ -38,7 +38,7 @@ class ReviewServiceImpl(
             post = post,
             mainEvaluation = createReviewInput.mainEvaluation,
             isFriendly = createReviewInput.isFriendly,
-            wasLate = createReviewInput.wasLate,
+            wasLate = createReviewInput.notLate,
             respondedQuickly = createReviewInput.respondedQuickly
         ))
 
