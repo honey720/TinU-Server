@@ -36,7 +36,7 @@ class Review(
     var isFriendly: Boolean = false,
 
     @Column(nullable = false)
-    var wasLate: Boolean = false,
+    var notLate: Boolean = false,
 
     @Column(nullable = false)
     var respondedQuickly: Boolean = false
