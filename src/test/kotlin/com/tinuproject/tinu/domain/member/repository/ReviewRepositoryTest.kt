@@ -1,16 +1,10 @@
 package com.tinuproject.tinu.domain.member.repository
 
 import com.tinuproject.tinu.annotation.RepositoryTest
-import com.tinuproject.tinu.domain.member.entity.Member
 import com.tinuproject.tinu.domain.member.entity.Review
 import com.tinuproject.tinu.domain.member.enums.Evaluation
-import com.tinuproject.tinu.domain.member.enums.Social
-import com.tinuproject.tinu.domain.post.entity.Category
-import com.tinuproject.tinu.domain.post.entity.Post
-import com.tinuproject.tinu.domain.post.enums.SellMethod
 import com.tinuproject.tinu.domain.post.repository.CategoryRepository
 import com.tinuproject.tinu.domain.post.repository.PostRepository
-import com.tinuproject.tinu.domain.university.entity.University
 import com.tinuproject.tinu.domain.university.repository.UniversityRepository
 import com.tinuproject.tinu.factory.TestCategoryFactory
 import com.tinuproject.tinu.factory.TestMemberFactory
@@ -18,7 +12,6 @@ import com.tinuproject.tinu.factory.TestPostFactory
 import com.tinuproject.tinu.factory.TestUniversityFactory
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
-import org.mockito.Mockito.mock
 import java.util.*
 import kotlin.test.Test
 
@@ -52,16 +45,14 @@ class ReviewRepositoryTest(
     }
 
 
-
     @Test
-    @DisplayName("")
-    fun tddLiveTemple(){
+    @DisplayName("특정 유저가 특정 post에서 평가를 진행했는지 확인 할 때 없다면 false를 리턴한다.")
+    fun notExistsByReviewer_UserIdOrReviewee_UserIdAndPost_IdTest(){
         //given
-
-        //when
-
-        //then
-
+        val reviewerId = UUID.randomUUID()
+        val postId = 1L
+        //when & then
+        assertThat(reviewRepository.existsByReviewer_UserIdAndPost_Id(reviewerId, postId)).isFalse()
     }
 
     @Test
@@ -111,7 +102,7 @@ class ReviewRepositoryTest(
         reviewRepository.save(review)
 
         //when & then
-        assertThat(reviewRepository.existsByReviewer_UserIdOrReviewee_UserIdAndPost_Id(reviewerId, reviewerId, post.id!!)).isTrue()
+        assertThat(reviewRepository.existsByReviewer_UserIdAndPost_Id(reviewerId,  post.id!!)).isTrue()
 
     }
 }

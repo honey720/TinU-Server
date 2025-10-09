@@ -7,5 +7,5 @@ import java.util.*
 @Repository
 interface ReviewRepository : JpaRepository<Review, Long> {
 
-    fun existsByReviewer_UserIdOrReviewee_UserIdAndPost_Id(reviewerId : UUID, revieweeId: UUID, postId : Long) : Boolean
+    fun existsByReviewer_UserIdAndPost_Id(reviewerId : UUID, postId : Long) : Boolean
 }
