@@ -77,7 +77,12 @@ class Member (
     @OneToMany(fetch = FetchType.LAZY,
         cascade = [CascadeType.REMOVE],
         mappedBy = "member")
-    var customFilter : MutableList<CustomFilter> = mutableListOf()
+    var customFilter : MutableList<CustomFilter> = mutableListOf(),
+
+    @OneToOne(fetch = FetchType.LAZY,
+        cascade = [CascadeType.REMOVE],
+        mappedBy = "member")
+    val subEvaluationSummary: SubEvaluationSummary
 ) : BaseEntity(){
 
     fun updateMemberInfo(updateUserInputDTO: UpdateUserInputDTO){

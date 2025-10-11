@@ -3,7 +3,7 @@ package com.tinuproject.tinu.domain.member.entity
 import jakarta.persistence.*
 
 @Entity
-class SubReviewSummary(
+class SubEvaluationSummary(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id : Long? = null,
