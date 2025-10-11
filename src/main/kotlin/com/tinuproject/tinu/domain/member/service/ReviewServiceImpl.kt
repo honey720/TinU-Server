@@ -2,10 +2,12 @@ package com.tinuproject.tinu.domain.member.service
 
 import com.tinuproject.tinu.domain.member.controller.dto.request.SearchReviewInput
 import com.tinuproject.tinu.domain.member.entity.Review
+import com.tinuproject.tinu.domain.member.entity.SubEvaluationSummary
 import com.tinuproject.tinu.domain.member.exception.ExistReviewException
 import com.tinuproject.tinu.domain.member.exception.NotExistMemberException
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.member.repository.ReviewRepository
+import com.tinuproject.tinu.domain.member.repository.SubEvaluationSummaryRepository
 import com.tinuproject.tinu.domain.member.service.dto.input.CreateReviewInput
 import com.tinuproject.tinu.domain.post.exception.PostNotFoundException
 import com.tinuproject.tinu.domain.post.repository.PostRepository
@@ -17,39 +19,60 @@ import java.util.*
 class ReviewServiceImpl(
     private val reviewRepository: ReviewRepository,
     private val memberRepository: MemberRepository,
-    private val postRepository : PostRepository
+    private val postRepository : PostRepository,
+    private val subEvaluationSummaryRepository: SubEvaluationSummaryRepository
 ) : ReviewService {
+
     @Transactional
     override fun createReview(createReviewInput: CreateReviewInput): Boolean {
-        if(existReview(userId = createReviewInput.reviewerId, postId = createReviewInput.postId)){
+        if(existsReview(userId = createReviewInput.reviewerId, postId = createReviewInput.postId)){
             throw ExistReviewException()
         }
-
-
+        //reviewer 영속화
         val reviewer = memberRepository.findMemberByUserId(createReviewInput.reviewerId)?:throw NotExistMemberException()
 
-        val reviewee = memberRepository.findMemberByUserId(createReviewInput.revieweeId)?:throw NotExistMemberException()
+        //reviewee 영속화
+        var reviewee = memberRepository.findMemberByUserId(createReviewInput.revieweeId)?:throw NotExistMemberException()
 
+        //post 영속화
         val post = postRepository.findPostById(createReviewInput.postId)?: throw PostNotFoundException()
 
+        //리뷰 작성 및 저장
         reviewRepository.save(Review(
             reviewer = reviewer,
             reviewee = reviewee,
             post = post,
             mainEvaluation = createReviewInput.mainEvaluation,
             isFriendly = createReviewInput.isFriendly,
-            wasLate = createReviewInput.notLate,
+            notLate = createReviewInput.notLate,
             respondedQuickly = createReviewInput.respondedQuickly
         ))
+
+
+        //서브 Evaluation 반영을 위한 영속화
+        //만약 이때 첫 리뷰시 = SubEvaluation이 없다면 새로 만들어서 저장.
+        //THINK("Member를 생성하는 시점에 만들어줘야할까 아니면 첫 리뷰 시 만들어줘야할까")
+        //THINK(리뷰를 작성 받지 않았다 = 거래를 하지 않는 눈팅 유저 가능성 이들에게 데이터를 할당해야하는가?
+        //  근데 이렇게 첫 리뷰시 받는다면 앞으로 SubEvaluation을 받을 때 null 체크가 필수
+        //  번거롭긴 해도 유저 정보 받아올 때 불필요한 네트워크를 한번 줄일 수 있을 것 같음.
+        //  근데 또 코틀린은 null을 그닥 좋아하지 않는 언어인데 언어에게 안맞는 것은 아닌지.
+        val subEvaluationSummary = subEvaluationSummaryRepository.findByMemberUserIdForUpdate(reviewee.userId)
+            ?: subEvaluationSummaryRepository.save(SubEvaluationSummary(member = reviewee).apply {
+                reviewee.subEvaluationSummary = this
+            })
+        subEvaluationSummary.updateFriendlyNum(createReviewInput.isFriendly)
+        subEvaluationSummary.updateNotLateNum(createReviewInput.notLate)
+        subEvaluationSummary.updateRespondedQuicklyNum(createReviewInput.respondedQuickly)
 
         return true
     }
 
+    @Transactional(readOnly = true)
     override fun hasWrittenReview(searchReviewInput: SearchReviewInput): Boolean {
-        TODO()
+        return existsReview(searchReviewInput.userId, searchReviewInput.postId)
     }
 
-    private fun existReview(userId : UUID, postId: Long) : Boolean{
+    private fun existsReview(userId : UUID, postId: Long) : Boolean{
         return reviewRepository.existsByReviewer_UserIdAndPost_Id(reviewerId = userId, postId = postId)
     }
 }

@@ -82,7 +82,8 @@ class Member (
     @OneToOne(fetch = FetchType.LAZY,
         cascade = [CascadeType.REMOVE],
         mappedBy = "member")
-    val subEvaluationSummary: SubEvaluationSummary
+    var subEvaluationSummary: SubEvaluationSummary?
+
 ) : BaseEntity(){
 
     fun updateMemberInfo(updateUserInputDTO: UpdateUserInputDTO){

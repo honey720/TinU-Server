@@ -16,8 +16,39 @@ class SubEvaluationSummary(
     var notLateNum: Int = 0,
 
     @Column(nullable = false)
-    var respondedQuicklyNum: Int = 0
+    var respondedQuicklyNum: Int = 0,
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    val member: Member
+
 ) {
 
 
+    fun updateFriendlyNum(flag : Boolean){
+        if(flag){
+            this.respondedQuicklyNum++;
+        }
+        else{
+            this.respondedQuicklyNum--
+        }
+    }
+
+    fun updateNotLateNum(flag : Boolean){
+        if(flag){
+            this.respondedQuicklyNum++;
+        }
+        else{
+            this.respondedQuicklyNum--
+        }
+    }
+
+    fun updateRespondedQuicklyNum(flag : Boolean){
+        if(flag){
+            this.respondedQuicklyNum++;
+        }
+        else{
+            this.respondedQuicklyNum--
+        }
+    }
 }
