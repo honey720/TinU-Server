@@ -6,8 +6,6 @@ import java.util.*
 class CreateReviewInput(
     //평가자 Id
     val reviewerId : UUID,
-    //피평가자 Id
-    val revieweeId : UUID,
     //게시글 정보
     val postId : Long,
     

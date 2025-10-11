@@ -1,6 +1,7 @@
 package com.tinuproject.tinu.domain.member.service
 
 import com.tinuproject.tinu.domain.member.controller.dto.request.SearchReviewInput
+import com.tinuproject.tinu.domain.member.entity.Member
 import com.tinuproject.tinu.domain.member.entity.Review
 import com.tinuproject.tinu.domain.member.entity.SubEvaluationSummary
 import com.tinuproject.tinu.domain.member.exception.ExistReviewException
@@ -29,24 +30,38 @@ class ReviewServiceImpl(
         if(existsReview(userId = createReviewInput.reviewerId, postId = createReviewInput.postId)){
             throw ExistReviewException()
         }
-        //reviewer 영속화
-        val reviewer = memberRepository.findMemberByUserId(createReviewInput.reviewerId)?:throw NotExistMemberException()
 
-        //reviewee 영속화
-        var reviewee = memberRepository.findMemberByUserId(createReviewInput.revieweeId)?:throw NotExistMemberException()
+        var reviewer : Member? = null
+
+        var reviewee :Member? = null
 
         //post 영속화
         val post = postRepository.findPostById(createReviewInput.postId)?: throw PostNotFoundException()
 
+        //피 평가자를 프론트에서 받는 방식에서 직접 Post에서 추출하는 방식으로 변경.
+        //실제 피평가자가 Post 연관자인지 확인할 필요 X
+        //프론트 -> Back으로의 데이터 전송량 감소
+        if(post.buyer!=null){
+            val author = post.author
+            val buyer = post.buyer
+            if(buyer!!.userId == createReviewInput.reviewerId){
+                reviewer = buyer
+                reviewee = author
+            }else{
+                reviewer = author
+                reviewee = buyer
+            }
+        }
+
         //현재 리뷰 작성자가 작성자 혹은 구매자인지 확인
-        if(post.author.id != reviewer.id && post.buyer!!.id != reviewer.id){
+        if(post.author.id != reviewer!!.id && post.buyer!!.id != reviewer.id){
             throw UnauthorizedAccessException()
         }
         
         //리뷰 작성 및 저장
         reviewRepository.save(Review(
             reviewer = reviewer,
-            reviewee = reviewee,
+            reviewee = reviewee!!,
             post = post,
             mainEvaluation = createReviewInput.mainEvaluation,
             isFriendly = createReviewInput.isFriendly,

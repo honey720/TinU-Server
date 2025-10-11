@@ -6,9 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 @Schema
 class CreateReviewRequest(
-    //피평가자 Id
-    @Schema(description = "피평가자 Id", example = "UUID")
-    val revieweeId : UUID,
+
     //게시글 Id
     @Schema(description = "게시글 Id", example = "UUID")
     val postId : Long,
@@ -24,7 +22,6 @@ class CreateReviewRequest(
     fun of(reviewerId : UUID) : CreateReviewInput{
         return CreateReviewInput(
             reviewerId = reviewerId,
-            revieweeId = this.revieweeId,
             postId = postId,
             mainEvaluation = this.mainEvaluation,
             isFriendly = this.subEvaluation[0],
