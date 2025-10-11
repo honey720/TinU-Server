@@ -62,8 +62,6 @@ class ReviewRepositoryTest(
         //대학 정보 기입
         val testUniversity = universityRepository.save(TestUniversityFactory.create())
 
-
-
         //유저 정보 기입
         val reviewerId = UUID.randomUUID()
         val revieweeId = UUID.randomUUID()

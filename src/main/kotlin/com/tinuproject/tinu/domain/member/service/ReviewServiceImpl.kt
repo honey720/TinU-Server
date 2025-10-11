@@ -11,6 +11,7 @@ import com.tinuproject.tinu.domain.member.repository.SubEvaluationSummaryReposit
 import com.tinuproject.tinu.domain.member.service.dto.input.CreateReviewInput
 import com.tinuproject.tinu.domain.post.exception.PostNotFoundException
 import com.tinuproject.tinu.domain.post.repository.PostRepository
+import com.tinuproject.tinu.global.exception.UnauthorizedAccessException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -37,6 +38,11 @@ class ReviewServiceImpl(
         //post 영속화
         val post = postRepository.findPostById(createReviewInput.postId)?: throw PostNotFoundException()
 
+        //현재 리뷰 작성자가 작성자 혹은 구매자인지 확인
+        if(post.author.id != reviewer.id && post.buyer!!.id != reviewer.id){
+            throw UnauthorizedAccessException()
+        }
+        
         //리뷰 작성 및 저장
         reviewRepository.save(Review(
             reviewer = reviewer,
@@ -60,6 +66,8 @@ class ReviewServiceImpl(
             ?: subEvaluationSummaryRepository.save(SubEvaluationSummary(member = reviewee).apply {
                 reviewee.subEvaluationSummary = this
             })
+
+        //Dirty 체킹 대신 이를 DB 레벨 단에서 작동하게끔 해도 좋을 것 같음.
         subEvaluationSummary.updateFriendlyNum(createReviewInput.isFriendly)
         subEvaluationSummary.updateNotLateNum(createReviewInput.notLate)
         subEvaluationSummary.updateRespondedQuicklyNum(createReviewInput.respondedQuickly)

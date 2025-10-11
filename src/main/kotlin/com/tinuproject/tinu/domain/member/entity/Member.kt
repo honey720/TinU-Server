@@ -82,7 +82,7 @@ class Member (
     @OneToOne(fetch = FetchType.LAZY,
         cascade = [CascadeType.REMOVE],
         mappedBy = "member")
-    var subEvaluationSummary: SubEvaluationSummary?
+    var subEvaluationSummary: SubEvaluationSummary? = null
 
 ) : BaseEntity(){
 
