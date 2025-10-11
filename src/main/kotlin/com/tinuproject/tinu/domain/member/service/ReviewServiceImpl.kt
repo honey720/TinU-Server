@@ -10,6 +10,7 @@ import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.member.repository.ReviewRepository
 import com.tinuproject.tinu.domain.member.repository.SubEvaluationSummaryRepository
 import com.tinuproject.tinu.domain.member.service.dto.input.CreateReviewInput
+import com.tinuproject.tinu.domain.post.entity.Post
 import com.tinuproject.tinu.domain.post.exception.PostNotFoundException
 import com.tinuproject.tinu.domain.post.repository.PostRepository
 import com.tinuproject.tinu.global.exception.UnauthorizedAccessException
@@ -51,17 +52,18 @@ class ReviewServiceImpl(
                 reviewer = author
                 reviewee = buyer
             }
+            //만약 아직 거래가 끝나지 않은 게시글에 대한 것이면 권한 없음.
+        }else{
+            throw UnauthorizedAccessException()
         }
 
         //현재 리뷰 작성자가 작성자 혹은 구매자인지 확인
-        if(post.author.id != reviewer!!.id && post.buyer!!.id != reviewer.id){
-            throw UnauthorizedAccessException()
-        }
+        validateTradeParticipant(post, reviewer.userId)
         
         //리뷰 작성 및 저장
         reviewRepository.save(Review(
             reviewer = reviewer,
-            reviewee = reviewee!!,
+            reviewee = reviewee,
             post = post,
             mainEvaluation = createReviewInput.mainEvaluation,
             isFriendly = createReviewInput.isFriendly,
@@ -92,10 +94,23 @@ class ReviewServiceImpl(
 
     @Transactional(readOnly = true)
     override fun hasWrittenReview(searchReviewInput: SearchReviewInput): Boolean {
+
+        val post = postRepository.findPostById(searchReviewInput.postId) ?: throw PostNotFoundException()
+
+
+        validateTradeParticipant(post, searchReviewInput.userId)
+
+
         return existsReview(searchReviewInput.userId, searchReviewInput.postId)
     }
 
     private fun existsReview(userId : UUID, postId: Long) : Boolean{
         return reviewRepository.existsByReviewer_UserIdAndPost_Id(reviewerId = userId, postId = postId)
+    }
+
+    private fun validateTradeParticipant(post: Post, userId: UUID) {
+        if(post.buyer == null || (post.author.userId != userId && post.buyer!!.userId != userId)) {
+            throw UnauthorizedAccessException()
+        }
     }
 }

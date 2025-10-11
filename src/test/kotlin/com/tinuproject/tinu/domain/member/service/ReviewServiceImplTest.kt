@@ -104,7 +104,6 @@ class ReviewServiceImplTest(
         val result  = reviewService.createReview(
             createReviewInput = CreateReviewInput(
                 reviewerId = reviewerId,
-                revieweeId =  revieweeId,
                 postId = post.id!!,
                 mainEvaluation = Evaluation.GOOD,
                 isFriendly = true,
