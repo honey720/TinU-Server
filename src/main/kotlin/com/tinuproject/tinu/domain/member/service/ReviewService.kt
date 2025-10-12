@@ -10,5 +10,5 @@ interface ReviewService {
     fun createReview(createReviewInput : CreateReviewInput) : Boolean
 
     //리뷰 작성 여부 확인(채팅방 입장 시)
-    fun hasWrittenReview(searchWriteReviewInput: SearchWriteReviewInput) : Boolean
+    fun needWrittenReview(searchWriteReviewInput: SearchWriteReviewInput) : Boolean
 }

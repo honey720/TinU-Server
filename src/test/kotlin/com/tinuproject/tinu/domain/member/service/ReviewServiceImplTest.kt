@@ -76,8 +76,8 @@ class ReviewServiceImplTest(
 
 
     @Test
-    @DisplayName("사용자가 해당 리뷰를 이미 남긴 적이 없다면 false를 있다면 true를 리턴한다.")
-    fun hasWrittenReviewTest(){
+    @DisplayName("사용자가 리뷰를 남겨야한다면 true 아니라면 false를 반환한다.")
+    fun needWrittenReviewTest(){
         //Given
         val testUniversity = universityRepository.save(TestUniversityFactory.create())
 
@@ -86,8 +86,11 @@ class ReviewServiceImplTest(
 
         val reviewee = createMember(testUniversity)
 
+        val badUser = createMember(testUniversity)
+
         val reviewerId = reviewer.userId
 
+        val badUserId = badUser.userId
         //게시글 정보 기입
         val testCategory = TestCategoryFactory.create(categoryRepository = categoryRepository)
 
@@ -99,12 +102,12 @@ class ReviewServiceImplTest(
             category = testCategory
         )
         //When & Then
-        assertThat(reviewService.hasWrittenReview(
+        assertThat(reviewService.needWrittenReview(
             SearchWriteReviewInput(userId = reviewerId,
                 postId = post.id!!)
-        )).isFalse()
+        )).isTrue()
 
-        val result  = reviewService.createReview(
+        reviewService.createReview(
             createReviewInput = CreateReviewInput(
                 reviewerId = reviewerId,
                 postId = post.id!!,
@@ -115,13 +118,19 @@ class ReviewServiceImplTest(
             )
         )
 
-        assertThat(reviewService.hasWrittenReview(
+        assertThat(reviewService.needWrittenReview(
             SearchWriteReviewInput(userId = reviewerId,
                 postId = post.id!!)
-        )).isTrue()
+        )).isFalse()
 
+
+        assertThat(reviewService.needWrittenReview(
+            SearchWriteReviewInput(userId = badUserId,
+                postId = post.id!!)
+        )).isFalse()
 
     }
+
 
 
     @Test

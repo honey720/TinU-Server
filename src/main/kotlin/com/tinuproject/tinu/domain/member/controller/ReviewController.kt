@@ -37,8 +37,12 @@ class ReviewController(
     }
 
     @GetMapping("")
+    @SwaggerExceptionResponses(
+        exceptions = [
+            PostNotFoundException::class
+        ]
+    )
     fun checkAlreadyWriteReview(@AuthenticationPrincipal userId : UUID, @RequestBody searchWriteReviewRequest: SearchWriteReviewRequest):ResponseEntity<ResponseDTO<Boolean?>>{
-        return ResponseEntityGenerator.onSuccess(reviewService.hasWrittenReview(searchWriteReviewRequest.of(userId)))
-
+        return ResponseEntityGenerator.onSuccess(reviewService.needWrittenReview(searchWriteReviewRequest.of(userId)))
     }
 }

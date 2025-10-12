@@ -106,24 +106,27 @@ class ReviewServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun hasWrittenReview(searchWriteReviewInput: SearchWriteReviewInput): Boolean {
+    override fun needWrittenReview(searchWriteReviewInput: SearchWriteReviewInput): Boolean {
 
         val post = postRepository.findPostById(searchWriteReviewInput.postId) ?: throw PostNotFoundException()
 
-        //현재 리뷰 작성자가 작성자 혹은 구매자인지 확인
-        validateTradeParticipant(post, searchWriteReviewInput.userId)
+        //현재 리뷰 작성자가 작성자 혹은 구매자인지 확인 만약 아니라면
+        //리뷰를 작성할 필요가 없으니 false 반환
+        if(!validateTradeParticipant(post, searchWriteReviewInput.userId)) return false
 
 
-        return existsReview(searchWriteReviewInput.userId, searchWriteReviewInput.postId)
+        //리뷰를 작성했다면 할필요가 없으니 false, 리뷰를 작성한적 없다면 작성을 해야하니 true
+        return !existsReview(searchWriteReviewInput.userId, searchWriteReviewInput.postId)
     }
 
     private fun existsReview(userId : UUID, postId: Long) : Boolean{
         return reviewRepository.existsByReviewer_UserIdAndPost_Id(reviewerId = userId, postId = postId)
     }
 
-    private fun validateTradeParticipant(post: Post, userId: UUID) {
+    private fun validateTradeParticipant(post: Post, userId: UUID) : Boolean {
         if(post.buyer == null || (post.author.userId != userId && post.buyer!!.userId != userId)) {
-            throw UnauthorizedAccessException()
+            return false
         }
+        return true
     }
 }
