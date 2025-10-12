@@ -7,7 +7,6 @@ import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.member.repository.ReviewRepository
 import com.tinuproject.tinu.domain.member.service.dto.input.CreateReviewInput
 import com.tinuproject.tinu.domain.member.service.dto.input.SearchWriteReviewInput
-import com.tinuproject.tinu.domain.post.entity.Post
 import com.tinuproject.tinu.domain.post.exception.PostNotFoundException
 import com.tinuproject.tinu.domain.post.repository.CategoryRepository
 import com.tinuproject.tinu.domain.post.repository.PostRepository
@@ -27,8 +26,8 @@ import kotlin.test.Test
 
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.not
 import org.junit.jupiter.api.assertThrows
-import software.amazon.awssdk.services.s3.endpoints.internal.Eval
 
 @ServiceTest
 class ReviewServiceImplTest(
@@ -108,7 +107,7 @@ class ReviewServiceImplTest(
         )).isTrue()
 
         reviewService.createReview(
-            createReviewInput = CreateReviewInput(
+            input = CreateReviewInput(
                 reviewerId = reviewerId,
                 postId = post.id!!,
                 mainEvaluation = Evaluation.GOOD,
@@ -158,7 +157,7 @@ class ReviewServiceImplTest(
         )
         //When
         val result  = reviewService.createReview(
-            createReviewInput = CreateReviewInput(
+            input = CreateReviewInput(
                 reviewerId = reviewerId,
                 postId = post.id!!,
                 mainEvaluation = Evaluation.GOOD,
@@ -212,7 +211,7 @@ class ReviewServiceImplTest(
 
         //When
        reviewService.createReview(
-            createReviewInput = CreateReviewInput(
+           input = CreateReviewInput(
                 reviewerId = reviewerId,
                 postId = post.id!!,
                 mainEvaluation = Evaluation.GOOD,
@@ -222,7 +221,7 @@ class ReviewServiceImplTest(
             )
         )
        reviewService.createReview(
-            createReviewInput = CreateReviewInput(
+           input = CreateReviewInput(
                 reviewerId = reviewerId,
                 postId = post2.id!!,
                 mainEvaluation = Evaluation.SOSO,
@@ -241,8 +240,8 @@ class ReviewServiceImplTest(
 
 
     @Test
-    @DisplayName("리뷰 작성 중 구매 설정이 완료되지 않거나, 작성자가 해당 게시글 실 거래자가 아닌 경우 UnAuthorization Exception 반환")
-    fun createReviewUnAutoriztionExceptionTest(){
+    @DisplayName("리뷰 작성 시 게시글의 구매 설정이 완료되지 않거나, 작성자가 해당 게시글 실 거래자가 아닌 경우 UnAuthorization Exception 반환")
+    fun createReviewUnAuthorizationExceptionTest(){
         //Given
         val testUniversity = universityRepository.save(TestUniversityFactory.create())
 
@@ -293,7 +292,7 @@ class ReviewServiceImplTest(
             respondedQuickly = true
         )
 
-        //when
+        //when  & then
         assertThrows<UnauthorizedAccessException>{
             reviewService.createReview(badUserCase)
         }
@@ -303,9 +302,24 @@ class ReviewServiceImplTest(
             reviewService.createReview(notDoneTradeCase)
         }
 
+    }
 
-        //then
-
+    @Test
+    @DisplayName("리뷰 작성 시 게시글이 존재하지 않을 경우 PostNotFoundException을 반환한다.")
+    fun createReviewPostNotFoundExceptionTest(){
+        //Given
+        val notFoundPostCase = CreateReviewInput(
+            reviewerId = UUID.randomUUID(),
+            postId = 1L,
+            mainEvaluation = Evaluation.GOOD,
+            isFriendly = true,
+            notLate = true,
+            respondedQuickly = true
+        )
+        //When & Then
+        assertThrows<PostNotFoundException>{
+            reviewService.createReview(notFoundPostCase)
+        }
     }
 
 }
