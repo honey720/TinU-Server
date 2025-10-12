@@ -25,14 +25,16 @@ class ReviewServiceImpl(
 
     @Transactional
     override fun createReview(input: CreateReviewInput): Boolean {
-        //이미 리뷰를 작성한 적이 있다면 예외 발생
-        validateReviewNotExist(input)
+
 
         //post 영속화
         val post = postRepository.findPostById(input.postId)?: throw PostNotFoundException()
 
-        //현재 리뷰 작성자가 작성자 혹은 구매자인지 확인
+        //현재 리뷰 작성 요청자가 리뷰 작성 권한이 있는 지 확인.
         if(!validateTradeParticipant(post, input.reviewerId)) throw UnauthorizedAccessException()
+
+        //이미 리뷰를 작성한 적이 있다면 예외 발생
+        validateReviewNotExist(input)
 
         //평가자 피평가자 결정
         val (reviewer, reviewee) = resolveParticipants(post, input.reviewerId)
