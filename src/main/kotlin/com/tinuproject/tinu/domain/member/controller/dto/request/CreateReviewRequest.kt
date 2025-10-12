@@ -15,8 +15,14 @@ class CreateReviewRequest(
     @Schema(description = "메인 평가", example = "GOOD OR SOSO OR BAD")
     val mainEvaluation: Evaluation,
 
-    @Schema(description = "서브 평가(순서: isFriendly, notLate, respondedQuickly)", example = "[true, false, true]")
-    val subEvaluation : List<Boolean>,
+    @Schema(description = "대화가 친절했어요", example = "true or false")
+    val isFriendly : Boolean,
+
+    @Schema(description = "시간을 준수했어요.", example = "true or false")
+    val notLate : Boolean,
+
+    @Schema(description = "응답이 빨랐어요", example = "true or false")
+    val respondedQuickly : Boolean
 ) {
 
     fun of(reviewerId : UUID) : CreateReviewInput{
@@ -24,9 +30,9 @@ class CreateReviewRequest(
             reviewerId = reviewerId,
             postId = postId,
             mainEvaluation = this.mainEvaluation,
-            isFriendly = this.subEvaluation[0],
-            notLate = this.subEvaluation[1],
-            respondedQuickly = this.subEvaluation[2]
+            isFriendly = this.isFriendly,
+            notLate = this.notLate,
+            respondedQuickly = this.respondedQuickly
         )
     }
 }

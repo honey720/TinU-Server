@@ -76,10 +76,7 @@ class ReviewServiceImpl(
     }
 
     private fun validateTradeParticipant(post: Post, userId: UUID) : Boolean {
-        if(post.buyer == null || (post.author.userId != userId && post.buyer!!.userId != userId)) {
-            return false
-        }
-        return true
+        return !(post.buyer == null || (post.author.userId != userId && post.buyer!!.userId != userId))
     }
 
     /**
