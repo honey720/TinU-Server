@@ -6,6 +6,7 @@ import com.tinuproject.tinu.domain.member.enums.Evaluation
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.member.repository.ReviewRepository
 import com.tinuproject.tinu.domain.member.service.dto.input.CreateReviewInput
+import com.tinuproject.tinu.domain.member.service.dto.input.SearchWriteReviewInput
 import com.tinuproject.tinu.domain.post.entity.Post
 import com.tinuproject.tinu.domain.post.exception.PostNotFoundException
 import com.tinuproject.tinu.domain.post.repository.CategoryRepository
@@ -62,15 +63,6 @@ class ReviewServiceImplTest(
     }
 
 
-    @Test
-    @DisplayName("")
-    fun hasWrittenReviewTest(){
-        //Given
-
-        //When
-
-        //Then
-    }
 
     private fun createMember(university: University) : Member {
 
@@ -80,6 +72,55 @@ class ReviewServiceImplTest(
             nickname = "테스트",
             userId = UUID.randomUUID()
         )
+    }
+
+
+    @Test
+    @DisplayName("사용자가 해당 리뷰를 이미 남긴 적이 없다면 false를 있다면 true를 리턴한다.")
+    fun hasWrittenReviewTest(){
+        //Given
+        val testUniversity = universityRepository.save(TestUniversityFactory.create())
+
+        //유저 정보 기입
+        val reviewer = createMember(testUniversity)
+
+        val reviewee = createMember(testUniversity)
+
+        val reviewerId = reviewer.userId
+
+        //게시글 정보 기입
+        val testCategory = TestCategoryFactory.create(categoryRepository = categoryRepository)
+
+        val post = TestPostFactory.create(
+            postRepository = postRepository,
+            author = reviewee,
+            buyer = reviewer,
+            university = testUniversity,
+            category = testCategory
+        )
+        //When & Then
+        assertThat(reviewService.hasWrittenReview(
+            SearchWriteReviewInput(userId = reviewerId,
+                postId = post.id!!)
+        )).isFalse()
+
+        val result  = reviewService.createReview(
+            createReviewInput = CreateReviewInput(
+                reviewerId = reviewerId,
+                postId = post.id!!,
+                mainEvaluation = Evaluation.GOOD,
+                isFriendly = true,
+                notLate = false,
+                respondedQuickly = true
+            )
+        )
+
+        assertThat(reviewService.hasWrittenReview(
+            SearchWriteReviewInput(userId = reviewerId,
+                postId = post.id!!)
+        )).isTrue()
+
+
     }
 
 

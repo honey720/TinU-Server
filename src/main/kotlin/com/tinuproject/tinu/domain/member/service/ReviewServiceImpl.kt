@@ -1,15 +1,15 @@
 package com.tinuproject.tinu.domain.member.service
 
-import com.tinuproject.tinu.domain.member.controller.dto.request.SearchReviewInput
+import com.tinuproject.tinu.domain.member.controller.dto.request.SearchWriteReviewRequest
 import com.tinuproject.tinu.domain.member.entity.Member
 import com.tinuproject.tinu.domain.member.entity.Review
 import com.tinuproject.tinu.domain.member.entity.SubEvaluationSummary
 import com.tinuproject.tinu.domain.member.exception.ExistReviewException
-import com.tinuproject.tinu.domain.member.exception.NotExistMemberException
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.member.repository.ReviewRepository
 import com.tinuproject.tinu.domain.member.repository.SubEvaluationSummaryRepository
 import com.tinuproject.tinu.domain.member.service.dto.input.CreateReviewInput
+import com.tinuproject.tinu.domain.member.service.dto.input.SearchWriteReviewInput
 import com.tinuproject.tinu.domain.post.entity.Post
 import com.tinuproject.tinu.domain.post.exception.PostNotFoundException
 import com.tinuproject.tinu.domain.post.repository.PostRepository
@@ -106,15 +106,15 @@ class ReviewServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun hasWrittenReview(searchReviewInput: SearchReviewInput): Boolean {
+    override fun hasWrittenReview(searchWriteReviewInput: SearchWriteReviewInput): Boolean {
 
-        val post = postRepository.findPostById(searchReviewInput.postId) ?: throw PostNotFoundException()
+        val post = postRepository.findPostById(searchWriteReviewInput.postId) ?: throw PostNotFoundException()
 
         //현재 리뷰 작성자가 작성자 혹은 구매자인지 확인
-        validateTradeParticipant(post, searchReviewInput.userId)
+        validateTradeParticipant(post, searchWriteReviewInput.userId)
 
 
-        return existsReview(searchReviewInput.userId, searchReviewInput.postId)
+        return existsReview(searchWriteReviewInput.userId, searchWriteReviewInput.postId)
     }
 
     private fun existsReview(userId : UUID, postId: Long) : Boolean{

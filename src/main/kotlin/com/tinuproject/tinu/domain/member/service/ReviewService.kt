@@ -1,7 +1,8 @@
 package com.tinuproject.tinu.domain.member.service
 
-import com.tinuproject.tinu.domain.member.controller.dto.request.SearchReviewInput
+import com.tinuproject.tinu.domain.member.controller.dto.request.SearchWriteReviewRequest
 import com.tinuproject.tinu.domain.member.service.dto.input.CreateReviewInput
+import com.tinuproject.tinu.domain.member.service.dto.input.SearchWriteReviewInput
 
 interface ReviewService {
 
@@ -9,5 +10,5 @@ interface ReviewService {
     fun createReview(createReviewInput : CreateReviewInput) : Boolean
 
     //리뷰 작성 여부 확인(채팅방 입장 시)
-    fun hasWrittenReview(searchReviewInput : SearchReviewInput) : Boolean
+    fun hasWrittenReview(searchWriteReviewInput: SearchWriteReviewInput) : Boolean
 }

@@ -15,7 +15,7 @@ class CreateReviewRequest(
     @Schema(description = "메인 평가", example = "GOOD OR SOSO OR BAD")
     val mainEvaluation: Evaluation,
 
-    @Schema(description = "서브 평가(순서: isFriendly, wasLate, respondedQuickly)", example = "[true, false, true]")
+    @Schema(description = "서브 평가(순서: isFriendly, notLate, respondedQuickly)", example = "[true, false, true]")
     val subEvaluation : List<Boolean>,
 ) {
 
