@@ -38,13 +38,13 @@ data class MemberSearchResponseDTO(
 
     companion object {
         fun convertMarkToGrade(mark: Double): String {
-                return if(0.0<=mark&&mark<0.5) "F"
-                else if(0.5<=mark&&mark<1.5) "D"
+                return if(1.0<=mark&&mark<1.5) "F"
                 else if(1.5<=mark&&mark<2.5) "C"
                 else if(2.5<=mark&&mark<3.0) "B"
                 else if(3.0<=mark&&mark<3.5) "B+"
                 else if(3.5<=mark&&mark<4.0) "A"
-                else if(4.0<=mark&&mark<4.5) "A+"
+                else if(4.0<=mark&&mark<=4.5) "A+"
+                //미평가자(Review를 받은사람은 1.0 ~ 4.5 의 범위 값을 가짐.)
                 else "U"
         }
     }
