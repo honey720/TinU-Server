@@ -4,6 +4,7 @@ import com.tinuproject.tinu.domain.member.controller.dto.request.CreateReviewReq
 import com.tinuproject.tinu.domain.member.controller.dto.request.SearchWriteReviewRequest
 import com.tinuproject.tinu.domain.member.exception.ExistReviewException
 import com.tinuproject.tinu.domain.member.service.ReviewService
+import com.tinuproject.tinu.domain.member.service.dto.input.SearchWriteReviewInput
 import com.tinuproject.tinu.domain.post.exception.PostNotFoundException
 import com.tinuproject.tinu.global.exception.UnauthorizedAccessException
 import com.tinuproject.tinu.global.response.ResponseEntityGenerator
@@ -51,7 +52,10 @@ class ReviewController(
             "<br>필수 파라미터 : postId" +
             "<br> 해당 결과 값이 true 일 경우 리뷰 작성 필요, false 일 경우 리뷰 작성 불필요입니다."
     )
-    fun checkAlreadyWriteReview(@AuthenticationPrincipal userId : UUID, @RequestBody request: SearchWriteReviewRequest):ResponseEntity<ResponseDTO<Boolean?>>{
-        return ResponseEntityGenerator.onSuccess(reviewService.needWrittenReview(request.of(userId)))
+    fun checkAlreadyWriteReview(@AuthenticationPrincipal userId : UUID, @RequestParam postId: Long):ResponseEntity<ResponseDTO<Boolean?>>{
+        return ResponseEntityGenerator.onSuccess(reviewService.needWrittenReview(SearchWriteReviewInput(
+            userId = userId,
+            postId = postId
+        )))
     }
 }

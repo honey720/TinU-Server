@@ -78,7 +78,7 @@ class ReviewServiceImplTest(
     @DisplayName("사용자가 리뷰를 남겨야한다면 true 아니라면 false를 반환한다.")
     fun needWrittenReviewTest(){
         //Given
-        val testUniversity = universityRepository.save(TestUniversityFactory.create())
+        val testUniversity = TestUniversityFactory.create(universityRepository)
 
         //유저 정보 기입
         val reviewer = createMember(testUniversity)
@@ -136,7 +136,7 @@ class ReviewServiceImplTest(
     @DisplayName("거래 리뷰를 남기려할때 Reviewer Reviewee Post에 대한 정보가 모두 맞을 때 결과 true 반환.")
     fun createReviewTest(){
         //Given
-        val testUniversity = universityRepository.save(TestUniversityFactory.create())
+        val testUniversity = TestUniversityFactory.create(universityRepository)
 
         //유저 정보 기입
         val reviewer = createMember(testUniversity)
@@ -182,7 +182,7 @@ class ReviewServiceImplTest(
     @DisplayName("리뷰 작성 시 피평가자의 mark를 이번 결과에 반영하여 업데이트 한다.")
     fun createReviewUpdateMarkTest(){
         //given
-        val testUniversity = universityRepository.save(TestUniversityFactory.create())
+        val testUniversity = TestUniversityFactory.create(universityRepository)
 
         //유저 정보 기입
         val reviewer = createMember(testUniversity)
@@ -243,7 +243,7 @@ class ReviewServiceImplTest(
     @DisplayName("리뷰 작성 시 게시글의 구매 설정이 완료되지 않거나, 작성자가 해당 게시글 실 거래자가 아닌 경우 UnAuthorization Exception 반환")
     fun createReviewUnAuthorizationExceptionTest(){
         //Given
-        val testUniversity = universityRepository.save(TestUniversityFactory.create())
+        val testUniversity = TestUniversityFactory.create(universityRepository)
 
         //유저 정보 기입
         val reviewer = createMember(testUniversity)

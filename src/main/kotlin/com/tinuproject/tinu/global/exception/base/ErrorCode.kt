@@ -48,7 +48,7 @@ enum class ErrorCode(
 
 
     //리뷰 관련
-    REVIEW_ALEADTY_EXIST(httpStatusCode = 409, stateCode = "REVIEW_ALREADY_EXIST", message = "이미 리뷰를 작성하셨습니다."),
+    REVIEW_ALREADY_EXIST(httpStatusCode = 409, stateCode = "REVIEW_ALREADY_EXIST", message = "이미 리뷰를 작성하셨습니다."),
 
     //전역적 사용
     UNIVERSITY_NOT_MATCH(httpStatusCode = 403, stateCode = "UNIVERSITY_NOT_MATCH", message = "대학이 일치하지 않습니다."),

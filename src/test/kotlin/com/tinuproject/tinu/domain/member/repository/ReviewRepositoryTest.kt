@@ -60,7 +60,7 @@ class ReviewRepositoryTest(
     fun existsByReviewer_UserIdOrReviewee_UserIdAndPost_IdTest(){
         //given
         //대학 정보 기입
-        val testUniversity = universityRepository.save(TestUniversityFactory.create())
+        val testUniversity = TestUniversityFactory.create(universityRepository)
 
         //유저 정보 기입
         val reviewerId = UUID.randomUUID()
@@ -105,10 +105,10 @@ class ReviewRepositoryTest(
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("피평가자 ID로 작성된 리뷰 개수를 정확히 반환한다")
     fun countReviewsByReviewee_UserIdTest(){
         //given
-        val testUniversity = universityRepository.save(TestUniversityFactory.create())
+        val testUniversity = TestUniversityFactory.create(universityRepository)
 
         //유저 정보 기입
         val reviewerId = UUID.randomUUID()

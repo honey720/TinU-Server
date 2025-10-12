@@ -42,7 +42,7 @@ class Member (
     var reportCount : Long=0,
 
     @Column
-    var mark : Double?,
+    var mark : Double? = 0.0,
 
     @Column
     @Enumerated(EnumType.STRING)

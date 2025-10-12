@@ -4,7 +4,7 @@ import com.tinuproject.tinu.domain.university.entity.University
 import com.tinuproject.tinu.domain.university.repository.UniversityRepository
 
 object TestUniversityFactory {
-    fun create() : University{
-        return University(name="경기대")
+    fun create(universityRepository: UniversityRepository) : University{
+        return universityRepository.save(University(name="경기대"))
     }
 }

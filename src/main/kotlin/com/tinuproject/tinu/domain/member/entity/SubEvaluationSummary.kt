@@ -26,29 +26,14 @@ class SubEvaluationSummary(
 
 
     fun updateFriendlyNum(flag : Boolean){
-        if(flag){
-            this.isFriendlyNum++;
-        }
-        else{
-            this.isFriendlyNum--
-        }
+        this.isFriendlyNum += if(flag) 1 else -1
     }
 
     fun updateNotLateNum(flag : Boolean){
-        if(flag){
-            this.notLateNum++;
-        }
-        else{
-            this.notLateNum--
-        }
+        this.notLateNum += if(flag) 1 else -1
     }
 
     fun updateRespondedQuicklyNum(flag : Boolean){
-        if(flag){
-            this.respondedQuicklyNum++;
-        }
-        else{
-            this.respondedQuicklyNum--
-        }
+        this.respondedQuicklyNum += if(flag) 1 else -1
     }
 }
