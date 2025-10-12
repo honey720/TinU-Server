@@ -7,5 +7,5 @@ enum class Evaluation(
 ){
     GOOD(4.5,"만족해요."),
     SOSO( 2.5,"평범해요."),
-    BAD(0.0,"아쉬워요.")
+    BAD(1.0,"아쉬워요.")
 }
