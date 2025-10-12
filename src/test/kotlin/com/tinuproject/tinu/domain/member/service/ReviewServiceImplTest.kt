@@ -7,6 +7,7 @@ import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.member.repository.ReviewRepository
 import com.tinuproject.tinu.domain.member.service.dto.input.CreateReviewInput
 import com.tinuproject.tinu.domain.post.entity.Post
+import com.tinuproject.tinu.domain.post.exception.PostNotFoundException
 import com.tinuproject.tinu.domain.post.repository.CategoryRepository
 import com.tinuproject.tinu.domain.post.repository.PostRepository
 import com.tinuproject.tinu.domain.university.entity.University
@@ -120,15 +121,77 @@ class ReviewServiceImplTest(
         //Then
         assertThat(result).isTrue()
 
-        val resultReviewer = memberRepository.findMemberByUserId(reviewee.userId)
+        val resultReviewee = memberRepository.findMemberByUserId(reviewee.userId)
 
-        assertThat(resultReviewer!!.subEvaluationSummary)
+        assertThat(resultReviewee!!.subEvaluationSummary)
             .extracting("isFriendlyNum","notLateNum","respondedQuicklyNum")
             .containsExactly(1, -1, 1)
+
     }
 
     @Test
-    @DisplayName("리뷰 작성 중 Post가 존재하지 않거나, 구매 설정이 완료되지 않거나, 작성자가 해당 게시글 실 거래자가 아닌 경우 UnAuthorization Exception 반환")
+    @DisplayName("리뷰 작성 시 피평가자의 mark를 이번 결과에 반영하여 업데이트 한다.")
+    fun createReviewUpdateMarkTest(){
+        //given
+        val testUniversity = universityRepository.save(TestUniversityFactory.create())
+
+        //유저 정보 기입
+        val reviewer = createMember(testUniversity)
+
+        var reviewee = createMember(testUniversity)
+
+        val reviewerId = reviewer.userId
+
+        //게시글 정보 기입
+        val testCategory = TestCategoryFactory.create(categoryRepository = categoryRepository)
+
+        val post = TestPostFactory.create(
+            postRepository = postRepository,
+            author = reviewee,
+            buyer = reviewer,
+            university = testUniversity,
+            category = testCategory
+        )
+        val post2 = TestPostFactory.create(
+            postRepository = postRepository,
+            author = reviewee,
+            buyer = reviewer,
+            university = testUniversity,
+            category = testCategory
+        )
+
+        //When
+       reviewService.createReview(
+            createReviewInput = CreateReviewInput(
+                reviewerId = reviewerId,
+                postId = post.id!!,
+                mainEvaluation = Evaluation.GOOD,
+                isFriendly = true,
+                notLate = false,
+                respondedQuickly = true
+            )
+        )
+       reviewService.createReview(
+            createReviewInput = CreateReviewInput(
+                reviewerId = reviewerId,
+                postId = post2.id!!,
+                mainEvaluation = Evaluation.SOSO,
+                isFriendly = true,
+                notLate = false,
+                respondedQuickly = true
+            )
+        )
+        //when & then
+        reviewee = memberRepository.findMemberByUserId(reviewee.userId)!!
+
+        assertThat(reviewee.mark)
+            .isEqualTo((Evaluation.GOOD.score+Evaluation.SOSO.score) / 2)
+
+    }
+
+
+    @Test
+    @DisplayName("리뷰 작성 중 구매 설정이 완료되지 않거나, 작성자가 해당 게시글 실 거래자가 아닌 경우 UnAuthorization Exception 반환")
     fun createReviewUnAutoriztionExceptionTest(){
         //Given
         val testUniversity = universityRepository.save(TestUniversityFactory.create())
@@ -153,16 +216,41 @@ class ReviewServiceImplTest(
             category = testCategory
         )
 
+        val notTradePost = TestPostFactory.create(
+            postRepository = postRepository,
+            author = reviewer,
+            university = testUniversity,
+            category = testCategory,
+            buyer =null
+        )
+
+        val badUserCase =  CreateReviewInput(
+            reviewerId = badUser.userId,
+            postId = post.id!!,
+            mainEvaluation = Evaluation.GOOD,
+            isFriendly = true,
+            notLate = false,
+            respondedQuickly = true
+        )
+
+        //아직 거래가 되지 않은 게시글에 리뷰 시도
+        val notDoneTradeCase = CreateReviewInput(
+            reviewerId = reviewerId,
+            postId = notTradePost.id!!,
+            mainEvaluation = Evaluation.GOOD,
+            isFriendly = true,
+            notLate = false,
+            respondedQuickly = true
+        )
+
         //when
         assertThrows<UnauthorizedAccessException>{
-            reviewService.createReview(createReviewInput = CreateReviewInput(
-                reviewerId = badUser.userId,
-                postId = post.id!!,
-                mainEvaluation = Evaluation.GOOD,
-                isFriendly = true,
-                notLate = false,
-                respondedQuickly = true
-            ))
+            reviewService.createReview(badUserCase)
+        }
+
+
+        assertThrows<UnauthorizedAccessException>{
+            reviewService.createReview(notDoneTradeCase)
         }
 
 

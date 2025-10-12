@@ -8,4 +8,6 @@ import java.util.*
 interface ReviewRepository : JpaRepository<Review, Long> {
 
     fun existsByReviewer_UserIdAndPost_Id(reviewerId : UUID, postId : Long) : Boolean
+
+    fun countReviewsByReviewee_UserId(revieweeId : UUID) : Int
 }

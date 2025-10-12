@@ -7,7 +7,7 @@ import com.tinuproject.tinu.domain.post.repository.PostRepository
 import com.tinuproject.tinu.domain.university.entity.University
 
 object TestPostFactory {
-    fun create( postRepository: PostRepository, author: Member, buyer : Member, university : University, category: Category) : Post {
+    fun create( postRepository: PostRepository, author: Member, buyer : Member?, university : University, category: Category) : Post {
         return postRepository.save(
             Post(
                 university = university,

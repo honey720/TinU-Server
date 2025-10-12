@@ -67,7 +67,12 @@ class ReviewServiceImpl(
             throw UnauthorizedAccessException()
         }
 
-        
+        val reviewNum = reviewRepository.countReviewsByReviewee_UserId(revieweeId = reviewee.userId)
+
+        val resultMark = ((reviewee.mark!! * reviewNum) + createReviewInput.mainEvaluation.score) / (reviewNum + 1)
+
+        reviewee.mark = resultMark
+
         //리뷰 작성 및 저장
         reviewRepository.save(Review(
             reviewer = reviewer,

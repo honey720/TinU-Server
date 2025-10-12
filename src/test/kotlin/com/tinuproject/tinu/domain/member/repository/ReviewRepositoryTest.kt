@@ -103,4 +103,70 @@ class ReviewRepositoryTest(
         assertThat(reviewRepository.existsByReviewer_UserIdAndPost_Id(reviewerId,  post.id!!)).isTrue()
 
     }
+
+    @Test
+    @DisplayName("")
+    fun countReviewsByReviewee_UserIdTest(){
+        //given
+        val testUniversity = universityRepository.save(TestUniversityFactory.create())
+
+        //유저 정보 기입
+        val reviewerId = UUID.randomUUID()
+        val revieweeId = UUID.randomUUID()
+        val reviewer = TestMemberFactory.create(
+            memberRepository = memberRepository,
+            university = testUniversity,
+            nickname = "리뷰어",
+            userId = reviewerId
+        )
+
+        val reviewee = TestMemberFactory.create(
+            memberRepository = memberRepository,
+            university = testUniversity,
+            nickname = "피리뷰어",
+            userId = revieweeId
+        )
+
+        //게시글 정보 기입
+        val testCategory = TestCategoryFactory.create(categoryRepository = categoryRepository)
+
+        val post = TestPostFactory.create(
+            postRepository = postRepository,
+            author = reviewee,
+            buyer = reviewer,
+            university = testUniversity,
+            category = testCategory
+        )
+
+
+        val post2 = TestPostFactory.create(
+            postRepository = postRepository,
+            author = reviewee,
+            buyer = reviewer,
+            university = testUniversity,
+            category = testCategory
+        )
+
+        val review = Review(
+            reviewer = reviewer,
+            reviewee = reviewee,
+            post = post,
+            mainEvaluation = Evaluation.GOOD
+        )
+
+        val review2 = Review(
+            reviewer = reviewer,
+            reviewee = reviewee,
+            post = post2,
+            mainEvaluation = Evaluation.SOSO
+        )
+
+        reviewRepository.saveAll(listOf(review2,review))
+
+        //when & Then
+        assertThat(reviewRepository.countReviewsByReviewee_UserId(reviewerId)).isZero()
+        assertThat(reviewRepository.countReviewsByReviewee_UserId(revieweeId)).isEqualTo(2)
+
+
+    }
 }
