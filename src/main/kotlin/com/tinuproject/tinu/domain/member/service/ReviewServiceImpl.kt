@@ -28,6 +28,7 @@ class ReviewServiceImpl(
 
     @Transactional
     override fun createReview(createReviewInput: CreateReviewInput): Boolean {
+        //이미 리뷰를 작성한 적이 있다면 예외 발생
         if(existsReview(userId = createReviewInput.reviewerId, postId = createReviewInput.postId)){
             throw ExistReviewException()
         }
@@ -39,26 +40,33 @@ class ReviewServiceImpl(
         //post 영속화
         val post = postRepository.findPostById(createReviewInput.postId)?: throw PostNotFoundException()
 
+        //현재 리뷰 작성자가 작성자 혹은 구매자인지 확인
+        validateTradeParticipant(post, createReviewInput.reviewerId)
+
         //피 평가자를 프론트에서 받는 방식에서 직접 Post에서 추출하는 방식으로 변경.
         //실제 피평가자가 Post 연관자인지 확인할 필요 X
         //프론트 -> Back으로의 데이터 전송량 감소
         if(post.buyer!=null){
             val author = post.author
             val buyer = post.buyer
+            //현재 리뷰작성자가 구매자인 경우
             if(buyer!!.userId == createReviewInput.reviewerId){
+                //평가자는 구매자
+                //피평가자는 판매자(작성자)
                 reviewer = buyer
                 reviewee = author
-            }else{
+            //리뷰 작성자가 판매자인 경우
+            }else {
+                //평가자는 판매자,
+                //피평가자는 구매자
                 reviewer = author
                 reviewee = buyer
             }
-            //만약 아직 거래가 끝나지 않은 게시글에 대한 것이면 권한 없음.
+        //만약 아직 거래가 끝나지 않은 게시글에 대한 것이면 권한 없음.
         }else{
             throw UnauthorizedAccessException()
         }
 
-        //현재 리뷰 작성자가 작성자 혹은 구매자인지 확인
-        validateTradeParticipant(post, reviewer.userId)
         
         //리뷰 작성 및 저장
         reviewRepository.save(Review(
@@ -97,7 +105,7 @@ class ReviewServiceImpl(
 
         val post = postRepository.findPostById(searchReviewInput.postId) ?: throw PostNotFoundException()
 
-
+        //현재 리뷰 작성자가 작성자 혹은 구매자인지 확인
         validateTradeParticipant(post, searchReviewInput.userId)
 
 

@@ -1,17 +1,21 @@
 package com.tinuproject.tinu.domain.member.service
 
 import com.tinuproject.tinu.annotation.ServiceTest
+import com.tinuproject.tinu.domain.member.entity.Member
 import com.tinuproject.tinu.domain.member.enums.Evaluation
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
 import com.tinuproject.tinu.domain.member.repository.ReviewRepository
 import com.tinuproject.tinu.domain.member.service.dto.input.CreateReviewInput
+import com.tinuproject.tinu.domain.post.entity.Post
 import com.tinuproject.tinu.domain.post.repository.CategoryRepository
 import com.tinuproject.tinu.domain.post.repository.PostRepository
+import com.tinuproject.tinu.domain.university.entity.University
 import com.tinuproject.tinu.domain.university.repository.UniversityRepository
 import com.tinuproject.tinu.factory.TestCategoryFactory
 import com.tinuproject.tinu.factory.TestMemberFactory
 import com.tinuproject.tinu.factory.TestPostFactory
 import com.tinuproject.tinu.factory.TestUniversityFactory
+import com.tinuproject.tinu.global.exception.UnauthorizedAccessException
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
@@ -21,8 +25,8 @@ import kotlin.test.Test
 
 
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.tuple
-
+import org.junit.jupiter.api.assertThrows
+import software.amazon.awssdk.services.s3.endpoints.internal.Eval
 
 @ServiceTest
 class ReviewServiceImplTest(
@@ -67,6 +71,17 @@ class ReviewServiceImplTest(
         //Then
     }
 
+    private fun createMember(university: University) : Member {
+
+        return TestMemberFactory.create(
+            memberRepository = memberRepository,
+            university = university,
+            nickname = "테스트",
+            userId = UUID.randomUUID()
+        )
+    }
+
+
     @Test
     @DisplayName("거래 리뷰를 남기려할때 Reviewer Reviewee Post에 대한 정보가 모두 맞을 때 결과 true 반환.")
     fun createReviewTest(){
@@ -74,21 +89,11 @@ class ReviewServiceImplTest(
         val testUniversity = universityRepository.save(TestUniversityFactory.create())
 
         //유저 정보 기입
-        val reviewerId = UUID.randomUUID()
-        val revieweeId = UUID.randomUUID()
-        val reviewer = TestMemberFactory.create(
-            memberRepository = memberRepository,
-            university = testUniversity,
-            nickname = "리뷰어",
-            userId = reviewerId
-        )
+        val reviewer = createMember(testUniversity)
 
-        val reviewee = TestMemberFactory.create(
-            memberRepository = memberRepository,
-            university = testUniversity,
-            nickname = "피리뷰어",
-            userId = revieweeId
-        )
+        val reviewee = createMember(testUniversity)
+
+        val reviewerId = reviewer.userId
 
         //게시글 정보 기입
         val testCategory = TestCategoryFactory.create(categoryRepository = categoryRepository)
@@ -113,14 +118,56 @@ class ReviewServiceImplTest(
         )
 
         //Then
-
         assertThat(result).isTrue()
 
-        val resultReviewer = memberRepository.findMemberByUserId(revieweeId)
+        val resultReviewer = memberRepository.findMemberByUserId(reviewee.userId)
 
         assertThat(resultReviewer!!.subEvaluationSummary)
             .extracting("isFriendlyNum","notLateNum","respondedQuicklyNum")
             .containsExactly(1, -1, 1)
+    }
+
+    @Test
+    @DisplayName("리뷰 작성 중 Post가 존재하지 않거나, 구매 설정이 완료되지 않거나, 작성자가 해당 게시글 실 거래자가 아닌 경우 UnAuthorization Exception 반환")
+    fun createReviewUnAutoriztionExceptionTest(){
+        //Given
+        val testUniversity = universityRepository.save(TestUniversityFactory.create())
+
+        //유저 정보 기입
+        val reviewer = createMember(testUniversity)
+
+        val reviewee = createMember(testUniversity)
+
+        val badUser = createMember(testUniversity)
+
+        val reviewerId = reviewer.userId
+
+        //게시글 정보 기입
+        val testCategory = TestCategoryFactory.create(categoryRepository = categoryRepository)
+
+        val post = TestPostFactory.create(
+            postRepository = postRepository,
+            author = reviewee,
+            buyer = reviewer,
+            university = testUniversity,
+            category = testCategory
+        )
+
+        //when
+        assertThrows<UnauthorizedAccessException>{
+            reviewService.createReview(createReviewInput = CreateReviewInput(
+                reviewerId = badUser.userId,
+                postId = post.id!!,
+                mainEvaluation = Evaluation.GOOD,
+                isFriendly = true,
+                notLate = false,
+                respondedQuickly = true
+            ))
+        }
+
+
+        //then
+
     }
 
 }
