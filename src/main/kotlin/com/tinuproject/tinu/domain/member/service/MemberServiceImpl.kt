@@ -112,13 +112,8 @@ class MemberServiceImpl(
     @Transactional(readOnly = true)
     override fun findMemberByUserId(userId : UUID,searchUserId: UUID): MemberSearchResponseDTO {
 
-        //검색하려는 유저와 요청자가 같은 학교인지 검증
-        userAccessValidator.validateSameUniversity(userId, searchUserId)
-
-        //이 때 해당 대상 유저는 위 validateSameUniversity()를 실행했을 때
-        val searchMember = memberRepository.findMemberByUserId(searchUserId)
-
-        searchMember?: throw NotExistMemberException()
+        //검색하려는 유저와 요청자가 같은 학교인지 검증 및 검색 상대를 반환
+        val searchMember = userAccessValidator.validateSameUniversity(userId, searchUserId)
 
         return MemberSearchResponseDTO(searchMember)
 
