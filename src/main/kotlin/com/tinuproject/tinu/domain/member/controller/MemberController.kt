@@ -40,7 +40,10 @@ class MemberController(
     fun requestUserInfo(@AuthenticationPrincipal userId : UUID, @RequestParam(name = "userId") searchUserId : String? ) : ResponseEntity<ResponseDTO<MemberSearchResponseDTO?>>{
         val findUserId = searchUserId?.let{UUID.fromString(it)}?:userId
 
-        return ResponseEntityGenerator.onSuccess(memberService.findMemberByUserId(findUserId))
+        return ResponseEntityGenerator.onSuccess(memberService.findMemberByUserId(
+            userId = userId,
+            searchUserId = findUserId
+        ))
     }
 
     @PutMapping()

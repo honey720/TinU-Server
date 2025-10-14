@@ -16,7 +16,9 @@ import com.tinuproject.tinu.domain.member.repository.SocialMemberRepository
 import com.tinuproject.tinu.domain.university.repository.UniversityDomainRepository
 import com.tinuproject.tinu.infra.s3.service.S3Service
 import com.tinuproject.tinu.domain.member.entity.EmailAuth
+import com.tinuproject.tinu.domain.member.policy.UserAccessValidator
 import com.tinuproject.tinu.domain.member.repository.EmailRepository
+import com.tinuproject.tinu.global.exception.UnauthorizedAccessException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -29,7 +31,8 @@ class MemberServiceImpl(
     val universityDomainRepository: UniversityDomainRepository,
     val emailAuthRepository: EmailRepository,
     val socialMemberRepository: SocialMemberRepository,
-    val s3Service: S3Service
+    val s3Service: S3Service,
+    val userAccessValidator: UserAccessValidator
 ): MemberService {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
@@ -107,12 +110,17 @@ class MemberServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun findMemberByUserId(userId: UUID): MemberSearchResponseDTO {
-        val member = memberRepository.findMemberByUserId(userId)
+    override fun findMemberByUserId(userId : UUID,searchUserId: UUID): MemberSearchResponseDTO {
 
-        member?: throw NotExistMemberException()
+        //검색하려는 유저와 요청자가 같은 학교인지 검증
+        userAccessValidator.validateSameUniversity(userId, searchUserId)
 
-        return MemberSearchResponseDTO(member)
+        //이 때 해당 대상 유저는 위 validateSameUniversity()를 실행했을 때
+        val searchMember = memberRepository.findMemberByUserId(searchUserId)
+
+        searchMember?: throw NotExistMemberException()
+
+        return MemberSearchResponseDTO(searchMember)
 
     }
 

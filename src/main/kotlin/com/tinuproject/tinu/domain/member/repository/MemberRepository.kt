@@ -15,5 +15,7 @@ interface MemberRepository : JpaRepository<Member, Long> {
 
     fun existsByNickname(name : String) : Boolean
 
+    fun findByUserIdIn(userIds: List<UUID>): MutableList<Member>
+
     
 }
