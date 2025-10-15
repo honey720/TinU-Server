@@ -15,7 +15,7 @@ class Review(
 
     // 피평가자
     // 피평가자가 사라지면 평가를 남겨둘 이유가 없음.
-    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.REMOVE])
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviewee_id", nullable = false)
     val reviewee : Member,
 
