@@ -5,7 +5,7 @@ import com.tinuproject.tinu.domain.member.service.dto.input.CreateReviewInput
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 @Schema
-class CreateReviewRequest(
+data class CreateReviewRequest(
 
     //게시글 Id
     @Schema(description = "게시글 Id", example = "UUID")

@@ -3,7 +3,7 @@ package com.tinuproject.tinu.domain.member.service.dto.input
 import com.tinuproject.tinu.domain.member.enums.Evaluation
 import java.util.*
 
-class CreateReviewInput(
+data class CreateReviewInput(
     //평가자 Id
     val reviewerId : UUID,
     //게시글 정보
