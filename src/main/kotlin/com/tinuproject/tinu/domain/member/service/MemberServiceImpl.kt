@@ -71,7 +71,6 @@ class MemberServiceImpl(
             profileImageURL = url,
             introduction = registerRequestDTO.introduction,
             email = registerRequestDTO.email,
-            mark = 0.0,
             social = socialMember!!.provider
         )
         log.info("회원가입이 완료되었습니다. eMailAuth 관련 데이터를 삭제합니다.")

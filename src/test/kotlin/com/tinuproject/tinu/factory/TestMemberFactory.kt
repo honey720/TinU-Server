@@ -25,7 +25,6 @@ object TestMemberFactory {
                 introduction = "나는야 컴공생~",
                 email = "test@kyonggi.ac.kr",
                 reportCount = 0,
-                mark = 0.0,
                 social = Social.KAKAO,
             )
         )

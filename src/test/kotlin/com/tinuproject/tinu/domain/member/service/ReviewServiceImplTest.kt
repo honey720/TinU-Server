@@ -18,7 +18,6 @@ import com.tinuproject.tinu.factory.TestPostFactory
 import com.tinuproject.tinu.factory.TestUniversityFactory
 import com.tinuproject.tinu.global.exception.UnauthorizedAccessException
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.*
@@ -26,7 +25,6 @@ import kotlin.test.Test
 
 
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.not
 import org.junit.jupiter.api.assertThrows
 
 @ServiceTest
@@ -172,7 +170,7 @@ class ReviewServiceImplTest(
 
         val resultReviewee = memberRepository.findMemberByUserId(reviewee.userId)
 
-        assertThat(resultReviewee!!.subEvaluationSummary)
+        assertThat(resultReviewee!!.reviewSummary)
             .extracting("isFriendlyNum","notLateNum","respondedQuicklyNum")
             .containsExactly(1, -1, 1)
 
@@ -233,8 +231,11 @@ class ReviewServiceImplTest(
         //when & then
         reviewee = memberRepository.findMemberByUserId(reviewee.userId)!!
 
-        assertThat(reviewee.mark)
+        assertThat(reviewee.reviewSummary!!.mark)
             .isEqualTo((Evaluation.GOOD.score+Evaluation.SOSO.score) / 2)
+
+        assertThat(reviewee.reviewSummary!!.reviewCount)
+            .isEqualTo(2)
 
     }
 

@@ -2,10 +2,11 @@ package com.tinuproject.tinu.domain.member.service
 
 import com.tinuproject.tinu.domain.member.entity.Member
 import com.tinuproject.tinu.domain.member.entity.Review
-import com.tinuproject.tinu.domain.member.entity.SubEvaluationSummary
+import com.tinuproject.tinu.domain.member.entity.ReviewSummary
 import com.tinuproject.tinu.domain.member.exception.ExistReviewException
+import com.tinuproject.tinu.domain.member.exception.NotExistMemberException
 import com.tinuproject.tinu.domain.member.repository.ReviewRepository
-import com.tinuproject.tinu.domain.member.repository.SubEvaluationSummaryRepository
+import com.tinuproject.tinu.domain.member.repository.ReviewSummaryRepository
 import com.tinuproject.tinu.domain.member.service.dto.input.CreateReviewInput
 import com.tinuproject.tinu.domain.member.service.dto.input.SearchWriteReviewInput
 import com.tinuproject.tinu.domain.post.entity.Post
@@ -20,7 +21,7 @@ import java.util.*
 class ReviewServiceImpl(
     private val reviewRepository: ReviewRepository,
     private val postRepository : PostRepository,
-    private val subEvaluationSummaryRepository: SubEvaluationSummaryRepository
+    private val reviewSummaryRepository: ReviewSummaryRepository
 ) : ReviewService {
 
     @Transactional
@@ -39,8 +40,6 @@ class ReviewServiceImpl(
         //평가자 피평가자 결정
         val (reviewer, reviewee) = resolveParticipants(post, input.reviewerId)
 
-        //리뷰 이후 평점 반영
-        updateRevieweeMark(reviewee, input)
 
         //리뷰 작성 및 저장
         reviewRepository.save(Review(
@@ -52,9 +51,8 @@ class ReviewServiceImpl(
             notLate = input.notLate,
             respondedQuickly = input.respondedQuickly
         ))
-        
-        //SubEvaluation 반영
-        updateRevieweeSubEvaluationSummary(reviewee, input)
+
+        updateRevieweeReviewSummary(reviewee, input)
 
         return true
     }
@@ -81,6 +79,24 @@ class ReviewServiceImpl(
         return !(post.buyer == null || (post.author.userId != userId && post.buyer!!.userId != userId))
     }
 
+
+    /**
+     * 리뷰 관련 정보를 업데이트하는 메서드
+     * MainEvaluation과 SubEvaluation에 대한 값을 각기 따로 진행
+     * 이 때 ReviewSummary에는 비관적 락이 걸려있음.
+     */
+    private fun updateRevieweeReviewSummary(
+        reviewee: Member,
+        input: CreateReviewInput
+    ) {
+        val reviewSummary = reviewSummaryRepository.findByMemberUserIdForUpdate(reviewee.userId)?: throw NotExistMemberException()
+        //Main 평가
+        updateRevieweeMainEvaluationSummary(reviewSummary, input)
+        
+        //Sub 평가
+        updateRevieweeSubEvaluationSummary(reviewSummary, input)
+    }
+
     /**
      *     서브 Evaluation 반영을 위한 영속화
      *     만약 이때 첫 리뷰시 = SubEvaluation이 없다면 새로 만들어서 저장.
@@ -91,32 +107,24 @@ class ReviewServiceImpl(
      *     근데 또 코틀린은 null을 그닥 좋아하지 않는 언어인데 언어에게 안맞는 것은 아닌지.")
      */
     private fun updateRevieweeSubEvaluationSummary(
-        reviewee: Member,
+        reviewSummary: ReviewSummary,
         input: CreateReviewInput
     ) {
-        val subEvaluationSummary = subEvaluationSummaryRepository.findByMemberUserIdForUpdate(reviewee.userId)
-            ?: subEvaluationSummaryRepository.save(SubEvaluationSummary(member = reviewee).apply {
-                reviewee.subEvaluationSummary = this
-            })
 
         //Dirty 체킹 대신 이를 DB 레벨 단에서 작동하게끔 해도 좋을 것 같음.
-        subEvaluationSummary.updateFriendlyNum(input.isFriendly)
-        subEvaluationSummary.updateNotLateNum(input.notLate)
-        subEvaluationSummary.updateRespondedQuicklyNum(input.respondedQuickly)
+        reviewSummary.updateFriendlyNum(input.isFriendly)
+        reviewSummary.updateNotLateNum(input.notLate)
+        reviewSummary.updateRespondedQuicklyNum(input.respondedQuickly)
     }
 
     /**
      * 평점 구하는 식은 ((기존 평점 * 반영 전 평가 수) + 새평점) / 반영 후 평가수
      */
-    private fun updateRevieweeMark(
-        reviewee: Member,
+    private fun updateRevieweeMainEvaluationSummary(
+        reviewSummary: ReviewSummary,
         input: CreateReviewInput
     ) {
-        val reviewNum = reviewRepository.countReviewsByReviewee_UserId(revieweeId = reviewee.userId)
-
-        val resultMark = ((reviewee.mark!! * reviewNum) + input.mainEvaluation.score) / (reviewNum + 1)
-
-        reviewee.mark = resultMark
+        reviewSummary.updateMainEvaluation(input.mainEvaluation.score)
     }
 
     /**

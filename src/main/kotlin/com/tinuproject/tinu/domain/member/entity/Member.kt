@@ -42,9 +42,6 @@ class Member (
     var reportCount : Long=0,
 
     @Column
-    var mark : Double? = 0.0,
-
-    @Column
     @Enumerated(EnumType.STRING)
     var social : Social,
 
@@ -80,11 +77,19 @@ class Member (
     var customFilter : MutableList<CustomFilter> = mutableListOf(),
 
     @OneToOne(fetch = FetchType.LAZY,
-        cascade = [CascadeType.REMOVE],
+        cascade = [CascadeType.PERSIST,CascadeType.REMOVE],
         mappedBy = "member")
-    var subEvaluationSummary: SubEvaluationSummary? = null
+    var reviewSummary: ReviewSummary? = null
 
 ) : BaseEntity(){
+
+    @PrePersist
+    //멤버가 생성될 때 해당 reviewSummary도 함께 생성
+    fun onPrePersist() {
+        if (reviewSummary == null) {
+            this.reviewSummary = ReviewSummary(member = this)
+        }
+    }
 
     fun updateMemberInfo(updateUserInputDTO: UpdateUserInputDTO){
         this.nickname = updateUserInputDTO.nickname

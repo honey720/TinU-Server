@@ -33,7 +33,7 @@ data class MemberSearchResponseDTO(
         university = member.university!!.name,
         major = member.major!!,
         introduction = member.introduction!!,
-        mark = convertMarkToGrade(member.mark!!)
+        mark = convertMarkToGrade(member.reviewSummary!!.mark)
     )
 
     companion object {

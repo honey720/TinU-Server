@@ -3,10 +3,16 @@ package com.tinuproject.tinu.domain.member.entity
 import jakarta.persistence.*
 
 @Entity
-class SubEvaluationSummary(
+class ReviewSummary(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id : Long? = null,
+
+    @Column
+    var mark : Double = 0.0,
+
+    @Column
+    var reviewCount : Int = 0,
 
     // 보조 평가 요약
     @Column(nullable = false)
@@ -24,6 +30,15 @@ class SubEvaluationSummary(
 
 ) {
 
+    fun updateMainEvaluation(reviewScore : Double){
+        val reviewNum = this.reviewCount
+
+        val resultMark = ((this.mark * reviewNum) + reviewScore) / (reviewNum + 1)
+
+        this.mark = resultMark
+
+        this.reviewCount++
+    }
 
     fun updateFriendlyNum(flag : Boolean){
         this.isFriendlyNum += if(flag) 1 else -1
