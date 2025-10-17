@@ -3,7 +3,7 @@ package com.tinuproject.tinu.domain.member.policy
 import com.tinuproject.tinu.domain.member.entity.Member
 import com.tinuproject.tinu.domain.member.exception.NotExistMemberException
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
-import com.tinuproject.tinu.global.exception.UnauthorizedAccessException
+import com.tinuproject.tinu.global.exception.ForbiddenException
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -24,7 +24,7 @@ class UserAccessValidator(
         val targetMember  = members.find { it.userId == targetUserId } ?: throw NotExistMemberException()
 
         if (requestMember.university?.id != targetMember.university?.id) {
-            throw UnauthorizedAccessException()
+            throw ForbiddenException()
         }
 
         return targetMember

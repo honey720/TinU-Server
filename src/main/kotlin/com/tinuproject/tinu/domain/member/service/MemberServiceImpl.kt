@@ -18,7 +18,6 @@ import com.tinuproject.tinu.infra.s3.service.S3Service
 import com.tinuproject.tinu.domain.member.entity.EmailAuth
 import com.tinuproject.tinu.domain.member.policy.UserAccessValidator
 import com.tinuproject.tinu.domain.member.repository.EmailRepository
-import com.tinuproject.tinu.global.exception.UnauthorizedAccessException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service

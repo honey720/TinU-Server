@@ -9,7 +9,7 @@ import com.tinuproject.tinu.domain.member.controller.dto.response.SelectCustomFi
 import com.tinuproject.tinu.domain.member.repository.CustomFilterRepository
 import com.tinuproject.tinu.domain.member.entity.CustomCategory
 import com.tinuproject.tinu.domain.member.entity.CustomFilter
-import com.tinuproject.tinu.global.exception.UnauthorizedAccessException
+import com.tinuproject.tinu.global.exception.ForbiddenException
 import com.tinuproject.tinu.domain.member.exception.NotExistCustomFilter
 import com.tinuproject.tinu.domain.member.exception.NotExistMemberException
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
@@ -79,7 +79,7 @@ class CustomFilterServiceImpl(
         val customFilter = customFilterRepository.findCustomFilterById(updateCustomFilter.filterId!!) ?: throw NotExistCustomFilter()
 
         if(customFilter.member.userId!=userId){
-            throw UnauthorizedAccessException()
+            throw ForbiddenException()
         }
 
         customFilter.updateCustomFilter(updateCustomFilter)
@@ -93,7 +93,7 @@ class CustomFilterServiceImpl(
         val existCustomFilter = customFilterRepository.findCustomFilterById(deleteCustomFilter.filterId)?: throw NotExistCustomFilter()
 
 
-        if(existCustomFilter.member.userId != userId) throw UnauthorizedAccessException()
+        if(existCustomFilter.member.userId != userId) throw ForbiddenException()
         log.info("커스텀 필터 삭제")
         customCategoryRepository.deleteAllByCustomFilterId(existCustomFilter.id!!)
         customFilterRepository.deleteById(deleteCustomFilter.filterId)

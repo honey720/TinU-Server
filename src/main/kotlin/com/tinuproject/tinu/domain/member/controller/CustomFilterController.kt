@@ -6,7 +6,7 @@ import com.tinuproject.tinu.domain.member.controller.dto.request.DeleteCustomFil
 import com.tinuproject.tinu.domain.member.controller.dto.request.UpdateCustomFilter
 import com.tinuproject.tinu.domain.member.controller.dto.response.SelectCustomFilter
 import com.tinuproject.tinu.domain.member.service.CustomFilterService
-import com.tinuproject.tinu.global.exception.UnauthorizedAccessException
+import com.tinuproject.tinu.global.exception.ForbiddenException
 import com.tinuproject.tinu.domain.member.exception.NotExistCustomFilter
 import com.tinuproject.tinu.domain.member.exception.NotExistMemberException
 import com.tinuproject.tinu.infra.swagger.annotation.SwaggerExceptionResponses
@@ -69,7 +69,7 @@ class CustomFilterController(
     }
 
     @PutMapping("/{filterId}")
-    @SwaggerExceptionResponses(exceptions = [NotExistCustomFilter::class, UnauthorizedAccessException::class])
+    @SwaggerExceptionResponses(exceptions = [NotExistCustomFilter::class, ForbiddenException::class])
     @Operation(summary = "커스텀 필터 업데이트 API", description = "기존 생성되어 있던 커스텀 필터를 갱신하는 API입니다." +
             "<br>필수 파라미터 : filterId(pathVariable), filterName, category, onlySell" +
             "<br>선택 파라미터 : maxPrice, minPrice")
@@ -82,7 +82,7 @@ class CustomFilterController(
     }
 
     @DeleteMapping("/{filterId}")
-    @SwaggerExceptionResponses(exceptions = [NotExistCustomFilter::class, UnauthorizedAccessException::class])
+    @SwaggerExceptionResponses(exceptions = [NotExistCustomFilter::class, ForbiddenException::class])
     @Operation(summary = "커스텀 필터 삭제 API", description = "커스텀 필터 삭제하는 API입니다." +
             "<br>필수 파라미터 : filterId")
     fun deleteCustomFilter(@AuthenticationPrincipal userId : UUID, @PathVariable(name = "filterId") filterId: Long) : ResponseEntity<ResponseDTO<NullResponse?>>{
