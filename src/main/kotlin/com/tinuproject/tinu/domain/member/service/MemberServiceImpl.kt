@@ -118,6 +118,7 @@ class MemberServiceImpl(
         val requestMember = members[requestUserId] ?: throw NotExistMemberException()
         val searchMember = members[searchUserId] ?: throw NotExistMemberException()
 
+
         //만약 동일 인물이라면 굳이 동일 대학인지 확인할 필요 없이 본인 정보 반환
         if(requestUserId == searchUserId){
             return MemberSearchResponseDTO(requestMember)
