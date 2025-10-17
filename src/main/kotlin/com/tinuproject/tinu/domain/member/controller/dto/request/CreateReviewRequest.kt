@@ -8,7 +8,7 @@ import java.util.*
 data class CreateReviewRequest(
 
     //게시글 Id
-    @Schema(description = "게시글 Id", example = "UUID")
+    @Schema(description = "게시글 Id", example = "1")
     val postId : Long,
 
     //메인평가 ( 좋았어요, 보통이에요,별로였어요 )
