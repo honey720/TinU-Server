@@ -37,8 +37,8 @@ class MemberController(
     @Operation(summary = "유저 정보 조회 API", description = "유저 정보 조회 API입니다." +
             "<br>자기자신에대한 정보를 조회하고 싶다면 RequestParam을 비워주시면되고" +
             "<br>다른 유저의 정보를 조회하고 싶다면 해당 User의 Id(UUID)를 RequstParam에 담아주시면 됩니다.")
-    fun requestUserInfo(@AuthenticationPrincipal userId : UUID, @RequestParam(name = "userId") searchUserId : String? ) : ResponseEntity<ResponseDTO<MemberSearchResponseDTO?>>{
-        val findUserId = searchUserId?.let{UUID.fromString(it)}?:userId
+    fun requestUserInfo(@AuthenticationPrincipal userId : UUID, @RequestParam(name = "userId") searchUserId : UUID? ) : ResponseEntity<ResponseDTO<MemberSearchResponseDTO?>>{
+        val findUserId = searchUserId ?: userId
 
         return ResponseEntityGenerator.onSuccess(memberService.findMemberByUserId(
             requestUserId = userId,
