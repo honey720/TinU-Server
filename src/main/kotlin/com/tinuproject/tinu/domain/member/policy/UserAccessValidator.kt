@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 object UserAccessValidator{
-    fun validateSameUniversity(requestMember: Member, targetMember: Member){
+    fun validateSameUniversity(requestMember: Member, targetMember: Member) {
         //동일 유저라면 동일 대학임으로 배제
         if(requestMember.id == targetMember.id){
             return

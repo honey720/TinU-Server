@@ -30,8 +30,7 @@ class MemberServiceImpl(
     val universityDomainRepository: UniversityDomainRepository,
     val emailAuthRepository: EmailRepository,
     val socialMemberRepository: SocialMemberRepository,
-    val s3Service: S3Service,
-    val userAccessValidator: UserAccessValidator
+    val s3Service: S3Service
 ): MemberService {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
@@ -109,11 +108,25 @@ class MemberServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun findMemberByUserId(userId : UUID,searchUserId: UUID): MemberSearchResponseDTO {
+    override fun findMemberByUserId(requestUserId : UUID,searchUserId: UUID): MemberSearchResponseDTO {
+
+        //한번의 쿼리로 2명의 유저를 가져옴 이 때 파라미터가 Set이기에
+        //자기 자신을 조회할 땐 한명의 유저에 대한 내용만을 가져옴
+        val members = memberRepository.findByUserIdIn(setOf(requestUserId, searchUserId))
+            .associateBy { it.userId }
+
+        val requestMember = members[requestUserId] ?: throw NotExistMemberException()
+        val searchMember = members[searchUserId] ?: throw NotExistMemberException()
+
+        //만약 동일 인물이라면 굳이 동일 대학인지 확인할 필요 없이 본인 정보 반환
+        if(requestUserId == searchUserId){
+            return MemberSearchResponseDTO(requestMember)
+        }
 
         //검색하려는 유저와 요청자가 같은 학교인지 검증 및 검색 상대를 반환
-        val searchMember = userAccessValidator.validateSameUniversity(userId, searchUserId)
+        UserAccessValidator.validateSameUniversity(requestMember,searchMember)
 
+        //동일 대학인지 검증까지 완료후 상대 유저 정보 반환.
         return MemberSearchResponseDTO(searchMember)
 
     }

@@ -15,7 +15,7 @@ interface MemberRepository : JpaRepository<Member, Long> {
 
     fun existsByNickname(name : String) : Boolean
 
-    fun findByUserIdIn(userIds: List<UUID>): List<Member>
+    fun findByUserIdIn(userIds: Set<UUID>): List<Member>
 
     
 }

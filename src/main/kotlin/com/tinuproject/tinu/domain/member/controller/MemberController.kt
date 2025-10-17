@@ -41,7 +41,7 @@ class MemberController(
         val findUserId = searchUserId?.let{UUID.fromString(it)}?:userId
 
         return ResponseEntityGenerator.onSuccess(memberService.findMemberByUserId(
-            userId = userId,
+            requestUserId = userId,
             searchUserId = findUserId
         ))
     }

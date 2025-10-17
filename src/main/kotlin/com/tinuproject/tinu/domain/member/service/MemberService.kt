@@ -15,7 +15,7 @@ interface MemberService {
 
     fun usableMemberByEmail(userId: UUID,email : String) :Boolean
 
-    fun findMemberByUserId(userId :UUID,searchUserId: UUID) : MemberSearchResponseDTO
+    fun findMemberByUserId(requestUserId :UUID,searchUserId: UUID) : MemberSearchResponseDTO
 
     fun updateMember(userId: UUID, updateUserInfoRequestDTO: UpdateUserInfoRequestDTO)
 }
