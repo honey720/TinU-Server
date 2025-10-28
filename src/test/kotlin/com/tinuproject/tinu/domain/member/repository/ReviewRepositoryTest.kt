@@ -1,0 +1,172 @@
+package com.tinuproject.tinu.domain.member.repository
+
+import com.tinuproject.tinu.annotation.RepositoryTest
+import com.tinuproject.tinu.domain.member.entity.Review
+import com.tinuproject.tinu.domain.member.enums.Evaluation
+import com.tinuproject.tinu.domain.post.repository.CategoryRepository
+import com.tinuproject.tinu.domain.post.repository.PostRepository
+import com.tinuproject.tinu.domain.university.repository.UniversityRepository
+import com.tinuproject.tinu.factory.TestCategoryFactory
+import com.tinuproject.tinu.factory.TestMemberFactory
+import com.tinuproject.tinu.factory.TestPostFactory
+import com.tinuproject.tinu.factory.TestUniversityFactory
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.DisplayName
+import java.util.*
+import kotlin.test.Test
+
+import org.assertj.core.api.Assertions.assertThat
+import org.springframework.beans.factory.annotation.Autowired
+
+@RepositoryTest
+class ReviewRepositoryTest(
+) {
+
+    @Autowired
+    private lateinit var memberRepository: MemberRepository
+
+    @Autowired
+    private lateinit var universityRepository: UniversityRepository
+
+    @Autowired
+    private lateinit var postRepository: PostRepository
+
+    @Autowired
+    private lateinit var reviewRepository: ReviewRepository
+
+    @Autowired
+    private lateinit var categoryRepository: CategoryRepository
+
+    @AfterEach
+    fun tearDown() {
+        memberRepository.deleteAllInBatch()
+        postRepository.deleteAllInBatch()
+        reviewRepository.deleteAllInBatch()
+    }
+
+
+    @Test
+    @DisplayName("특정 유저가 특정 post에서 평가를 진행했는지 확인 할 때 없다면 false를 리턴한다.")
+    fun notExistsByReviewer_UserIdOrReviewee_UserIdAndPost_IdTest(){
+        //given
+        val reviewerId = UUID.randomUUID()
+        val postId = 1L
+        //when & then
+        assertThat(reviewRepository.existsByReviewer_UserIdAndPost_Id(reviewerId, postId)).isFalse()
+    }
+
+    @Test
+    @DisplayName("특정 유저가 특정 Post에서 평가를 진행했는지 확인할 때 이미 있다면 True를 리턴한다.")
+    fun existsByReviewer_UserIdOrReviewee_UserIdAndPost_IdTest(){
+        //given
+        //대학 정보 기입
+        val testUniversity = TestUniversityFactory.create(universityRepository)
+
+        //유저 정보 기입
+        val reviewerId = UUID.randomUUID()
+        val revieweeId = UUID.randomUUID()
+        val reviewer = TestMemberFactory.create(
+            memberRepository = memberRepository,
+            university = testUniversity,
+            nickname = "리뷰어",
+            userId = reviewerId
+        )
+
+        val reviewee = TestMemberFactory.create(
+            memberRepository = memberRepository,
+            university = testUniversity,
+            nickname = "피리뷰어",
+            userId = revieweeId
+        )
+
+        //게시글 정보 기입
+        val testCategory = TestCategoryFactory.create(categoryRepository = categoryRepository)
+
+        val post = TestPostFactory.create(
+            postRepository = postRepository,
+            author = reviewee,
+            buyer = reviewer,
+            university = testUniversity,
+            category = testCategory
+        )
+
+        val review = Review(
+            reviewer = reviewer,
+            reviewee = reviewer,
+            post = post,
+            mainEvaluation = Evaluation.GOOD
+        )
+
+        reviewRepository.save(review)
+
+        //when & then
+        assertThat(reviewRepository.existsByReviewer_UserIdAndPost_Id(reviewerId,  post.id!!)).isTrue()
+
+    }
+
+    @Test
+    @DisplayName("피평가자 ID로 작성된 리뷰 개수를 정확히 반환한다")
+    fun countReviewsByReviewee_UserIdTest(){
+        //given
+        val testUniversity = TestUniversityFactory.create(universityRepository)
+
+        //유저 정보 기입
+        val reviewerId = UUID.randomUUID()
+        val revieweeId = UUID.randomUUID()
+        val reviewer = TestMemberFactory.create(
+            memberRepository = memberRepository,
+            university = testUniversity,
+            nickname = "리뷰어",
+            userId = reviewerId
+        )
+
+        val reviewee = TestMemberFactory.create(
+            memberRepository = memberRepository,
+            university = testUniversity,
+            nickname = "피리뷰어",
+            userId = revieweeId
+        )
+
+        //게시글 정보 기입
+        val testCategory = TestCategoryFactory.create(categoryRepository = categoryRepository)
+
+        val post = TestPostFactory.create(
+            postRepository = postRepository,
+            author = reviewee,
+            buyer = reviewer,
+            university = testUniversity,
+            category = testCategory
+        )
+
+
+        val post2 = TestPostFactory.create(
+            postRepository = postRepository,
+            author = reviewee,
+            buyer = reviewer,
+            university = testUniversity,
+            category = testCategory
+        )
+
+        val review = Review(
+            reviewer = reviewer,
+            reviewee = reviewee,
+            post = post,
+            mainEvaluation = Evaluation.GOOD
+        )
+
+        val review2 = Review(
+            reviewer = reviewer,
+            reviewee = reviewee,
+            post = post2,
+            mainEvaluation = Evaluation.SOSO
+        )
+
+        reviewRepository.saveAll(listOf(review2,review))
+
+        //when & Then
+        assertThat(reviewRepository.countReviewsByReviewee_UserId(reviewerId)).isZero()
+        assertThat(reviewRepository.countReviewsByReviewee_UserId(revieweeId)).isEqualTo(2)
+
+
+    }
+}
