@@ -16,7 +16,7 @@ import com.tinuproject.tinu.factory.TestCategoryFactory
 import com.tinuproject.tinu.factory.TestMemberFactory
 import com.tinuproject.tinu.factory.TestPostFactory
 import com.tinuproject.tinu.factory.TestUniversityFactory
-import com.tinuproject.tinu.global.exception.UnauthorizedAccessException
+import com.tinuproject.tinu.global.exception.ForbiddenException
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
 import org.springframework.beans.factory.annotation.Autowired
@@ -294,12 +294,12 @@ class ReviewServiceImplTest(
         )
 
         //when  & then
-        assertThrows<UnauthorizedAccessException>{
+        assertThrows<ForbiddenException>{
             reviewService.createReview(badUserCase)
         }
 
 
-        assertThrows<UnauthorizedAccessException>{
+        assertThrows<ForbiddenException>{
             reviewService.createReview(notDoneTradeCase)
         }
 

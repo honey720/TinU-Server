@@ -6,7 +6,7 @@ import com.tinuproject.tinu.domain.member.exception.ExistReviewException
 import com.tinuproject.tinu.domain.member.service.ReviewService
 import com.tinuproject.tinu.domain.member.service.dto.input.SearchWriteReviewInput
 import com.tinuproject.tinu.domain.post.exception.PostNotFoundException
-import com.tinuproject.tinu.global.exception.UnauthorizedAccessException
+import com.tinuproject.tinu.global.exception.ForbiddenException
 import com.tinuproject.tinu.global.response.ResponseEntityGenerator
 import com.tinuproject.tinu.global.response.dto.ResponseDTO
 import com.tinuproject.tinu.infra.swagger.annotation.SwaggerExceptionResponses
@@ -28,7 +28,7 @@ class ReviewController(
     @PostMapping("")
     @SwaggerExceptionResponses(
         exceptions = [
-            UnauthorizedAccessException::class,
+            ForbiddenException::class,
             PostNotFoundException::class,
             ExistReviewException::class,
         ]

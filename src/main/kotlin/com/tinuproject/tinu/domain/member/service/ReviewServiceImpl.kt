@@ -12,7 +12,7 @@ import com.tinuproject.tinu.domain.member.service.dto.input.SearchWriteReviewInp
 import com.tinuproject.tinu.domain.post.entity.Post
 import com.tinuproject.tinu.domain.post.exception.PostNotFoundException
 import com.tinuproject.tinu.domain.post.repository.PostRepository
-import com.tinuproject.tinu.global.exception.UnauthorizedAccessException
+import com.tinuproject.tinu.global.exception.ForbiddenException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -32,7 +32,7 @@ class ReviewServiceImpl(
         val post = postRepository.findPostById(input.postId)?: throw PostNotFoundException()
 
         //현재 리뷰 작성 요청자가 리뷰 작성 권한이 있는 지 확인.
-        if(!validateTradeParticipant(post, input.reviewerId)) throw UnauthorizedAccessException()
+        if(!validateTradeParticipant(post, input.reviewerId)) throw ForbiddenException()
 
         //이미 리뷰를 작성한 적이 있다면 예외 발생
         validateReviewNotExist(input)
@@ -134,7 +134,7 @@ class ReviewServiceImpl(
     */
     private fun resolveParticipants(post: Post, reviewerId: UUID): Pair<Member, Member> {
         val author = post.author
-        val buyer = post.buyer ?: throw UnauthorizedAccessException()
+        val buyer = post.buyer ?: throw ForbiddenException()
 
         return if (buyer.userId == reviewerId) {
             buyer to author // (리뷰어, 리뷰이)
