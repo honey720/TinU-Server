@@ -16,6 +16,7 @@ import com.tinuproject.tinu.domain.member.repository.SocialMemberRepository
 import com.tinuproject.tinu.domain.university.repository.UniversityDomainRepository
 import com.tinuproject.tinu.infra.s3.service.S3Service
 import com.tinuproject.tinu.domain.member.entity.EmailAuth
+import com.tinuproject.tinu.domain.member.policy.UserAccessValidator
 import com.tinuproject.tinu.domain.member.repository.EmailRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -106,12 +107,27 @@ class MemberServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun findMemberByUserId(userId: UUID): MemberSearchResponseDTO {
-        val member = memberRepository.findMemberByUserId(userId)
+    override fun findMemberByUserId(requestUserId : UUID,searchUserId: UUID): MemberSearchResponseDTO {
 
-        member?: throw NotExistMemberException()
+        //한번의 쿼리로 2명의 유저를 가져옴 이 때 파라미터가 Set이기에
+        //자기 자신을 조회할 땐 한명의 유저에 대한 내용만을 가져옴
+        val members = memberRepository.findByUserIdIn(setOf(requestUserId, searchUserId))
+            .associateBy { it.userId }
 
-        return MemberSearchResponseDTO(member)
+        val requestMember = members[requestUserId] ?: throw NotExistMemberException()
+        val searchMember = members[searchUserId] ?: throw NotExistMemberException()
+
+
+        //만약 동일 인물이라면 굳이 동일 대학인지 확인할 필요 없이 본인 정보 반환
+        if(requestUserId == searchUserId){
+            return MemberSearchResponseDTO(requestMember)
+        }
+
+        //검색하려는 유저와 요청자가 같은 학교인지 검증 및 검색 상대를 반환
+        UserAccessValidator.validateSameUniversity(requestMember,searchMember)
+
+        //동일 대학인지 검증까지 완료후 상대 유저 정보 반환.
+        return MemberSearchResponseDTO(searchMember)
 
     }
 

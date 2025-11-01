@@ -53,6 +53,7 @@ enum class ErrorCode(
     //전역적 사용
     UNIVERSITY_NOT_MATCH(httpStatusCode = 403, stateCode = "UNIVERSITY_NOT_MATCH", message = "대학이 일치하지 않습니다."),
     NOT_FOUND(httpStatusCode = 404, stateCode = "NOT_FOUND", message = "없는 페이지입니다."),
-    UNAUTHORIZED_ACCESS(httpStatusCode = 403, stateCode = "FORBIDDEN", message = "요청에 대한 권한이 없습니다.");
+    FORBIDDEN(httpStatusCode = 403, stateCode = "FORBIDDEN", message = "요청에 대한 권한이 없습니다."),
+    BAD_REQUEST(httpStatusCode = 400, stateCode = "BAD_REQUEST", message = "잘못된 요청입니다.")
 
 }
