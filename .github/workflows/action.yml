@@ -144,10 +144,10 @@ jobs:
           key: ${{ secrets.AWS_SSH_KEY }}
           port: ${{ secrets.AWS_SSH_PORT }}
           script: |
-            cd /root
-            docker-compose down
-            docker-compose pull ${{ secrets.DOCKERHUB_IMAGENAME }}
-            docker-compose up --build -d
+            cd /home/ec2-user
+            docker compose down
+            docker compose pull ${{ secrets.DOCKERHUB_IMAGENAME }}
+            docker compose up --build -d
 
   backend-build :
     if: github.event_name == 'pull_request'
