@@ -145,9 +145,10 @@ jobs:
           port: ${{ secrets.AWS_SSH_PORT }}
           script: |
             cd /home/ec2-user
-            sudo docker compose down
+            sudo docker compose down tinu-server
             sudo docker compose pull ${{ secrets.DOCKERHUB_IMAGENAME }}
-            sudo docker compose up --build -d
+            sudo docker compose up tinu-server --build -d
+            sudo docker image prune -a -f
 
   backend-build :
     if: github.event_name == 'pull_request'
