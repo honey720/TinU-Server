@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.web.server.Cookie
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CookieValue
@@ -27,8 +28,17 @@ import org.springframework.web.bind.annotation.RestController
 class RefreshTokenController(
     private val refreshTokenService : RefreshTokenService,
 
+    @Value("\${cookie.token.access-token}")
+    private val accessTokenKey: String,
+
     @Value("\${cookie.token.refresh-token}")
-    private val refreshTokenkey : String,
+    private val refreshTokenKey : String,
+
+    @Value("\${jwt.refresh-token.expiration-time}")
+    private val refreshTokenExpiredTime : Long,
+
+    @Value("\${jwt.access-token.expiration-time}")
+    private val accessTokenExpiredTime : Long
 ) {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
@@ -43,8 +53,11 @@ class RefreshTokenController(
 
         val tokens : Tokens = refreshTokenService.reissueAccessTokenByRefreshToken(refreshToken)
 
-        httpServletResponse.addHeader(HttpHeaders.AUTHORIZATION,"Bearer "+ tokens.accessToken)
-        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, CookieGenerator.createCookies(refreshTokenkey, tokens.refreshToken))
+        //TODO("이후 프로젝트 완성 시 NONE에서 LAX 로 변경")
+        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, CookieGenerator.createCookies(accessTokenKey, tokens.accessToken,Cookie.SameSite.NONE,accessTokenExpiredTime/100))
+
+        //TODO("이후 프로젝트 완성 시 NONE에서 Strict 로 변경")
+        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, CookieGenerator.createCookies(refreshTokenKey, tokens.refreshToken,Cookie.SameSite.NONE,refreshTokenExpiredTime/100))
 
         return ResponseEntityGenerator.onSuccess()
     }
