@@ -2,9 +2,9 @@ package com.tinuproject.tinu.infra.security.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.tinuproject.tinu.domain.member.repository.MemberRepository
-import com.tinuproject.tinu.infra.security.filter.ExceptionHandlerFilter
 import com.tinuproject.tinu.infra.security.filter.JwtTokenFilter
-import com.tinuproject.tinu.infra.security.filter.SignUpFilter
+import com.tinuproject.tinu.infra.security.handler.CustomAccessDeniedHandler
+import com.tinuproject.tinu.infra.security.handler.CustomAuthenticationEntryPoint
 import com.tinuproject.tinu.infra.security.jwt.AppleJwtGenerator
 import com.tinuproject.tinu.infra.security.jwt.JwtUtil
 import com.tinuproject.tinu.infra.security.oauth.handler.OAuthLoginFailureHandler
@@ -32,7 +32,9 @@ import org.springframework.security.config.annotation.web.configurers.oauth2.cli
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
+import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.access.AccessDeniedHandler
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
@@ -46,6 +48,8 @@ class SecurityConfig(
     @Value("\${web.allowed-path}")
     private val allowedPaths : List<String>,
     private val objectMapper: ObjectMapper,
+    private val customAuthenticationEntryPoint: AuthenticationEntryPoint,
+    private val customAccessDeniedHandler: AccessDeniedHandler
 ) {
 
     @Bean
@@ -89,7 +93,10 @@ class SecurityConfig(
                     authorize
                         //TODO(배포 전 로그인 되어 있어야만 서비스 이용가능하게 변경)
                         .requestMatchers("/api/token/**").permitAll()
-                        .anyRequest().permitAll()//로그인 이후엔 모두 허용
+                        .requestMatchers("/login,/favicon.ico,/api/token/refresh,/tinu/").permitAll()
+                        .requestMatchers("/api/user/**").hasRole("USER")
+                        .requestMatchers("/api/user").hasRole("USER")
+                        .anyRequest().authenticated()//로그인 이후엔 모두 허용
                 }
             )
             .oauth2Login { oauth: OAuth2LoginConfigurer<HttpSecurity?> ->  // OAuth2 로그인 기능에 대한 여러 설정의 진입점
@@ -116,12 +123,15 @@ class SecurityConfig(
                 }
             }
 
+            .exceptionHandling {
+                // 인증 실패 (401) -> CustomAuthenticationEntryPoint
+                it.authenticationEntryPoint(customAuthenticationEntryPoint)
 
+                // 인가 실패 (403) -> CustomAccessDeniedHandler
+                it.accessDeniedHandler(customAccessDeniedHandler)
+            }
             httpSecurity
-                .addFilterBefore(JwtTokenFilter(jwtUtil = jwtUtil, excludeUrls =allowedPaths), UsernamePasswordAuthenticationFilter::class.java)
-                .addFilterBefore(ExceptionHandlerFilter(objectMapper), JwtTokenFilter::class.java)
-                .addFilterAfter(SignUpFilter(jwtUtil=jwtUtil, excludeUrls =  allowedPaths), JwtTokenFilter::class.java)
-
+                .addFilterBefore(JwtTokenFilter(jwtUtil = jwtUtil), UsernamePasswordAuthenticationFilter::class.java)
 
         return httpSecurity.build()
 

@@ -69,7 +69,13 @@ class OAuthLoginSuccessHandler(
         }
 
         //TODO(이후 프로젝트 완성시  NONE에서 STRICT로 변경)
-        response?.addHeader(HttpHeaders.SET_COOKIE, CookieGenerator.createCookies(REFRESH_TOKEN_KEY, refreshToken,Cookie.SameSite.NONE,REFRESH_TOKEN_EXPIRATION_TIME/100))
+        response?.addHeader(HttpHeaders.SET_COOKIE, CookieGenerator.createCookies(
+            key = REFRESH_TOKEN_KEY,
+            value =  refreshToken,
+            path =  "/api/token",
+            sameSite = Cookie.SameSite.NONE,
+            maxAge = REFRESH_TOKEN_EXPIRATION_TIME/100
+        ))
         response?.sendRedirect(redirectUri)
     }
 

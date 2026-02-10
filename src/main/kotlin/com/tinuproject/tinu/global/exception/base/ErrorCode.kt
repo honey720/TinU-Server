@@ -7,10 +7,15 @@ enum class ErrorCode(
     val stateCode : String?,
     val message :String
 ) {
+    //TOKEN 관련
     TOKEN_MISSING(httpStatusCode = 401, stateCode = "TOKEN_MISSING", message = "토큰이 존재하지 않습니다."),
     TOKEN_INVALIDED(httpStatusCode = 401, stateCode = "TOKEN_INVALIDED", message = "토큰이 유효하지 않습니다."),
     TOKEN_EXPIRED(httpStatusCode = 401, stateCode = "TOKEN_EXPIRED", message = "토큰이 만료되었습니다."),
     TOKEN_UNRECOGNIZED(httpStatusCode = 401, stateCode = "TOKEN_UNRECOGNIZED", message = "토큰을 인식할 수 없습니다."),
+
+    //AUTH 관련
+    NEED_LOGIN(httpStatusCode = 401, stateCode = "NEED_RE_LOGIN", message = "재로그인을 진행해주세요."),
+    NEED_REISSUE_TOKEN(httpStatusCode = 401, stateCode =  "NEED_REFRESH_TOKEN", message = "Reissue를 진행해주세요."),
 
     //멤버 관련
     MEMBER_EXIST_EMAIL(httpStatusCode = 409, stateCode="ALREADY_EXIST_EMAIL", message = "이미 사용중인 이메일입니다."),

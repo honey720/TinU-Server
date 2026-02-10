@@ -46,7 +46,7 @@ class RefreshTokenController(
     @GetMapping("/refresh")
     @SwaggerExceptionResponses(exceptions = [NotFoundTokenException::class, InvalidedTokenException::class, ExpiredTokenException::class, ])
     @Operation(summary = "AccessToken 재발급 API", description = "RefreshToken을 통해 AccessToken을 재발급 받는 로직입니다.")
-    fun refreshAccessToken(httpServletResponse: HttpServletResponse, @CookieValue(name = "RefreshToken") refreshToken : String?): ResponseEntity<ResponseDTO<NullResponse?>> {
+    fun refreshAccessToken(httpServletResponse: HttpServletResponse, @CookieValue(name = "refresh_token") refreshToken : String?): ResponseEntity<ResponseDTO<NullResponse?>> {
         log.info("AccessToken 갱신 시도")
 
         refreshToken?:throw NotFoundTokenException()
@@ -54,10 +54,27 @@ class RefreshTokenController(
         val tokens : Tokens = refreshTokenService.reissueAccessTokenByRefreshToken(refreshToken)
 
         //TODO("이후 프로젝트 완성 시 NONE에서 LAX 로 변경")
-        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, CookieGenerator.createCookies(accessTokenKey, tokens.accessToken,Cookie.SameSite.NONE,accessTokenExpiredTime/100))
+        httpServletResponse.addHeader(
+            HttpHeaders.SET_COOKIE,
+            CookieGenerator.createCookies(
+                key = accessTokenKey,
+                value =tokens.accessToken,
+                sameSite =  Cookie.SameSite.NONE,
+                maxAge = accessTokenExpiredTime/100
+            )
+        )
 
         //TODO("이후 프로젝트 완성 시 NONE에서 Strict 로 변경")
-        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, CookieGenerator.createCookies(refreshTokenKey, tokens.refreshToken,Cookie.SameSite.NONE,refreshTokenExpiredTime/100))
+        httpServletResponse.addHeader(
+            HttpHeaders.SET_COOKIE,
+            CookieGenerator.createCookies(
+                key = refreshTokenKey,
+                value =  tokens.refreshToken,
+                path =  "/api/token",
+                sameSite = Cookie.SameSite.NONE,
+                maxAge = refreshTokenExpiredTime/100
+            )
+        )
 
         return ResponseEntityGenerator.onSuccess()
     }
