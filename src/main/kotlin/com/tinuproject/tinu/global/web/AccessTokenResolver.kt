@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest
 
 object AccessTokenResolver : TokenResolver {
 
-    private const val ACCESS_TOKEN_COOKIE_NAME = "access_token"
+    private const val ACCESS_TOKEN_COOKIE_NAME = "access-token"
 
     override fun resolve(request: HttpServletRequest): String {
         val cookies = request.cookies ?: throw NotFoundTokenException()

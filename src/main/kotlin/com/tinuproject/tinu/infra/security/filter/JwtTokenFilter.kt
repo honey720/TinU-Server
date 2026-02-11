@@ -38,12 +38,16 @@ class JwtTokenFilter(
 
             // 3. 사용자 정보 추출
             val userId = jwtUtil.getUserIdFromClaims(claims)
+
+            log.info(userId)
+
             val isSigned = jwtUtil.isSigned(claims)
 
             // 4. 가입 여부에 따른 권한(Role) 분기 처리
             val authorities = if (isSigned) {
                 Collections.singletonList(SimpleGrantedAuthority("ROLE_USER")) // 정회원
             } else {
+                log.info("ROLE_GUEST 추가")
                 Collections.singletonList(SimpleGrantedAuthority("ROLE_GUEST")) // 소셜로그인만 한 상태
             }
 
@@ -64,10 +68,12 @@ class JwtTokenFilter(
         } catch (e: BaseException) {
             // 토큰 위조, 없음 등 기타 예외
             log.warn(e.stackTrace.toString())
+            log.warn("토큰이 이상합니다.")
             request.setAttribute("exception", InvalidedTokenException())
         } catch (e: Exception) {
             // 예상치 못한 예외
             log.warn(e.stackTrace.toString())
+            log.warn("예상치 못한 예외가 발생했습니다.")
             log.error("JwtFilter Error: {}", e.message)
             request.setAttribute("exception", InvalidedTokenException())
         }

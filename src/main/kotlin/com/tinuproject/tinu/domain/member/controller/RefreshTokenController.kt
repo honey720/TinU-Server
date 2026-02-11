@@ -46,7 +46,7 @@ class RefreshTokenController(
     @GetMapping("/refresh")
     @SwaggerExceptionResponses(exceptions = [NotFoundTokenException::class, InvalidedTokenException::class, ExpiredTokenException::class, ])
     @Operation(summary = "AccessToken 재발급 API", description = "RefreshToken을 통해 AccessToken을 재발급 받는 로직입니다.")
-    fun refreshAccessToken(httpServletResponse: HttpServletResponse, @CookieValue(name = "refresh_token") refreshToken : String?): ResponseEntity<ResponseDTO<NullResponse?>> {
+    fun refreshAccessToken(httpServletResponse: HttpServletResponse, @CookieValue(name = "refresh-token") refreshToken : String?): ResponseEntity<ResponseDTO<NullResponse?>> {
         log.info("AccessToken 갱신 시도")
 
         refreshToken?:throw NotFoundTokenException()

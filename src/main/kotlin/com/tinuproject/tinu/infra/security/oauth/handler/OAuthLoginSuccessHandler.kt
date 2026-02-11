@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory
 import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.server.Cookie
+import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpHeaders
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 
+@Profile("!test")
 @Component
 class OAuthLoginSuccessHandler(
 
