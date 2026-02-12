@@ -2,6 +2,7 @@ package com.tinuproject.tinu.infra.security.filter
 
 import com.tinuproject.tinu.domain.member.exception.ExpiredTokenException
 import com.tinuproject.tinu.domain.member.exception.InvalidedTokenException
+import com.tinuproject.tinu.domain.member.exception.NotFoundTokenException
 import com.tinuproject.tinu.global.exception.base.BaseException
 import com.tinuproject.tinu.global.web.AccessTokenResolver
 import com.tinuproject.tinu.infra.security.jwt.JwtUtil
@@ -64,8 +65,12 @@ class JwtTokenFilter(
             // 토큰 만료 시: 예외를 던지지 않고 request에 속성 저장 (나중에 EntryPoint가 확인)
             log.warn(e.stackTrace.toString())
             log.warn(e.message)
-            request.setAttribute("exception", ExpiredTokenException())
-        } catch (e: BaseException) {
+            request.setAttribute("exception", e)
+        } catch (e: NotFoundTokenException){
+            log.warn(e.message)
+            request.setAttribute("exception", e)
+        }
+        catch (e: BaseException) {
             // 토큰 위조, 없음 등 기타 예외
             log.warn(e.stackTrace.toString())
             log.warn("토큰이 이상합니다.")

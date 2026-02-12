@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.tinuproject.tinu.domain.member.exception.ExpiredTokenException
 import com.tinuproject.tinu.global.response.ResponseEntityGenerator
 import com.tinuproject.tinu.infra.security.exception.auth.NeedLoginException
+import com.tinuproject.tinu.infra.security.exception.auth.NeedReissueTokenException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
@@ -26,8 +27,8 @@ class CustomAuthenticationEntryPoint(
 
         // 2. 예외에 따른 에러 코드 선택
         val resultException = when (exception) {
-            is ExpiredTokenException -> exception
-            else -> NeedLoginException()
+            is ExpiredTokenException -> NeedReissueTokenException()
+            else -> NeedReissueTokenException()
         }
 
         // 3. ResponseEntityGenerator를 통해 공통 응답 포맷 생성
