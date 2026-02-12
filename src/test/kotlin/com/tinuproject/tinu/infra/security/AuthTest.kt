@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
 import org.springframework.test.web.servlet.get
-
+import org.junit.jupiter.api.DisplayName
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -70,7 +70,8 @@ class AuthTest (
      * =========================
      */
     @Test
-    fun `permitAll API는 토큰 없이 접근 가능`() {
+    @DisplayName("permitAll API는 토큰 없이 접근 가능하다")
+    fun permitAll_shouldAccessibleWithoutToken() {
         mockMvc.get("/test/permit-all")
             .andExpect {
                 status { isOk() }
@@ -79,16 +80,17 @@ class AuthTest (
     }
 
     @Test
-    fun `authenticated API는 토큰이 없으면 401`() {
+    @DisplayName("authenticated API는 토큰이 없으면 401을 반환한다")
+    fun authenticated_shouldReturn401_whenTokenIsMissing() {
         mockMvc.get("/test/authenticated")
             .andExpect {
                 status { isUnauthorized() }
             }
     }
 
-
     @Test
-    fun `authenticated API는 invalid secret 토큰이면 401`() {
+    @DisplayName("authenticated API는 invalid secret 토큰이면 401을 반환한다")
+    fun authenticated_shouldReturn401_whenTokenHasInvalidSecret() {
         val token = jwtTokenFactory.generateInvalidSecretKey(
             uuid = UUID.randomUUID(),
             expirationMillis = 60_000,
@@ -103,7 +105,8 @@ class AuthTest (
     }
 
     @Test
-    fun `authenticated API는 Expired  토큰이면 401`() {
+    @DisplayName("authenticated API는 만료된 토큰이면 401을 반환한다")
+    fun authenticated_shouldReturn401_whenTokenIsExpired() {
         val token = jwtUtil.generateAccessToken(
             uuid = UUID.randomUUID(),
             expirationMillis = -1,
@@ -118,7 +121,8 @@ class AuthTest (
     }
 
     @Test
-    fun `authenticated API는 userId 없는 토큰이면 401`() {
+    @DisplayName("authenticated API는 userId가 없는 토큰이면 401을 반환한다")
+    fun authenticated_shouldReturn401_whenTokenHasNoUserId() {
         val token = jwtTokenFactory.generateInvalidUserID(
             expirationMillis = 60_000,
             isSign = true
@@ -132,7 +136,8 @@ class AuthTest (
     }
 
     @Test
-    fun `authenticated API는 isSign 없는 토큰이면 401`() {
+    @DisplayName("authenticated API는 isSign 값이 없는 토큰이면 401을 반환한다")
+    fun authenticated_shouldReturn401_whenTokenHasNoIsSign() {
         val token = jwtTokenFactory.generateInvalidIsSign(
             uuid = UUID.randomUUID(),
             expirationMillis = 60_000
@@ -146,7 +151,8 @@ class AuthTest (
     }
 
     @Test
-    fun `authenticated API는 정상 토큰이면 접근 가능`() {
+    @DisplayName("authenticated API는 정상 토큰이면 접근 가능하다")
+    fun authenticated_shouldAccessible_whenTokenIsValid() {
         val token = jwtTokenFactory.generateAccessToken(isSign = true)
 
         mockMvc.get("/test/authenticated") {
@@ -157,7 +163,8 @@ class AuthTest (
     }
 
     @Test
-    fun `user API는 인증된 사용자면 접근 가능`() {
+    @DisplayName("user API는 USER 권한을 가진 인증된 사용자는 접근 가능하다")
+    fun userApi_shouldAccessible_whenUserIsAuthenticated() {
         val token = jwtTokenFactory.generateAccessToken(isSign = true)
 
         mockMvc.get("/test/user") {
@@ -167,8 +174,10 @@ class AuthTest (
             content { string("OK") }
         }
     }
+
     @Test
-    fun `hasRole(user) API에 isSign이 false 인 Token으로 요청이 올 경우 401 예외 반환`() {
+    @DisplayName("user API는 isSign이 false인 토큰으로 요청 시 401을 반환한다")
+    fun userApi_shouldReturn401_whenIsSignIsFalse() {
         val token = jwtTokenFactory.generateAccessToken(isSign = false)
 
         mockMvc.get("/test/user") {
@@ -178,13 +187,14 @@ class AuthTest (
         }
     }
 
-
     @Test
-    fun `user API는 토큰이 없으면 401`() {
+    @DisplayName("user API는 토큰이 없으면 401을 반환한다")
+    fun userApi_shouldReturn401_whenTokenIsMissing() {
         mockMvc.get("/test/user")
             .andExpect {
                 status { isUnauthorized() }
             }
     }
+
 
 }
