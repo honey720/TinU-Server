@@ -58,7 +58,7 @@ class OAuthLoginSuccessHandler(
         val userId : UUID = oauth2User.userInfoDto.uuid
 
         // 리프레쉬 토큰 발급 후 저장
-        val refreshToken: String =  jwtUtil.generateRefreshToken(userId, REFRESH_TOKEN_EXPIRATION_TIME)
+        val refreshToken: String =  jwtUtil.generateRefreshToken(REFRESH_TOKEN_EXPIRATION_TIME)
         val newRefreshToken = RefreshToken(userId = userId, token = refreshToken)
         refreshTokenRepository.save(newRefreshToken)
 
@@ -76,7 +76,7 @@ class OAuthLoginSuccessHandler(
             value =  refreshToken,
             path =  "/api/token",
             sameSite = Cookie.SameSite.NONE,
-            maxAge = REFRESH_TOKEN_EXPIRATION_TIME/100
+            maxAge = REFRESH_TOKEN_EXPIRATION_TIME/1000
         ))
         response?.sendRedirect(redirectUri)
     }

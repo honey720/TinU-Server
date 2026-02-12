@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest
 
 object RefreshTokenResolver : TokenResolver {
 
-    private const val REFRESH_TOKEN_COOKIE_NAME = "refresh_token"
+    private const val REFRESH_TOKEN_COOKIE_NAME = "refresh-token"
 
     override fun resolve(request: HttpServletRequest): String {
         val cookies = request.cookies ?: throw NotFoundTokenException()

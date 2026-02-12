@@ -63,7 +63,7 @@ class JwtTokenFilter(
 
         } catch (e: ExpiredTokenException) {
             // 토큰 만료 시: 예외를 던지지 않고 request에 속성 저장 (나중에 EntryPoint가 확인)
-            log.warn(e.stackTrace.toString())
+            log.warn( " 토큰이 만료되었습니다: {} " , e.message, e )
             log.warn(e.message)
             request.setAttribute("exception", e)
         } catch (e: NotFoundTokenException){

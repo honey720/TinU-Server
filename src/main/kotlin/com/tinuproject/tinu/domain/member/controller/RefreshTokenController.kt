@@ -64,7 +64,7 @@ class RefreshTokenController(
                     key = accessTokenKey,
                     value =tokens.accessToken,
                     sameSite =  Cookie.SameSite.NONE,
-                    maxAge = accessTokenExpiredTime/100
+                    maxAge = accessTokenExpiredTime/1000
                 )
             )
 
@@ -76,7 +76,7 @@ class RefreshTokenController(
                     value =  tokens.refreshToken,
                     path =  "/api/token",
                     sameSite = Cookie.SameSite.NONE,
-                    maxAge = refreshTokenExpiredTime/100
+                    maxAge = refreshTokenExpiredTime/1000
                 )
             )
             return ResponseEntityGenerator.onSuccess()
@@ -95,7 +95,7 @@ class RefreshTokenController(
             throw NeedLoginException()
         }catch(e : Exception){
             log.warn("토큰 재발행과 관련하여 알지 못하는 오류가 발생하였습니다. 일단 다시 로그인을 진행해야합니다.")
-            log.warn(e.stackTrace.toString())
+            log.warn("Error message", e)
             throw NeedLoginException()
         }
     }

@@ -36,7 +36,7 @@ class RefreshTokenServiceImpl(
         refreshTokenRepository.deleteByUserId(userId)
 
         //리프레쉬 토큰 재발행.
-        val reissueRefreshToken = jwtUtil.generateRefreshToken(userId,REFRESH_TOKEN_EXPIRATION_TIME)
+        val reissueRefreshToken = jwtUtil.generateRefreshToken(REFRESH_TOKEN_EXPIRATION_TIME)
 
         val newRefreshToken  = RefreshToken(userId = userId, token = reissueRefreshToken)
 

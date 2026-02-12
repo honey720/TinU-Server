@@ -43,7 +43,7 @@ class JwtUtil(
     }
 
     // 리프레쉬 토큰을 발급하는 메서드
-    fun generateRefreshToken(uuid : UUID, expirationMillis: Long): String {
+    fun generateRefreshToken(expirationMillis: Long): String {
         log.info("리프레쉬 토큰 발행.")
         return Jwts.builder()
             .setIssuedAt(Date())
