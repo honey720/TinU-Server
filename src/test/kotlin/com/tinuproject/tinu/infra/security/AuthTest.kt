@@ -176,14 +176,14 @@ class AuthTest (
     }
 
     @Test
-    @DisplayName("user API는 isSign이 false인 토큰으로 요청 시 401을 반환한다")
-    fun userApi_shouldReturn401_whenIsSignIsFalse() {
+    @DisplayName("user API는 isSign이 false인 토큰으로 요청 시 403을 반환한다")
+    fun userApi_shouldReturn403_whenIsSignIsFalse() {
         val token = jwtTokenFactory.generateAccessToken(isSign = false)
 
         mockMvc.get("/test/user") {
             cookie(Cookie("access-token", token))
         }.andExpect {
-            status { isUnauthorized() }
+            status { isForbidden() }
         }
     }
 
