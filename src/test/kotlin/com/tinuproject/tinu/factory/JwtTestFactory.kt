@@ -1,5 +1,6 @@
 package com.tinuproject.tinu.factory
 
+import com.tinuproject.tinu.infra.security.jwt.JwtProperties
 import com.tinuproject.tinu.infra.security.jwt.JwtUtil
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
@@ -11,8 +12,8 @@ import javax.crypto.SecretKey
 
 @Component
 class JwtTestFactory(
-    @Value("\${jwt.access-token.secret}")
-    var accessTokenSecretKey : String,
+
+    private val jwtProperties: JwtProperties,
 
     var jwtUtil: JwtUtil
 ) {
@@ -38,7 +39,7 @@ class JwtTestFactory(
             .claim("isSign", isSign)// 클레임에 회원가입 여부 추가.
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + expirationMillis))
-            .signWith(getSigningKey(accessTokenSecretKey))
+            .signWith(getSigningKey(jwtProperties.accessToken.secret))
             .compact()
     }
 
@@ -47,7 +48,7 @@ class JwtTestFactory(
             .claim("userId", uuid.toString())// 클레임에 userId 추가
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + expirationMillis))
-            .signWith(getSigningKey(accessTokenSecretKey))
+            .signWith(getSigningKey(jwtProperties.accessToken.secret))
             .compact()
     }
 

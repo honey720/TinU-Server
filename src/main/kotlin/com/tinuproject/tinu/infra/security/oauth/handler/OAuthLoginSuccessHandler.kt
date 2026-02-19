@@ -6,13 +6,13 @@ import com.tinuproject.tinu.domain.member.repository.RefreshTokenRepository
 import com.tinuproject.tinu.infra.security.jwt.JwtUtil
 import com.tinuproject.tinu.infra.security.oauth.dto.CustomOAuth2User
 import com.tinuproject.tinu.global.web.CookieGenerator
+import com.tinuproject.tinu.infra.security.jwt.JwtProperties
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.server.Cookie
-import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpHeaders
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
@@ -30,19 +30,18 @@ class OAuthLoginSuccessHandler(
     private val memberRepository: MemberRepository,
 
     @Value("\${jwt.redirect}")
-    private val REDIRECT_URL : String,
+    private val REDIRECT_URL: String,
 
     @Value("\${jwt.redirect.sign}")
-    private val SIGN_REDIRECT_URL : String,
+    private val SIGN_REDIRECT_URL: String,
 
     @Value("\${cookie.token.refresh-token}")
-    private val REFRESH_TOKEN_KEY : String,
+    private val REFRESH_TOKEN_KEY: String,
 
-    @Value("\${jwt.refresh-token.expiration-time}")
-    private val REFRESH_TOKEN_EXPIRATION_TIME: Long, // 리프레쉬 토큰 유효기간
+    private val jwtProperties: JwtProperties,
 
 
-) : SimpleUrlAuthenticationSuccessHandler() {
+    ) : SimpleUrlAuthenticationSuccessHandler() {
     var log : Logger = LoggerFactory.getLogger(this::class.java)
 
     @Throws
@@ -56,7 +55,7 @@ class OAuthLoginSuccessHandler(
         val userId : UUID = oauth2User.userInfoDto.uuid
 
         // 리프레쉬 토큰 발급 후 저장
-        val refreshToken: String =  jwtUtil.generateRefreshToken(REFRESH_TOKEN_EXPIRATION_TIME)
+        val refreshToken: String =  jwtUtil.generateRefreshToken()
         val newRefreshToken = RefreshToken(userId = userId, token = refreshToken)
         refreshTokenRepository.save(newRefreshToken)
 
@@ -74,7 +73,7 @@ class OAuthLoginSuccessHandler(
             value =  refreshToken,
             path =  "/api/token",
             sameSite = Cookie.SameSite.NONE,
-            maxAge = REFRESH_TOKEN_EXPIRATION_TIME/1000
+            maxAge = jwtProperties.refreshToken.expirationTime/1000
         ))
         response?.sendRedirect(redirectUri)
     }
