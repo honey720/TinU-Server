@@ -14,7 +14,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Service
 import java.util.*
 
-@Profile("!test")
 @Service
 class CustomOAuth2UserService(
     private val userRepository: SocialMemberRepository,

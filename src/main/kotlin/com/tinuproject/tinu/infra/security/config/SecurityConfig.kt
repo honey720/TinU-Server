@@ -42,12 +42,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 class SecurityConfig(
     private val jwtUtil: JwtUtil,
-    @Autowired(required = false)
-    private val oauth2LoginSuccessHandler: OAuthLoginSuccessHandler?,
-    @Autowired(required = false)
-    private val oAuthLoginFailureHandler: OAuthLoginFailureHandler?,
-    @Autowired(required = false)
-    private val customOAuth2UserService: CustomOAuth2UserService?,
+    private val oauth2LoginSuccessHandler: OAuthLoginSuccessHandler,
+    private val oAuthLoginFailureHandler: OAuthLoginFailureHandler,
+    private val customOAuth2UserService: CustomOAuth2UserService,
     private val customAuthenticationEntryPoint: AuthenticationEntryPoint,
     private val customAccessDeniedHandler: AccessDeniedHandler
 ) {
@@ -119,36 +116,31 @@ class SecurityConfig(
                 // 인가 실패 (403) -> CustomAccessDeniedHandler
                 it.accessDeniedHandler(customAccessDeniedHandler)
             }
-            if (
-                oauth2LoginSuccessHandler != null &&
-                oAuthLoginFailureHandler != null &&
-                customOAuth2UserService != null
-            ) {
-                httpSecurity.oauth2Login { oauth ->
-                    oauth
-                        .authorizationEndpoint { endpoint ->
-                            endpoint.authorizationRequestResolver(
-                                CustomAuthorizationRequestResolver(
-                                    clientRegisterRepository = clientRegistrationRepository
-                                )
+            .oauth2Login { oauth ->
+                oauth
+                    .authorizationEndpoint { endpoint ->
+                        endpoint.authorizationRequestResolver(
+                            CustomAuthorizationRequestResolver(
+                                clientRegisterRepository = clientRegistrationRepository
                             )
-                        }
-                        .userInfoEndpoint { userInfo ->
-                            userInfo.userService(customOAuth2UserService)
-                        }
-                        .tokenEndpoint { token ->
-                            token.accessTokenResponseClient(
-                                CustomTokenResponseClient(
-                                    appleTokenResponseClient = AppleTokenResponseClient {
-                                        appleJwtGenerator.generate()
-                                    },
-                                    defaultClient = DefaultAuthorizationCodeTokenResponseClient()
-                                )
+                        )
+                    }
+                    .userInfoEndpoint { userInfo ->
+                        userInfo.userService(customOAuth2UserService)
+                    }
+                    .tokenEndpoint { token ->
+                        token.accessTokenResponseClient(
+                            CustomTokenResponseClient(
+                                appleTokenResponseClient = AppleTokenResponseClient {
+                                    appleJwtGenerator.generate()
+                                },
+                                defaultClient = DefaultAuthorizationCodeTokenResponseClient()
                             )
-                        }
-                        .successHandler(oauth2LoginSuccessHandler)
-                        .failureHandler(oAuthLoginFailureHandler)
-                }
+                        )
+                    }
+                    .successHandler(oauth2LoginSuccessHandler)
+                    .failureHandler(oAuthLoginFailureHandler)
+
             }
 
             httpSecurity
