@@ -2,6 +2,8 @@ package com.tinuproject.tinu.infra.security.handler
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.tinuproject.tinu.domain.member.exception.ExpiredTokenException
+import com.tinuproject.tinu.domain.member.exception.InvalidedTokenException
+import com.tinuproject.tinu.domain.member.exception.NotFoundTokenException
 import com.tinuproject.tinu.global.response.ResponseEntityGenerator
 import com.tinuproject.tinu.infra.security.exception.auth.NeedLoginException
 import com.tinuproject.tinu.infra.security.exception.auth.NeedReissueTokenException
@@ -26,8 +28,12 @@ class CustomAuthenticationEntryPoint(
         val exception = request.getAttribute("exception")
 
         // 2. 예외에 따른 에러 코드 선택
+        // 현재 방식으로는 모든 요청에 대한 R.T 확인이 불가능하여 A.T에 문제가 있다면 
+        // R.T로 일단 ReIssue 해보는 수 밖에 없어 모든 Excepton에 대해 NeedReIssueTokenException() 전송
         val resultException = when (exception) {
             is ExpiredTokenException -> NeedReissueTokenException()
+            is NotFoundTokenException -> NeedReissueTokenException()
+            is InvalidedTokenException -> NeedReissueTokenException()
             else -> NeedReissueTokenException()
         }
 
