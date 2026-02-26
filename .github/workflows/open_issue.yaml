@@ -22,6 +22,14 @@ jobs:
           echo '${{ steps.issue-parser.outputs.jsonString }}'
           echo "checkbox : ${{ steps.issue-parser.outputs.issueparser_without_create_branch }}"
 
+      - name: Add Assignee to Issue
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'add-assignees'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          assignees: ${{ github.event.issue.user.login }}
+
       - name: Check conditions and Create Branch
         id: branch-step
         run: |
