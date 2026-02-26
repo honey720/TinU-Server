@@ -11,6 +11,9 @@ jobs:
     name: Open Issue
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Issue Parser
         uses: stefanbuck/github-issue-parser@v3
         id: issue-parser
@@ -45,12 +48,6 @@ jobs:
             echo "Condition not met: Skipping branch creation"
             echo "SHOULD_CREATE=false" >> $GITHUB_OUTPUT
           fi
-
-      - name: Checkout code
-        if: steps.branch-step.outputs.SHOULD_CREATE == 'true'
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Create and Push Branch
         if: steps.branch-step.outputs.SHOULD_CREATE == 'true'
