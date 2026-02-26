@@ -12,3 +12,4 @@ interface MultimediaRepository: JpaRepository<Multimedia, Long> {
     @Modifying
     fun deleteAllByPostId(@Param("postId") postId: Long)
 }
+// 테스트
